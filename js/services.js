@@ -117,9 +117,120 @@ const Services = {
 
     _delay(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
-    }
+    }, 
+    async getHistoricalLandslides() {
+        await this._delay(150);
+        return DEMO_DATA.historicalLandslides.map(h => ({ ...h, isDemo: true }));
+      },
+      async getInfrastructure() {
+        await this._delay(150);
+        return { ...DEMO_DATA.infrastructure, isDemo: true };
+      },
+      async getCitizenReports() {
+        await this._delay(150);
+        return DEMO_DATA.citizenReports.map(r => ({ ...r, isDemo: true }));
+      },
+      async getRainfallData() {
+        await this._delay(150);
+        return DEMO_DATA.rainfallData.map(r => ({ ...r, isDemo: true }));
+      },
+      async getSatelliteAnomalies() {
+        await this._delay(150);
+        return DEMO_DATA.satelliteAnomalies.map(a => ({ ...a, isDemo: true }));
+      },
+      async getRiskAnalysis(location = 'Tawang') {
+        await this._delay(150);
+        const data = DEMO_DATA.riskAnalysisData[location] || DEMO_DATA.riskAnalysisData['Tawang'];
+        return { ...data, location, isDemo: true };
+      },
+      async getRiskFactors(location = 'Tawang') {
+        await this._delay(100);
+        const data = DEMO_DATA.riskAnalysisData[location] || DEMO_DATA.riskAnalysisData['Tawang'];
+        return { factors: data.factors, isDemo: true };
+      },
+      async getRainfallAnalysis(location = 'Tawang') {
+        await this._delay(100);
+        const data = DEMO_DATA.riskAnalysisData[location] || DEMO_DATA.riskAnalysisData['Tawang'];
+        return { rainfall: data.rainfallBreakdown, isDemo: true };
+      },
+      async getTerrainAnalysis(location = 'Tawang') {
+        await this._delay(100);
+        const data = DEMO_DATA.riskAnalysisData[location] || DEMO_DATA.riskAnalysisData['Tawang'];
+        return {
+          slope: data.slope, elevation: data.elevation,
+          soilType: data.soilType, aspect: data.aspect,
+          curvature: data.curvature, stability: data.stability,
+          isDemo: true
+        };
+      },
+      async getHistoricalContext(location = 'Tawang') {
+        await this._delay(100);
+        const data = DEMO_DATA.riskAnalysisData[location] || DEMO_DATA.riskAnalysisData['Tawang'];
+        return { events: data.historicalEvents, byYear: data.historicalByYear, isDemo: true };
+      },
+      async getExposureData(location = 'Tawang') {
+        await this._delay(100);
+        const data = DEMO_DATA.riskAnalysisData[location] || DEMO_DATA.riskAnalysisData['Tawang'];
+        return {
+          population: data.population, villages: data.villages,
+          roads: data.roads, schools: data.schools,
+          hospitals: data.hospitals, bridges: data.bridges,
+          responsePriority: data.responsePriority, isDemo: true
+        };
+      },
+      async getSatelliteIndicators(location = 'Tawang') {
+        await this._delay(100);
+        const data = DEMO_DATA.riskAnalysisData[location] || DEMO_DATA.riskAnalysisData['Tawang'];
+        return { ...data.satellite, isDemo: true };
+      },
+      async getRiskAnalysis(location = 'Tawang') {
+        await this._delay(150);
+        const data = DEMO_DATA.riskAnalysisData[location] || DEMO_DATA.riskAnalysisData['Tawang'];
+        return { ...data, location, isDemo: true };
+      },
+      async getRiskFactors(location = 'Tawang') {
+        await this._delay(100);
+        const data = DEMO_DATA.riskAnalysisData[location] || DEMO_DATA.riskAnalysisData['Tawang'];
+        return { factors: data.factors, isDemo: true };
+      },
+      async getRainfallAnalysis(location = 'Tawang') {
+        await this._delay(100);
+        const data = DEMO_DATA.riskAnalysisData[location] || DEMO_DATA.riskAnalysisData['Tawang'];
+        return { rainfall: data.rainfallBreakdown, isDemo: true };
+      },
+      async getTerrainAnalysis(location = 'Tawang') {
+        await this._delay(100);
+        const data = DEMO_DATA.riskAnalysisData[location] || DEMO_DATA.riskAnalysisData['Tawang'];
+        return {
+          slope: data.slope, elevation: data.elevation,
+          soilType: data.soilType, aspect: data.aspect,
+          curvature: data.curvature, stability: data.stability,
+          isDemo: true
+        };
+      },
+      async getHistoricalContext(location = 'Tawang') {
+        await this._delay(100);
+        const data = DEMO_DATA.riskAnalysisData[location] || DEMO_DATA.riskAnalysisData['Tawang'];
+        return { events: data.historicalEvents, byYear: data.historicalByYear, isDemo: true };
+      },
+      async getExposureData(location = 'Tawang') {
+        await this._delay(100);
+        const data = DEMO_DATA.riskAnalysisData[location] || DEMO_DATA.riskAnalysisData['Tawang'];
+        return {
+          population: data.population, villages: data.villages,
+          roads: data.roads, schools: data.schools,
+          hospitals: data.hospitals, bridges: data.bridges,
+          responsePriority: data.responsePriority, isDemo: true
+        };
+      },
+      async getSatelliteIndicators(location = 'Tawang') {
+        await this._delay(100);
+        const data = DEMO_DATA.riskAnalysisData[location] || DEMO_DATA.riskAnalysisData['Tawang'];
+        return { ...data.satellite, isDemo: true };
+      },
 };
 
 if (typeof window !== 'undefined') {
     window.Services = Services;
 }
+

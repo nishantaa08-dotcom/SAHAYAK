@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SAHAYAK AI Risk Analysis — Explainable landslide risk intelligence for Northeast India">
+  <title>AI Risk Analysis — SAHAYAK</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/landing.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/risk-analysis.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body class="risk-analysis-page">
+  <div class="app-shell">
+    <!-- ============ SIDEBAR ============ -->
+    <aside class="sidebar" id="sidebar" role="navigation" aria-label="Primary navigation">
+      <div class="sidebar-brand">
+        <div class="brand-logo" aria-hidden="true">
+          <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#19B8C7"/>
+                <stop offset="100%" stop-color="#0F9D8A"/>
+              </linearGradient>
+            </defs>
+            <path d="M20 3 L34 8 V20 C34 28 28 34 20 37 C12 34 6 28 6 20 V8 Z" fill="none" stroke="url(#logoGrad)" stroke-width="1.5"/>
+            <path d="M10 26 L16 16 L20 22 L24 14 L30 26 Z" fill="url(#logoGrad)" opacity="0.85"/>
+            <circle cx="24" cy="14" r="2" fill="#19B8C7"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">SAHAYAK</span>
+          <span class="brand-sub">NER Landslide Intelligence</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav" id="sidebarNav"></nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-status">
+          <span class="status-dot"></span>
+          <span>System Operational</span>
+        </div>
+        <div class="sidebar-user">
+          <div class="user-avatar">AU</div>
+          <div class="user-info">
+            <div class="user-name">Authority</div>
+            <div class="user-role">Administrator</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- ============ TOP HEADER ============ -->
+    <header class="top-header">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="header-title-wrap">
+        <h1 class="header-title">AI RISK ANALYSIS</h1>
+        <div class="header-subtitle">Explainable landslide risk intelligence for selected locations</div>
+      </div>
+      <div class="header-actions">
+        <div class="header-system-status" id="systemStatus">
+          <span class="status-dot"></span>
+          <span>All systems operational</span>
+        </div>
+        <div style="position: relative;">
+          <button class="icon-btn" id="notificationBtn" aria-label="Notifications">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notification-badge" id="notificationBadge" style="display:none;">0</span>
+          </button>
+          <div class="notification-panel" id="notificationPanel">
+            <div class="notification-panel-header">
+              <div class="notification-panel-title">Notifications</div>
+              <span class="notification-mark-read" onclick="window.SahayakRiskAnalysis.markAllNotificationsRead()">Mark all read</span>
+            </div>
+            <div class="notification-list" id="notificationList"></div>
+          </div>
+        </div>
+        <select class="lang-selector" aria-label="Language">
+          <option>EN</option><option>HI</option><option>BN</option><option>AS</option>
+        </select>
+        <button class="header-user" aria-label="User profile">
+          <div class="user-avatar">AU</div>
+          <span class="header-user-name">Authority</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ============ STATUS BAR ============ -->
+    <div class="status-bar">
+      <div class="status-bar-item">
+        <span class="status-bar-label">System Status</span>
+        <span class="status-bar-value" style="color: var(--safe);">Operational</span>
+      </div>
+      <div class="status-bar-divider"></div>
+      <div class="status-bar-item">
+        <span class="status-bar-label">Data Sources</span>
+        <span class="status-bar-value">5/5 Online</span>
+      </div>
+      <div class="status-bar-divider"></div>
+      <div class="status-bar-item">
+        <span class="status-bar-label">Active Monitoring Regions</span>
+        <span class="status-bar-value">8 States</span>
+      </div>
+      <div class="status-bar-divider"></div>
+      <div class="status-bar-item">
+        <span class="status-bar-label">Last Model Update</span>
+        <span class="status-bar-value">5 min ago</span>
+      </div>
+      <div class="status-bar-demo">
+        <span class="demo-indicator"></span>
+        SIH 2026 PROTOTYPE · DEMO DATA
+      </div>
+    </div>
+
+    <!-- ============ MAIN CONTENT ============ -->
+    <main class="main-content">
+      <!-- Loading Overlay -->
+      <div id="analysisLoading" class="analysis-loading" style="display:none;">
+        <div class="loading-spinner"></div>
+        <div style="font-size: var(--fs-sm); color: var(--text-700); font-weight: 600;">Loading AI analysis...</div>
+      </div>
+
+      <!-- Page Header -->
+      <div class="analysis-header">
+        <div class="analysis-header-left">
+          <h2 class="analysis-title">
+            AI RISK ANALYSIS
+            <span class="analysis-title-badge">EXPLAINABLE AI</span>
+          </h2>
+          <p class="analysis-subtitle">Explainable landslide risk intelligence for selected locations</p>
+          <div class="analysis-demo-strip">
+            <span class="analysis-demo-tag">SIH 2026 PROTOTYPE</span>
+            <span class="analysis-demo-tag">DEMO DATA</span>
+            <span class="analysis-demo-tag">ILLUSTRATIVE MODEL OUTPUT</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Location Selector -->
+      <div class="location-selector-card">
+        <div class="location-selector-label">Analyzing Location</div>
+        <div class="location-selector-wrap">
+          <svg class="location-selector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <input type="text" class="location-selector-input" id="locationSelectorInput" placeholder="Select a location..." autocomplete="off" aria-label="Select location">
+          <div class="location-selector-dropdown" id="locationSelectorDropdown"></div>
+        </div>
+        <div style="font-size: var(--fs-sm); color: var(--text-700); font-weight: 600;">
+          Current: <span id="analysisLocationDisplay" style="color: var(--text-900);">Tawang, Arunachal Pradesh</span>
+        </div>
+      </div>
+
+      <!-- ============ RISK OVERVIEW (HERO) ============ -->
+      <div class="risk-overview" id="riskOverview">
+        <!-- Gauge -->
+        <div class="risk-gauge">
+          <svg viewBox="0 0 200 200">
+            <circle class="track" cx="100" cy="100" r="85"/>
+            <circle class="progress level-warning" cx="100" cy="100" r="85"/>
+          </svg>
+          <div class="risk-gauge-center">
+            <div class="risk-gauge-label">Current Risk</div>
+            <div class="risk-gauge-value">0</div>
+            <div class="risk-gauge-max">/ 100</div>
+          </div>
+        </div>
+
+        <!-- Main Info -->
+        <div class="risk-overview-main">
+          <div class="risk-overview-status status-warning">
+            <span class="status-dot"></span>
+            <span>WARNING</span>
+          </div>
+          <div class="risk-overview-probability">Landslide Probability</div>
+          <div class="risk-overview-probability-value">0%</div>
+          <div class="risk-overview-message">
+            <div class="risk-overview-message-title">Current Assessment</div>
+            <div class="risk-overview-message-text">
+              <strong>High landslide risk conditions detected in the selected demonstration area.</strong><br>
+              Risk increased significantly compared with the previous monitoring period.
+            </div>
+            <div class="risk-overview-message-demo">DEMO / SYNTHETIC ANALYSIS</div>
+          </div>
+        </div>
+
+        <!-- Risk Change -->
+        <div class="risk-change-card">
+          <div class="risk-change-label">Risk Change</div>
+          <div class="risk-change-value">+0 ↑</div>
+          <div class="risk-change-range">0 → 0</div>
+          <div class="risk-change-text">Since previous assessment</div>
+        </div>
+      </div>
+
+      <!-- ============ RISK TREND + AI EXPLANATION ============ -->
+      <div class="analysis-grid">
+        <!-- Risk Trend Chart -->
+        <div class="analysis-card">
+          <div class="analysis-card-header">
+            <div class="analysis-card-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              Risk Trend — Last 12 Hours
+            </div>
+            <span class="analysis-card-badge">DEMO</span>
+          </div>
+          <div class="analysis-card-body">
+            <div class="risk-trend-wrap">
+              <canvas id="riskTrendCanvas"></canvas>
+            </div>
+            <div style="text-align: center; margin-top: var(--space-2); font-size: 10px; color: var(--text-400); font-style: italic;">
+              Illustrative Demo Data
+            </div>
+          </div>
+        </div>
+
+        <!-- Confidence -->
+        <div class="analysis-card">
+          <div class="analysis-card-header">
+            <div class="analysis-card-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              Model Confidence
+            </div>
+          </div>
+          <div class="analysis-card-body" id="confidenceCard"></div>
+        </div>
+      </div>
+
+      <!-- ============ AI EXPLANATION (SHAP) ============ -->
+      <div id="aiExplanationPanel"></div>
+
+      <!-- ============ ENVIRONMENTAL CONDITIONS ============ -->
+      <div class="analysis-card" style="margin-bottom: var(--space-5);">
+        <div class="analysis-card-header">
+          <div class="analysis-card-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
+            Environmental Conditions
+          </div>
+          <span class="analysis-card-badge">DEMO</span>
+        </div>
+        <div class="analysis-card-body">
+          <div class="env-indicator-grid" id="envIndicatorGrid"></div>
+        </div>
+      </div>
+
+      <!-- ============ RAINFALL + TERRAIN ============ -->
+      <div class="analysis-grid">
+        <!-- Rainfall Analysis -->
+        <div class="analysis-card">
+          <div class="analysis-card-header">
+            <div class="analysis-card-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="16" y1="13" x2="16" y2="21"/><line x1="8" y1="13" x2="8" y2="21"/><line x1="12" y1="15" x2="12" y2="23"/><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"/></svg>
+              Rainfall Contribution
+            </div>
+          </div>
+          <div class="analysis-card-body">
+            <div class="rainfall-chart-wrap">
+              <canvas id="rainfallCanvas"></canvas>
+            </div>
+            <div class="rainfall-summary" id="rainfallSummary"></div>
+            <div class="rainfall-alert" id="rainfallAlert" style="display:none;"></div>
+            <div style="text-align: center; margin-top: var(--space-2); font-size: 10px; color: var(--text-400); font-style: italic;">
+              Illustrative Demo Data
+            </div>
+          </div>
+        </div>
+
+        <!-- Soil & Terrain -->
+        <div class="analysis-card">
+          <div class="analysis-card-header">
+            <div class="analysis-card-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20l4-8 4 4 4-10 6 14"/></svg>
+              Soil & Terrain Analysis
+            </div>
+          </div>
+          <div class="analysis-card-body" id="terrainPanel"></div>
+        </div>
+      </div>
+
+      <!-- ============ HISTORICAL + SATELLITE ============ -->
+      <div class="analysis-grid">
+        <!-- Historical Context -->
+        <div class="analysis-card">
+          <div class="analysis-card-header">
+            <div class="analysis-card-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Historical Landslide Context
+            </div>
+          </div>
+          <div class="analysis-card-body">
+            <div class="historical-header">
+              <div>
+                <div class="historical-count" id="historicalCount">0</div>
+                <div class="historical-count-label">Historical events in selected demo area</div>
+              </div>
+            </div>
+            <div style="font-size: 10px; font-weight: 700; letter-spacing: 0.1em; color: var(--text-500); margin-bottom: var(--space-2); text-transform: uppercase;">Events by Year</div>
+            <div class="historical-chart-wrap">
+              <canvas id="historicalCanvas"></canvas>
+            </div>
+            <div style="text-align: center; margin-top: var(--space-2); font-size: 10px; color: var(--text-400); font-style: italic;">
+              Synthetic demonstration dataset
+            </div>
+          </div>
+        </div>
+
+        <!-- Satellite Intelligence -->
+        <div class="analysis-card">
+          <div class="analysis-card-header">
+            <div class="analysis-card-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="21.17" y1="8" x2="12" y2="8"/></svg>
+              Satellite Change Indicator
+            </div>
+            <span class="analysis-card-badge">DEMO</span>
+          </div>
+          <div class="analysis-card-body">
+            <div class="satellite-visual">
+              <div class="satellite-visual-cell before">
+                <span class="satellite-visual-label">BEFORE</span>
+                T-7 DAYS
+              </div>
+              <div class="satellite-visual-cell after">
+                <span class="satellite-visual-label">AFTER</span>
+                CURRENT
+              </div>
+            </div>
+            <div class="satellite-grid" id="satelliteGrid"></div>
+            <a href="satellite.html" class="btn btn-outline" style="width: 100%; justify-content: center;">
+              View Satellite Monitor →
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ RISK HISTORY TIMELINE ============ -->
+      <div class="analysis-card" style="margin-bottom: var(--space-5);">
+        <div class="analysis-card-header">
+          <div class="analysis-card-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Risk History Timeline
+          </div>
+          <span class="analysis-card-badge">DEMO</span>
+        </div>
+        <div class="analysis-card-body">
+          <div class="timeline" id="timelineContainer"></div>
+        </div>
+      </div>
+
+      <!-- ============ EXPOSURE + RESPONSE PRIORITY ============ -->
+      <div class="analysis-grid">
+        <!-- Exposure -->
+        <div class="analysis-card">
+          <div class="analysis-card-header">
+            <div class="analysis-card-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+              Potential Exposure
+            </div>
+          </div>
+          <div class="analysis-card-body">
+            <div class="exposure-summary-grid" id="exposureSummaryGrid"></div>
+          </div>
+        </div>
+
+        <!-- Response Priority -->
+        <div class="analysis-card">
+          <div class="analysis-card-header">
+            <div class="analysis-card-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              Response Priority
+            </div>
+          </div>
+          <div class="analysis-card-body">
+            <div class="response-priority" id="responsePriority"></div>
+            <a href="infrastructure.html" class="btn btn-outline" style="width: 100%; justify-content: center; margin-top: var(--space-3);">
+              View Impact Assessment →
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ RECOMMENDED ACTIONS ============ -->
+      <div class="actions-panel">
+        <div class="actions-panel-header">
+          <h3 class="actions-panel-title">RECOMMENDED ACTION</h3>
+          <p class="actions-panel-subtitle">Based on the illustrative risk assessment — Decision Support Workflow</p>
+        </div>
+        <div class="actions-steps">
+          <div class="action-step">
+            <div class="action-step-number">01</div>
+            <div class="action-step-title">Monitor</div>
+            <div class="action-step-text">Increase monitoring frequency for the selected demonstration area.</div>
+          </div>
+          <div class="action-step">
+            <div class="action-step-number">02</div>
+            <div class="action-step-title">Verify</div>
+            <div class="action-step-text">Request field inspection to validate model output.</div>
+          </div>
+          <div class="action-step">
+            <div class="action-step-number">03</div>
+            <div class="action-step-title">Prepare</div>
+            <div class="action-step-text">Review nearby critical infrastructure and population exposure.</div>
+          </div>
+          <div class="action-step">
+            <div class="action-step-number">04</div>
+            <div class="action-step-title">Warn</div>
+            <div class="action-step-text">Consider an appropriate warning if validated by authorities.</div>
+          </div>
+        </div>
+        <div class="actions-buttons">
+          <a href="alerts.html" class="btn btn-primary">Generate Warning →</a>
+          <a href="verification.html" class="btn btn-outline">Request Field Inspection →</a>
+          <a href="risk-map.html" class="btn btn-outline">View on Risk Map →</a>
+        </div>
+      </div>
+
+      <!-- ============ COMPARISON ============ -->
+      <div class="analysis-card" style="margin-bottom: var(--space-5);">
+        <div class="analysis-card-header">
+          <div class="analysis-card-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            Compare Risk
+          </div>
+        </div>
+        <div class="analysis-card-body">
+          <div class="comparison-grid" id="comparisonGrid"></div>
+        </div>
+      </div>
+
+      <!-- ============ DATA FRESHNESS ============ -->
+      <div class="analysis-card" style="margin-bottom: var(--space-5);">
+        <div class="analysis-card-header">
+          <div class="analysis-card-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Data Freshness
+          </div>
+        </div>
+        <div class="analysis-card-body">
+          <div class="freshness-compact" id="freshnessCompact"></div>
+        </div>
+      </div>
+
+      <!-- ============ MODEL INFORMATION (ACCORDION) ============ -->
+      <div class="accordion">
+        <div class="accordion-header">
+          <div class="accordion-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/></svg>
+            Model Information
+          </div>
+          <div class="accordion-toggle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+        <div class="accordion-body">
+          <div class="accordion-content">
+            <div class="model-info-grid">
+              <div class="model-info-item">
+                <div class="model-info-label">Model</div>
+                <div class="model-info-value">Landslide Risk Model — Prototype</div>
+              </div>
+              <div class="model-info-item">
+                <div class="model-info-label">Output</div>
+                <div class="model-info-value">Risk Score 0–100</div>
+              </div>
+              <div class="model-info-item">
+                <div class="model-info-label">Model Version</div>
+                <div class="model-info-value">Demo v0.1</div>
+              </div>
+              <div class="model-info-item">
+                <div class="model-info-label">Last Model Update</div>
+                <div class="model-info-value">5 min ago — Demo</div>
+              </div>
+            </div>
+            <div style="font-size: 10px; font-weight: 700; letter-spacing: 0.1em; color: var(--text-500); margin-bottom: var(--space-2); text-transform: uppercase;">Input Categories</div>
+            <div class="model-info-categories">
+              <span class="model-info-chip">Rainfall</span>
+              <span class="model-info-chip">Soil Moisture</span>
+              <span class="model-info-chip">Terrain</span>
+              <span class="model-info-chip">Historical Events</span>
+              <span class="model-info-chip">Satellite Indicators</span>
+            </div>
+            <div class="model-info-disclaimer">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <span>Prototype model information. Replace with validated model metadata when integrated with production ML services.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ DISCLAIMER FOOTER ============ -->
+      <div class="disclaimer-footer">
+        <p class="disclaimer-footer-text">
+          This prototype demonstrates a decision-support workflow using synthetic data. Risk scores and predictions must not be treated as operational warnings or validated real-world forecasts. SAHAYAK is positioned as a <strong>Decision Support</strong> system — it does not independently order evacuation or emergency action.
+        </p>
+        <div class="disclaimer-footer-badges">
+          <span class="analysis-demo-tag">SIH 2026 PROTOTYPE</span>
+          <span class="analysis-demo-tag">DEMO DATA</span>
+          <span class="analysis-demo-tag">ILLUSTRATIVE MODEL OUTPUT</span>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ============ FULL EXPLANATION MODAL ============ -->
+  <div class="modal-overlay" id="explanationModal">
+    <div class="modal" style="max-width: 640px;">
+      <div class="modal-header">
+        <div class="modal-title">Full AI Explanation</div>
+        <button class="modal-close" onclick="window.SahayakRiskAnalysis.closeExplanationModal()" aria-label="Close">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body" style="background: var(--navy-900); color: var(--white); border-radius: 0;">
+        <p style="font-size: var(--fs-sm); color: var(--text-200); line-height: 1.7; margin-bottom: var(--space-4);">
+          The risk assessment for the selected demonstration area is driven by multiple converging environmental factors. Accumulated rainfall over the past 72 hours has exceeded local thresholds, significantly increasing soil moisture saturation. Combined with steep terrain characteristics and historical landslide patterns in the region, the susceptibility of the slope has increased substantially.
+        </p>
+        <p style="font-size: var(--fs-sm); color: var(--text-200); line-height: 1.7; margin-bottom: var(--space-4);">
+          Satellite observations have detected surface changes consistent with early-stage slope instability. While the model confidence is moderate, the convergence of multiple risk drivers warrants heightened monitoring and consideration of precautionary measures.
+        </p>
+        <p style="font-size: var(--fs-sm); color: var(--text-200); line-height: 1.7; margin-bottom: var(--space-4);">
+          <strong style="color: var(--cyan);">Recommendation:</strong> Authorities should validate these findings through field inspection before initiating any warning or response actions. This analysis is illustrative and should not be treated as a real operational forecast.
+        </p>
+        <div style="padding: var(--space-3); background: rgba(234, 179, 8, 0.1); border: 1px solid rgba(234, 179, 8, 0.25); border-radius: var(--radius-md); font-size: var(--fs-xs); color: var(--watch);">
+          <strong>Disclaimer:</strong> This is a synthetic demonstration. All values, explanations, and model outputs are illustrative.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="window.SahayakRiskAnalysis.closeExplanationModal()">Close</button>
+        <a href="risk-map.html" class="btn btn-primary">View on Risk Map →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/risk-analysis.js"></script>
+</body>
+</html>

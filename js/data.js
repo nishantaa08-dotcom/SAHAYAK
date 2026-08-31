@@ -50,11 +50,13 @@ const DEMO_DATA = {
     },
 
     // ===== DASHBOARD-SPECIFIC DATA =====
-
     riskZones: [
         {
-            id: 'RZ-001', location: 'Tawang', state: 'Arunachal Pradesh',
-            lat: 27.47, lng: 91.86, risk: 84, level: 'WARNING',
+            id: 'RZ-001',
+            location: 'Tawang',
+            state: 'Arunachal Pradesh',
+            lat: 27.47, lng: 91.86,
+            risk: 84, level: 'WARNING',
             rainfall: 286, soilMoisture: 81, slope: 41, elevation: 2100,
             historical: 5, satelliteChange: true,
             population: 1240, roads: 3, schools: 2, hospitals: 1, bridges: 1,
@@ -65,7 +67,59 @@ const DEMO_DATA = {
                 { label: 'High Soil Moisture', value: 17 },
                 { label: 'Historical Landslides', value: 11 },
                 { label: 'Satellite Anomaly', value: 6 }
-            ]
+            ],
+            // === RISK ANALYSIS PAGE FIELDS ===
+            probability: 82.4,
+            riskChange: '+8',
+            riskChangeDir: 'up',
+            aspect: 'NE',
+            curvature: 'Moderate',
+            terrainStability: 'Elevated',
+            historicalEventsList: [
+                { year: 2019, magnitude: 'severe', month: 'June' },
+                { year: 2021, magnitude: 'moderate', month: 'July' },
+                { year: 2022, magnitude: 'minor', month: 'August' },
+                { year: 2024, magnitude: 'moderate', month: 'June' },
+                { year: 2025, magnitude: 'minor', month: 'July' }
+            ],
+            satelliteIndicators: {
+                ndvi: { value: 0.42, status: 'declining', label: 'NDVI' },
+                ndwi: { value: 0.31, status: 'elevated', label: 'NDWI' },
+                surfaceChange: { value: 'Detected', status: 'anomaly', label: 'Surface Change' },
+                sarChange: { value: 'Moderate', status: 'watch', label: 'SAR Change' }
+            },
+            rainfallHistory: [
+                { time: '06:00', rainfall: 18, risk: 42 },
+                { time: '09:00', rainfall: 34, risk: 51 },
+                { time: '12:00', rainfall: 58, risk: 63 },
+                { time: '15:00', rainfall: 82, risk: 76 },
+                { time: '18:00', rainfall: 94, risk: 84 }
+            ],
+            riskHistoryEvents: [
+                { time: '06:00', level: 'watch', score: 42, event: 'Baseline monitoring' },
+                { time: '09:00', level: 'watch', score: 51, event: 'Rainfall increased' },
+                { time: '12:00', level: 'alert', score: 63, event: 'Risk crossed alert threshold' },
+                { time: '15:00', level: 'warning', score: 76, event: 'Soil moisture saturation' },
+                { time: '18:00', level: 'warning', score: 84, event: 'Warning generated' }
+            ],
+            keyDrivers: ['Heavy rainfall', 'High soil moisture', 'Steep terrain', 'Historical susceptibility', 'Satellite anomaly'],
+            recommendedActions: [
+                { id: 'A1', label: 'Increase monitoring frequency', priority: 'high' },
+                { id: 'A2', label: 'Review nearby infrastructure exposure', priority: 'high' },
+                { id: 'A3', label: 'Consider field inspection', priority: 'medium' },
+                { id: 'A4', label: 'Review warning thresholds', priority: 'medium' },
+                { id: 'A5', label: 'Monitor rainfall trend', priority: 'medium' },
+                { id: 'A6', label: 'Verify satellite anomaly', priority: 'low' }
+            ],
+            interpretation: {
+                status: 'WARNING',
+                confidence: 'Demonstration value',
+                trend: 'Increasing',
+                primaryDriver: 'Heavy rainfall',
+                secondaryDriver: 'Soil moisture',
+                terrainFactor: 'Steep slope'
+            },
+            responsePriority: { score: 91, level: 'CRITICAL' }
         },
         {
             id: 'RZ-002', location: 'East Siang', state: 'Arunachal Pradesh',
@@ -80,7 +134,46 @@ const DEMO_DATA = {
                 { label: 'High Soil Moisture', value: 14 },
                 { label: 'Historical Landslides', value: 8 },
                 { label: 'Satellite Anomaly', value: 4 }
-            ]
+            ],
+            probability: 71.2, riskChange: '+6', riskChangeDir: 'up',
+            aspect: 'E', curvature: 'Low', terrainStability: 'Moderate',
+            historicalEventsList: [
+                { year: 2020, magnitude: 'moderate', month: 'July' },
+                { year: 2022, magnitude: 'minor', month: 'August' },
+                { year: 2024, magnitude: 'minor', month: 'June' }
+            ],
+            satelliteIndicators: {
+                ndvi: { value: 0.48, status: 'stable', label: 'NDVI' },
+                ndwi: { value: 0.28, status: 'normal', label: 'NDWI' },
+                surfaceChange: { value: 'Detected', status: 'anomaly', label: 'Surface Change' },
+                sarChange: { value: 'Low', status: 'normal', label: 'SAR Change' }
+            },
+            rainfallHistory: [
+                { time: '06:00', rainfall: 14, risk: 38 },
+                { time: '09:00', rainfall: 26, risk: 45 },
+                { time: '12:00', rainfall: 44, risk: 58 },
+                { time: '15:00', rainfall: 62, risk: 65 },
+                { time: '18:00', rainfall: 72, risk: 72 }
+            ],
+            riskHistoryEvents: [
+                { time: '06:00', level: 'watch', score: 38, event: 'Baseline monitoring' },
+                { time: '09:00', level: 'watch', score: 45, event: 'Rainfall increasing' },
+                { time: '12:00', level: 'watch', score: 58, event: 'Soil moisture rising' },
+                { time: '15:00', level: 'alert', score: 65, event: 'Alert threshold reached' },
+                { time: '18:00', level: 'alert', score: 72, event: 'Satellite anomaly detected' }
+            ],
+            keyDrivers: ['Heavy rainfall', 'Steep terrain', 'Soil moisture', 'Historical events'],
+            recommendedActions: [
+                { id: 'A1', label: 'Increase monitoring frequency', priority: 'high' },
+                { id: 'A2', label: 'Review nearby infrastructure exposure', priority: 'medium' },
+                { id: 'A3', label: 'Monitor rainfall trend', priority: 'medium' },
+                { id: 'A4', label: 'Verify satellite anomaly', priority: 'low' }
+            ],
+            interpretation: {
+                status: 'ALERT', confidence: 'Demonstration value', trend: 'Increasing',
+                primaryDriver: 'Heavy rainfall', secondaryDriver: 'Steep terrain', terrainFactor: 'Moderate slope'
+            },
+            responsePriority: { score: 74, level: 'HIGH' }
         },
         {
             id: 'RZ-003', location: 'West Khasi Hills', state: 'Meghalaya',
@@ -95,7 +188,46 @@ const DEMO_DATA = {
                 { label: 'High Soil Moisture', value: 15 },
                 { label: 'Historical Landslides', value: 5 },
                 { label: 'Satellite Anomaly', value: 2 }
-            ]
+            ],
+            probability: 66.8, riskChange: '+4', riskChangeDir: 'up',
+            aspect: 'S', curvature: 'Moderate', terrainStability: 'Moderate',
+            historicalEventsList: [
+                { year: 2018, magnitude: 'severe', month: 'June' },
+                { year: 2020, magnitude: 'moderate', month: 'July' },
+                { year: 2023, magnitude: 'minor', month: 'August' },
+                { year: 2024, magnitude: 'minor', month: 'July' }
+            ],
+            satelliteIndicators: {
+                ndvi: { value: 0.51, status: 'stable', label: 'NDVI' },
+                ndwi: { value: 0.33, status: 'elevated', label: 'NDWI' },
+                surfaceChange: { value: 'None', status: 'normal', label: 'Surface Change' },
+                sarChange: { value: 'Low', status: 'normal', label: 'SAR Change' }
+            },
+            rainfallHistory: [
+                { time: '06:00', rainfall: 16, risk: 35 },
+                { time: '09:00', rainfall: 30, risk: 42 },
+                { time: '12:00', rainfall: 52, risk: 55 },
+                { time: '15:00', rainfall: 68, risk: 62 },
+                { time: '18:00', rainfall: 78, risk: 68 }
+            ],
+            riskHistoryEvents: [
+                { time: '06:00', level: 'watch', score: 35, event: 'Baseline monitoring' },
+                { time: '09:00', level: 'watch', score: 42, event: 'Rainfall increasing' },
+                { time: '12:00', level: 'watch', score: 55, event: 'Soil moisture rising' },
+                { time: '15:00', level: 'alert', score: 62, event: 'Alert threshold reached' },
+                { time: '18:00', level: 'alert', score: 68, event: 'Continued rainfall' }
+            ],
+            keyDrivers: ['Heavy rainfall', 'Soil moisture', 'Steep terrain', 'Historical events'],
+            recommendedActions: [
+                { id: 'A1', label: 'Increase monitoring frequency', priority: 'medium' },
+                { id: 'A2', label: 'Monitor rainfall trend', priority: 'medium' },
+                { id: 'A3', label: 'Review warning thresholds', priority: 'low' }
+            ],
+            interpretation: {
+                status: 'ALERT', confidence: 'Demonstration value', trend: 'Increasing',
+                primaryDriver: 'Heavy rainfall', secondaryDriver: 'Soil moisture', terrainFactor: 'Moderate slope'
+            },
+            responsePriority: { score: 68, level: 'HIGH' }
         },
         {
             id: 'RZ-004', location: 'Gangtok', state: 'Sikkim',
@@ -110,7 +242,43 @@ const DEMO_DATA = {
                 { label: 'High Soil Moisture', value: 12 },
                 { label: 'Historical Landslides', value: 5 },
                 { label: 'Satellite Anomaly', value: 3 }
-            ]
+            ],
+            probability: 56.2, riskChange: '+3', riskChangeDir: 'up',
+            aspect: 'NW', curvature: 'Low', terrainStability: 'Stable',
+            historicalEventsList: [
+                { year: 2021, magnitude: 'minor', month: 'July' },
+                { year: 2023, magnitude: 'minor', month: 'August' }
+            ],
+            satelliteIndicators: {
+                ndvi: { value: 0.58, status: 'stable', label: 'NDVI' },
+                ndwi: { value: 0.26, status: 'normal', label: 'NDWI' },
+                surfaceChange: { value: 'None', status: 'normal', label: 'Surface Change' },
+                sarChange: { value: 'Low', status: 'normal', label: 'SAR Change' }
+            },
+            rainfallHistory: [
+                { time: '06:00', rainfall: 10, risk: 28 },
+                { time: '09:00', rainfall: 18, risk: 35 },
+                { time: '12:00', rainfall: 28, risk: 44 },
+                { time: '15:00', rainfall: 38, risk: 52 },
+                { time: '18:00', rainfall: 46, risk: 58 }
+            ],
+            riskHistoryEvents: [
+                { time: '06:00', level: 'safe', score: 28, event: 'Baseline monitoring' },
+                { time: '09:00', level: 'watch', score: 35, event: 'Rainfall increasing' },
+                { time: '12:00', level: 'watch', score: 44, event: 'Steady rise' },
+                { time: '15:00', level: 'watch', score: 52, event: 'Continued rainfall' },
+                { time: '18:00', level: 'watch', score: 58, event: 'Monitoring continues' }
+            ],
+            keyDrivers: ['Rainfall', 'Terrain', 'Soil moisture'],
+            recommendedActions: [
+                { id: 'A1', label: 'Continue routine monitoring', priority: 'low' },
+                { id: 'A2', label: 'Monitor rainfall trend', priority: 'low' }
+            ],
+            interpretation: {
+                status: 'WATCH', confidence: 'Demonstration value', trend: 'Increasing',
+                primaryDriver: 'Rainfall', secondaryDriver: 'Terrain', terrainFactor: 'Moderate slope'
+            },
+            responsePriority: { score: 52, level: 'MODERATE' }
         },
         {
             id: 'RZ-005', location: 'Kohima', state: 'Nagaland',
@@ -125,7 +293,40 @@ const DEMO_DATA = {
                 { label: 'High Soil Moisture', value: 9 },
                 { label: 'Historical Landslides', value: 4 },
                 { label: 'Satellite Anomaly', value: 2 }
-            ]
+            ],
+            probability: 43.8, riskChange: '+2', riskChangeDir: 'up',
+            aspect: 'N', curvature: 'Low', terrainStability: 'Stable',
+            historicalEventsList: [
+                { year: 2022, magnitude: 'minor', month: 'July' },
+                { year: 2024, magnitude: 'minor', month: 'August' }
+            ],
+            satelliteIndicators: {
+                ndvi: { value: 0.62, status: 'stable', label: 'NDVI' },
+                ndwi: { value: 0.24, status: 'normal', label: 'NDWI' },
+                surfaceChange: { value: 'None', status: 'normal', label: 'Surface Change' },
+                sarChange: { value: 'Low', status: 'normal', label: 'SAR Change' }
+            },
+            rainfallHistory: [
+                { time: '06:00', rainfall: 8, risk: 22 },
+                { time: '09:00', rainfall: 14, risk: 28 },
+                { time: '12:00', rainfall: 22, risk: 35 },
+                { time: '15:00', rainfall: 30, risk: 40 },
+                { time: '18:00', rainfall: 36, risk: 45 }
+            ],
+            riskHistoryEvents: [
+                { time: '06:00', level: 'safe', score: 22, event: 'Baseline' },
+                { time: '09:00', level: 'safe', score: 28, event: 'Stable' },
+                { time: '12:00', level: 'watch', score: 35, event: 'Rainfall increasing' },
+                { time: '15:00', level: 'watch', score: 40, event: 'Monitoring' },
+                { time: '18:00', level: 'watch', score: 45, event: 'Monitoring' }
+            ],
+            keyDrivers: ['Rainfall', 'Terrain'],
+            recommendedActions: [{ id: 'A1', label: 'Continue routine monitoring', priority: 'low' }],
+            interpretation: {
+                status: 'WATCH', confidence: 'Demonstration value', trend: 'Stable',
+                primaryDriver: 'Rainfall', secondaryDriver: 'Terrain', terrainFactor: 'Moderate slope'
+            },
+            responsePriority: { score: 42, level: 'MODERATE' }
         },
         {
             id: 'RZ-006', location: 'Aizawl', state: 'Mizoram',
@@ -140,7 +341,37 @@ const DEMO_DATA = {
                 { label: 'High Soil Moisture', value: 8 },
                 { label: 'Historical Landslides', value: 3 },
                 { label: 'Satellite Anomaly', value: 2 }
-            ]
+            ],
+            probability: 36.4, riskChange: '+1', riskChangeDir: 'up',
+            aspect: 'W', curvature: 'Low', terrainStability: 'Stable',
+            historicalEventsList: [{ year: 2023, magnitude: 'minor', month: 'July' }],
+            satelliteIndicators: {
+                ndvi: { value: 0.65, status: 'stable', label: 'NDVI' },
+                ndwi: { value: 0.22, status: 'normal', label: 'NDWI' },
+                surfaceChange: { value: 'None', status: 'normal', label: 'Surface Change' },
+                sarChange: { value: 'Low', status: 'normal', label: 'SAR Change' }
+            },
+            rainfallHistory: [
+                { time: '06:00', rainfall: 6, risk: 18 },
+                { time: '09:00', rainfall: 10, risk: 24 },
+                { time: '12:00', rainfall: 16, risk: 30 },
+                { time: '15:00', rainfall: 22, risk: 34 },
+                { time: '18:00', rainfall: 26, risk: 38 }
+            ],
+            riskHistoryEvents: [
+                { time: '06:00', level: 'safe', score: 18, event: 'Baseline' },
+                { time: '09:00', level: 'safe', score: 24, event: 'Stable' },
+                { time: '12:00', level: 'safe', score: 30, event: 'Stable' },
+                { time: '15:00', level: 'watch', score: 34, event: 'Slight increase' },
+                { time: '18:00', level: 'watch', score: 38, event: 'Monitoring' }
+            ],
+            keyDrivers: ['Rainfall', 'Terrain'],
+            recommendedActions: [{ id: 'A1', label: 'Continue routine monitoring', priority: 'low' }],
+            interpretation: {
+                status: 'WATCH', confidence: 'Demonstration value', trend: 'Stable',
+                primaryDriver: 'Rainfall', secondaryDriver: 'Terrain', terrainFactor: 'Moderate slope'
+            },
+            responsePriority: { score: 34, level: 'LOW' }
         },
         {
             id: 'RZ-007', location: 'Shillong', state: 'Meghalaya',
@@ -155,7 +386,37 @@ const DEMO_DATA = {
                 { label: 'High Soil Moisture', value: 5 },
                 { label: 'Historical Landslides', value: 2 },
                 { label: 'Satellite Anomaly', value: 1 }
-            ]
+            ],
+            probability: 21.6, riskChange: '0', riskChangeDir: 'stable',
+            aspect: 'SE', curvature: 'Low', terrainStability: 'Stable',
+            historicalEventsList: [{ year: 2022, magnitude: 'minor', month: 'August' }],
+            satelliteIndicators: {
+                ndvi: { value: 0.68, status: 'stable', label: 'NDVI' },
+                ndwi: { value: 0.20, status: 'normal', label: 'NDWI' },
+                surfaceChange: { value: 'None', status: 'normal', label: 'Surface Change' },
+                sarChange: { value: 'Low', status: 'normal', label: 'SAR Change' }
+            },
+            rainfallHistory: [
+                { time: '06:00', rainfall: 4, risk: 12 },
+                { time: '09:00', rainfall: 6, risk: 15 },
+                { time: '12:00', rainfall: 10, risk: 18 },
+                { time: '15:00', rainfall: 14, risk: 20 },
+                { time: '18:00', rainfall: 16, risk: 22 }
+            ],
+            riskHistoryEvents: [
+                { time: '06:00', level: 'safe', score: 12, event: 'Baseline' },
+                { time: '09:00', level: 'safe', score: 15, event: 'Stable' },
+                { time: '12:00', level: 'safe', score: 18, event: 'Stable' },
+                { time: '15:00', level: 'safe', score: 20, event: 'Stable' },
+                { time: '18:00', level: 'safe', score: 22, event: 'Stable' }
+            ],
+            keyDrivers: ['Rainfall'],
+            recommendedActions: [{ id: 'A1', label: 'Continue routine monitoring', priority: 'low' }],
+            interpretation: {
+                status: 'SAFE', confidence: 'Demonstration value', trend: 'Stable',
+                primaryDriver: 'Rainfall', secondaryDriver: '—', terrainFactor: 'Gentle slope'
+            },
+            responsePriority: { score: 22, level: 'LOW' }
         },
         {
             id: 'RZ-008', location: 'Imphal', state: 'Manipur',
@@ -170,7 +431,37 @@ const DEMO_DATA = {
                 { label: 'High Soil Moisture', value: 4 },
                 { label: 'Historical Landslides', value: 2 },
                 { label: 'Satellite Anomaly', value: 1 }
-            ]
+            ],
+            probability: 17.2, riskChange: '0', riskChangeDir: 'stable',
+            aspect: 'S', curvature: 'Low', terrainStability: 'Stable',
+            historicalEventsList: [{ year: 2023, magnitude: 'minor', month: 'July' }],
+            satelliteIndicators: {
+                ndvi: { value: 0.70, status: 'stable', label: 'NDVI' },
+                ndwi: { value: 0.19, status: 'normal', label: 'NDWI' },
+                surfaceChange: { value: 'None', status: 'normal', label: 'Surface Change' },
+                sarChange: { value: 'Low', status: 'normal', label: 'SAR Change' }
+            },
+            rainfallHistory: [
+                { time: '06:00', rainfall: 3, risk: 10 },
+                { time: '09:00', rainfall: 5, risk: 13 },
+                { time: '12:00', rainfall: 8, risk: 15 },
+                { time: '15:00', rainfall: 11, risk: 16 },
+                { time: '18:00', rainfall: 13, risk: 18 }
+            ],
+            riskHistoryEvents: [
+                { time: '06:00', level: 'safe', score: 10, event: 'Baseline' },
+                { time: '09:00', level: 'safe', score: 13, event: 'Stable' },
+                { time: '12:00', level: 'safe', score: 15, event: 'Stable' },
+                { time: '15:00', level: 'safe', score: 16, event: 'Stable' },
+                { time: '18:00', level: 'safe', score: 18, event: 'Stable' }
+            ],
+            keyDrivers: ['Rainfall'],
+            recommendedActions: [{ id: 'A1', label: 'Continue routine monitoring', priority: 'low' }],
+            interpretation: {
+                status: 'SAFE', confidence: 'Demonstration value', trend: 'Stable',
+                primaryDriver: 'Rainfall', secondaryDriver: '—', terrainFactor: 'Gentle slope'
+            },
+            responsePriority: { score: 18, level: 'LOW' }
         },
         {
             id: 'RZ-009', location: 'Guwahati', state: 'Assam',
@@ -185,55 +476,181 @@ const DEMO_DATA = {
                 { label: 'High Soil Moisture', value: 3 },
                 { label: 'Historical Landslides', value: 1 },
                 { label: 'Satellite Anomaly', value: 1 }
-            ]
+            ],
+            probability: 13.8, riskChange: '0', riskChangeDir: 'stable',
+            aspect: 'E', curvature: 'Low', terrainStability: 'Stable',
+            historicalEventsList: [],
+            satelliteIndicators: {
+                ndvi: { value: 0.72, status: 'stable', label: 'NDVI' },
+                ndwi: { value: 0.18, status: 'normal', label: 'NDWI' },
+                surfaceChange: { value: 'None', status: 'normal', label: 'Surface Change' },
+                sarChange: { value: 'Low', status: 'normal', label: 'SAR Change' }
+            },
+            rainfallHistory: [
+                { time: '06:00', rainfall: 2, risk: 8 },
+                { time: '09:00', rainfall: 4, risk: 10 },
+                { time: '12:00', rainfall: 6, risk: 12 },
+                { time: '15:00', rainfall: 8, risk: 13 },
+                { time: '18:00', rainfall: 10, risk: 14 }
+            ],
+            riskHistoryEvents: [
+                { time: '06:00', level: 'safe', score: 8, event: 'Baseline' },
+                { time: '09:00', level: 'safe', score: 10, event: 'Stable' },
+                { time: '12:00', level: 'safe', score: 12, event: 'Stable' },
+                { time: '15:00', level: 'safe', score: 13, event: 'Stable' },
+                { time: '18:00', level: 'safe', score: 14, event: 'Stable' }
+            ],
+            keyDrivers: ['Rainfall'],
+            recommendedActions: [{ id: 'A1', label: 'Continue routine monitoring', priority: 'low' }],
+            interpretation: {
+                status: 'SAFE', confidence: 'Demonstration value', trend: 'Stable',
+                primaryDriver: 'Rainfall', secondaryDriver: '—', terrainFactor: 'Gentle slope'
+            },
+            responsePriority: { score: 14, level: 'LOW' }
         },
+        // Extra locations for selector
         {
-            id: 'RZ-010', location: 'Upper Subansiri', state: 'Arunachal Pradesh',
-            lat: 27.80, lng: 93.80, risk: 76, level: 'ALERT',
-            rainfall: 212, soilMoisture: 76, slope: 38, elevation: 1900,
-            historical: 4, satelliteChange: true,
-            population: 680, roads: 2, schools: 1, hospitals: 0, bridges: 1,
-            trend: [40, 52, 64, 70, 76],
+            id: 'RZ-WS', location: 'West Siang', state: 'Arunachal Pradesh',
+            lat: 27.55, lng: 95.10, risk: 54, level: 'WATCH',
+            rainfall: 156, soilMoisture: 66, slope: 30, elevation: 1400,
+            historical: 2, satelliteChange: false,
+            population: 920, roads: 2, schools: 1, hospitals: 1, bridges: 1,
+            trend: [26, 32, 40, 48, 54],
             factors: [
-                { label: 'Heavy Rainfall', value: 28 },
-                { label: 'Steep Slope', value: 22 },
-                { label: 'High Soil Moisture', value: 15 },
-                { label: 'Historical Landslides', value: 8 },
-                { label: 'Satellite Anomaly', value: 3 }
-            ]
-        },
-        {
-            id: 'RZ-011', location: 'Dima Hasao', state: 'Assam',
-            lat: 25.60, lng: 93.20, risk: 62, level: 'ALERT',
-            rainfall: 178, soilMoisture: 70, slope: 32, elevation: 900,
-            historical: 3, satelliteChange: false,
-            population: 1420, roads: 3, schools: 2, hospitals: 1, bridges: 1,
-            trend: [32, 40, 50, 56, 62],
-            factors: [
-                { label: 'Heavy Rainfall', value: 24 },
-                { label: 'Steep Slope', value: 16 },
-                { label: 'High Soil Moisture', value: 13 },
+                { label: 'Heavy Rainfall', value: 20 },
+                { label: 'Steep Slope', value: 14 },
+                { label: 'High Soil Moisture', value: 11 },
                 { label: 'Historical Landslides', value: 6 },
                 { label: 'Satellite Anomaly', value: 3 }
-            ]
+            ],
+            probability: 52.4, riskChange: '+2', riskChangeDir: 'up',
+            aspect: 'N', curvature: 'Low', terrainStability: 'Moderate',
+            historicalEventsList: [
+                { year: 2021, magnitude: 'minor', month: 'July' },
+                { year: 2023, magnitude: 'minor', month: 'August' }
+            ],
+            satelliteIndicators: {
+                ndvi: { value: 0.55, status: 'stable', label: 'NDVI' },
+                ndwi: { value: 0.25, status: 'normal', label: 'NDWI' },
+                surfaceChange: { value: 'None', status: 'normal', label: 'Surface Change' },
+                sarChange: { value: 'Low', status: 'normal', label: 'SAR Change' }
+            },
+            rainfallHistory: [
+                { time: '06:00', rainfall: 12, risk: 26 },
+                { time: '09:00', rainfall: 20, risk: 32 },
+                { time: '12:00', rainfall: 32, risk: 40 },
+                { time: '15:00', rainfall: 44, risk: 48 },
+                { time: '18:00', rainfall: 52, risk: 54 }
+            ],
+            riskHistoryEvents: [
+                { time: '06:00', level: 'safe', score: 26, event: 'Baseline' },
+                { time: '09:00', level: 'watch', score: 32, event: 'Rainfall' },
+                { time: '12:00', level: 'watch', score: 40, event: 'Rising' },
+                { time: '15:00', level: 'watch', score: 48, event: 'Monitoring' },
+                { time: '18:00', level: 'watch', score: 54, event: 'Monitoring' }
+            ],
+            keyDrivers: ['Rainfall', 'Soil moisture', 'Terrain'],
+            recommendedActions: [
+                { id: 'A1', label: 'Continue routine monitoring', priority: 'low' },
+                { id: 'A2', label: 'Monitor rainfall trend', priority: 'low' }
+            ],
+            interpretation: {
+                status: 'WATCH', confidence: 'Demonstration value', trend: 'Increasing',
+                primaryDriver: 'Rainfall', secondaryDriver: 'Soil moisture', terrainFactor: 'Moderate slope'
+            },
+            responsePriority: { score: 48, level: 'MODERATE' }
         },
         {
-            id: 'RZ-012', location: 'Churachandpur', state: 'Manipur',
-            lat: 24.33, lng: 93.68, risk: 88, level: 'WARNING',
-            rainfall: 312, soilMoisture: 86, slope: 44, elevation: 1600,
-            historical: 6, satelliteChange: true,
-            population: 1580, roads: 2, schools: 2, hospitals: 1, bridges: 1,
-            trend: [48, 62, 74, 82, 88],
+            id: 'RZ-IT', location: 'Itanagar', state: 'Arunachal Pradesh',
+            lat: 27.10, lng: 93.62, risk: 32, level: 'WATCH',
+            rainfall: 88, soilMoisture: 48, slope: 22, elevation: 440,
+            historical: 1, satelliteChange: false,
+            population: 3200, roads: 5, schools: 4, hospitals: 2, bridges: 3,
+            trend: [16, 20, 24, 28, 32],
             factors: [
-                { label: 'Heavy Rainfall', value: 36 },
-                { label: 'Steep Slope', value: 26 },
-                { label: 'High Soil Moisture', value: 18 },
-                { label: 'Historical Landslides', value: 12 },
-                { label: 'Satellite Anomaly', value: 7 }
-            ]
+                { label: 'Heavy Rainfall', value: 12 },
+                { label: 'Steep Slope', value: 8 },
+                { label: 'High Soil Moisture', value: 7 },
+                { label: 'Historical Landslides', value: 3 },
+                { label: 'Satellite Anomaly', value: 2 }
+            ],
+            probability: 30.2, riskChange: '+1', riskChangeDir: 'up',
+            aspect: 'SE', curvature: 'Low', terrainStability: 'Stable',
+            historicalEventsList: [{ year: 2022, magnitude: 'minor', month: 'July' }],
+            satelliteIndicators: {
+                ndvi: { value: 0.64, status: 'stable', label: 'NDVI' },
+                ndwi: { value: 0.21, status: 'normal', label: 'NDWI' },
+                surfaceChange: { value: 'None', status: 'normal', label: 'Surface Change' },
+                sarChange: { value: 'Low', status: 'normal', label: 'SAR Change' }
+            },
+            rainfallHistory: [
+                { time: '06:00', rainfall: 5, risk: 16 },
+                { time: '09:00', rainfall: 9, risk: 20 },
+                { time: '12:00', rainfall: 14, risk: 24 },
+                { time: '15:00', rainfall: 20, risk: 28 },
+                { time: '18:00', rainfall: 24, risk: 32 }
+            ],
+            riskHistoryEvents: [
+                { time: '06:00', level: 'safe', score: 16, event: 'Baseline' },
+                { time: '09:00', level: 'safe', score: 20, event: 'Stable' },
+                { time: '12:00', level: 'safe', score: 24, event: 'Stable' },
+                { time: '15:00', level: 'watch', score: 28, event: 'Slight increase' },
+                { time: '18:00', level: 'watch', score: 32, event: 'Monitoring' }
+            ],
+            keyDrivers: ['Rainfall', 'Terrain'],
+            recommendedActions: [{ id: 'A1', label: 'Continue routine monitoring', priority: 'low' }],
+            interpretation: {
+                status: 'WATCH', confidence: 'Demonstration value', trend: 'Stable',
+                primaryDriver: 'Rainfall', secondaryDriver: 'Terrain', terrainFactor: 'Gentle slope'
+            },
+            responsePriority: { score: 28, level: 'LOW' }
+        },
+        {
+            id: 'RZ-AG', location: 'Agartala', state: 'Tripura',
+            lat: 23.83, lng: 91.28, risk: 16, level: 'SAFE',
+            rainfall: 48, soilMoisture: 36, slope: 14, elevation: 30,
+            historical: 0, satelliteChange: false,
+            population: 4800, roads: 6, schools: 5, hospitals: 3, bridges: 4,
+            trend: [8, 10, 12, 14, 16],
+            factors: [
+                { label: 'Heavy Rainfall', value: 6 },
+                { label: 'Steep Slope', value: 4 },
+                { label: 'High Soil Moisture', value: 3 },
+                { label: 'Historical Landslides', value: 2 },
+                { label: 'Satellite Anomaly', value: 1 }
+            ],
+            probability: 15.4, riskChange: '0', riskChangeDir: 'stable',
+            aspect: 'S', curvature: 'Low', terrainStability: 'Stable',
+            historicalEventsList: [],
+            satelliteIndicators: {
+                ndvi: { value: 0.71, status: 'stable', label: 'NDVI' },
+                ndwi: { value: 0.19, status: 'normal', label: 'NDWI' },
+                surfaceChange: { value: 'None', status: 'normal', label: 'Surface Change' },
+                sarChange: { value: 'Low', status: 'normal', label: 'SAR Change' }
+            },
+            rainfallHistory: [
+                { time: '06:00', rainfall: 3, risk: 8 },
+                { time: '09:00', rainfall: 5, risk: 10 },
+                { time: '12:00', rainfall: 8, risk: 12 },
+                { time: '15:00', rainfall: 11, risk: 14 },
+                { time: '18:00', rainfall: 13, risk: 16 }
+            ],
+            riskHistoryEvents: [
+                { time: '06:00', level: 'safe', score: 8, event: 'Baseline' },
+                { time: '09:00', level: 'safe', score: 10, event: 'Stable' },
+                { time: '12:00', level: 'safe', score: 12, event: 'Stable' },
+                { time: '15:00', level: 'safe', score: 14, event: 'Stable' },
+                { time: '18:00', level: 'safe', score: 16, event: 'Stable' }
+            ],
+            keyDrivers: ['Rainfall'],
+            recommendedActions: [{ id: 'A1', label: 'Continue routine monitoring', priority: 'low' }],
+            interpretation: {
+                status: 'SAFE', confidence: 'Demonstration value', trend: 'Stable',
+                primaryDriver: 'Rainfall', secondaryDriver: '—', terrainFactor: 'Gentle slope'
+            },
+            responsePriority: { score: 16, level: 'LOW' }
         }
     ],
-
     alerts: [
         {
             id: 'ALT-001', severity: 'warning', type: 'Landslide Risk Warning',
@@ -430,264 +847,7 @@ const DEMO_DATA = {
     { location: 'East Siang', lat: 27.20, lng: 94.50, type: 'Vegetation stress', detected: '1 day ago', confidence: 'Medium' },
     { location: 'Upper Subansiri', lat: 27.80, lng: 93.80, type: 'Surface change', detected: '3 days ago', confidence: 'High' },
     { location: 'Churachandpur', lat: 24.33, lng: 93.68, type: 'Ground subsidence', detected: '5 hours ago', confidence: 'High' }
-  ],
-  // ===== RISK ANALYSIS DATA =====
-riskAnalysisData: {
-    'Tawang': {
-      risk: 84, probability: 82.4, level: 'WARNING',
-      rainfall: 286, soilMoisture: 81, slope: 41, elevation: 2100,
-      historicalEvents: 5, satelliteChange: true,
-      population: 1240, villages: 4, roads: 3, schools: 2, hospitals: 1, bridges: 1,
-      previousRisk: 66, confidence: 78,
-      factors: { rainfall: 32, slope: 24, soil: 17, historical: 11, satellite: 6 },
-      trend: [
-        { time: '06:00', value: 42, status: 'watch' },
-        { time: '08:00', value: 47, status: 'watch' },
-        { time: '10:00', value: 53, status: 'watch' },
-        { time: '12:00', value: 63, status: 'alert' },
-        { time: '14:00', value: 71, status: 'alert' },
-        { time: '15:00', value: 76, status: 'alert' },
-        { time: '16:00', value: 80, status: 'warning' },
-        { time: '18:00', value: 84, status: 'warning' }
-      ],
-      rainfallBreakdown: { h24: 112, h48: 198, h72: 286, threshold: 232 },
-      soilType: 'Mountain Soil', aspect: 'North-East', curvature: 'Moderate', saturation: 'High', stability: 'Reduced',
-      historicalByYear: { 2021: 1, 2022: 0, 2023: 2, 2024: 1, 2025: 1 },
-      satellite: { ndvi: 'Change detected', ndwi: 'Stable', surface: 'Detected', sar: 'Elevated' },
-      responsePriority: 91
-    },
-    'East Siang': {
-      risk: 72, probability: 68.2, level: 'ALERT',
-      rainfall: 198, soilMoisture: 74, slope: 36, elevation: 1800,
-      historicalEvents: 3, satelliteChange: true,
-      population: 860, villages: 3, roads: 2, schools: 1, hospitals: 1, bridges: 1,
-      previousRisk: 58, confidence: 74,
-      factors: { rainfall: 26, slope: 20, soil: 14, historical: 8, satellite: 4 },
-      trend: [
-        { time: '06:00', value: 38, status: 'watch' },
-        { time: '08:00', value: 45, status: 'watch' },
-        { time: '10:00', value: 52, status: 'watch' },
-        { time: '12:00', value: 58, status: 'watch' },
-        { time: '14:00', value: 65, status: 'alert' },
-        { time: '15:00', value: 68, status: 'alert' },
-        { time: '16:00', value: 70, status: 'alert' },
-        { time: '18:00', value: 72, status: 'alert' }
-      ],
-      rainfallBreakdown: { h24: 78, h48: 142, h72: 198, threshold: 232 },
-      soilType: 'Loamy Soil', aspect: 'South-East', curvature: 'Low', saturation: 'High', stability: 'Moderate',
-      historicalByYear: { 2021: 0, 2022: 1, 2023: 1, 2024: 0, 2025: 1 },
-      satellite: { ndvi: 'Stable', ndwi: 'Stable', surface: 'Detected', sar: 'Normal' },
-      responsePriority: 74
-    },
-    'West Siang': {
-      risk: 54, probability: 48.6, level: 'WATCH',
-      rainfall: 142, soilMoisture: 62, slope: 30, elevation: 1500,
-      historicalEvents: 2, satelliteChange: false,
-      population: 720, villages: 2, roads: 2, schools: 1, hospitals: 0, bridges: 1,
-      previousRisk: 48, confidence: 70,
-      factors: { rainfall: 18, slope: 16, soil: 11, historical: 6, satellite: 3 },
-      trend: [
-        { time: '06:00', value: 32, status: 'watch' },
-        { time: '08:00', value: 38, status: 'watch' },
-        { time: '10:00', value: 42, status: 'watch' },
-        { time: '12:00', value: 46, status: 'watch' },
-        { time: '14:00', value: 50, status: 'watch' },
-        { time: '15:00', value: 52, status: 'watch' },
-        { time: '16:00', value: 53, status: 'watch' },
-        { time: '18:00', value: 54, status: 'watch' }
-      ],
-      rainfallBreakdown: { h24: 54, h48: 98, h72: 142, threshold: 232 },
-      soilType: 'Red Soil', aspect: 'East', curvature: 'Low', saturation: 'Moderate', stability: 'Stable',
-      historicalByYear: { 2021: 0, 2022: 0, 2023: 1, 2024: 1, 2025: 0 },
-      satellite: { ndvi: 'Stable', ndwi: 'Stable', surface: 'None', sar: 'Normal' },
-      responsePriority: 52
-    },
-    'Itanagar': {
-      risk: 38, probability: 32.1, level: 'WATCH',
-      rainfall: 98, soilMoisture: 54, slope: 22, elevation: 440,
-      historicalEvents: 1, satelliteChange: false,
-      population: 2840, villages: 5, roads: 4, schools: 3, hospitals: 2, bridges: 2,
-      previousRisk: 34, confidence: 72,
-      factors: { rainfall: 14, slope: 10, soil: 8, historical: 4, satellite: 2 },
-      trend: [
-        { time: '06:00', value: 28, status: 'safe' },
-        { time: '08:00', value: 30, status: 'safe' },
-        { time: '10:00', value: 32, status: 'watch' },
-        { time: '12:00', value: 34, status: 'watch' },
-        { time: '14:00', value: 36, status: 'watch' },
-        { time: '15:00', value: 37, status: 'watch' },
-        { time: '16:00', value: 37, status: 'watch' },
-        { time: '18:00', value: 38, status: 'watch' }
-      ],
-      rainfallBreakdown: { h24: 38, h48: 68, h72: 98, threshold: 232 },
-      soilType: 'Alluvial', aspect: 'South', curvature: 'Low', saturation: 'Moderate', stability: 'Stable',
-      historicalByYear: { 2021: 0, 2022: 0, 2023: 0, 2024: 1, 2025: 0 },
-      satellite: { ndvi: 'Stable', ndwi: 'Stable', surface: 'None', sar: 'Normal' },
-      responsePriority: 38
-    },
-    'Gangtok': {
-      risk: 58, probability: 52.4, level: 'WATCH',
-      rainfall: 142, soilMoisture: 62, slope: 32, elevation: 1650,
-      historicalEvents: 2, satelliteChange: false,
-      population: 3400, villages: 6, roads: 5, schools: 4, hospitals: 2, bridges: 3,
-      previousRisk: 52, confidence: 76,
-      factors: { rainfall: 22, slope: 16, soil: 12, historical: 5, satellite: 3 },
-      trend: [
-        { time: '06:00', value: 40, status: 'watch' },
-        { time: '08:00', value: 44, status: 'watch' },
-        { time: '10:00', value: 48, status: 'watch' },
-        { time: '12:00', value: 52, status: 'watch' },
-        { time: '14:00', value: 55, status: 'watch' },
-        { time: '15:00', value: 56, status: 'watch' },
-        { time: '16:00', value: 57, status: 'watch' },
-        { time: '18:00', value: 58, status: 'watch' }
-      ],
-      rainfallBreakdown: { h24: 56, h48: 102, h72: 142, threshold: 232 },
-      soilType: 'Mountain Soil', aspect: 'North', curvature: 'Moderate', saturation: 'Moderate', stability: 'Moderate',
-      historicalByYear: { 2021: 0, 2022: 1, 2023: 0, 2024: 1, 2025: 0 },
-      satellite: { ndvi: 'Stable', ndwi: 'Stable', surface: 'None', sar: 'Normal' },
-      responsePriority: 58
-    },
-    'Shillong': {
-      risk: 22, probability: 18.4, level: 'SAFE',
-      rainfall: 64, soilMoisture: 42, slope: 18, elevation: 1500,
-      historicalEvents: 1, satelliteChange: false,
-      population: 4200, villages: 7, roads: 6, schools: 5, hospitals: 3, bridges: 4,
-      previousRisk: 20, confidence: 80,
-      factors: { rainfall: 8, slope: 6, soil: 5, historical: 2, satellite: 1 },
-      trend: [
-        { time: '06:00', value: 18, status: 'safe' },
-        { time: '08:00', value: 19, status: 'safe' },
-        { time: '10:00', value: 20, status: 'safe' },
-        { time: '12:00', value: 21, status: 'safe' },
-        { time: '14:00', value: 21, status: 'safe' },
-        { time: '15:00', value: 22, status: 'safe' },
-        { time: '16:00', value: 22, status: 'safe' },
-        { time: '18:00', value: 22, status: 'safe' }
-      ],
-      rainfallBreakdown: { h24: 22, h48: 42, h72: 64, threshold: 232 },
-      soilType: 'Laterite', aspect: 'West', curvature: 'Low', saturation: 'Low', stability: 'Stable',
-      historicalByYear: { 2021: 0, 2022: 0, 2023: 0, 2024: 1, 2025: 0 },
-      satellite: { ndvi: 'Stable', ndwi: 'Stable', surface: 'None', sar: 'Normal' },
-      responsePriority: 22
-    },
-    'Aizawl': {
-      risk: 38, probability: 32.8, level: 'WATCH',
-      rainfall: 98, soilMoisture: 54, slope: 26, elevation: 1200,
-      historicalEvents: 1, satelliteChange: false,
-      population: 2600, villages: 4, roads: 4, schools: 3, hospitals: 2, bridges: 2,
-      previousRisk: 34, confidence: 72,
-      factors: { rainfall: 15, slope: 10, soil: 8, historical: 3, satellite: 2 },
-      trend: [
-        { time: '06:00', value: 28, status: 'safe' },
-        { time: '08:00', value: 30, status: 'safe' },
-        { time: '10:00', value: 32, status: 'watch' },
-        { time: '12:00', value: 34, status: 'watch' },
-        { time: '14:00', value: 36, status: 'watch' },
-        { time: '15:00', value: 37, status: 'watch' },
-        { time: '16:00', value: 37, status: 'watch' },
-        { time: '18:00', value: 38, status: 'watch' }
-      ],
-      rainfallBreakdown: { h24: 38, h48: 68, h72: 98, threshold: 232 },
-      soilType: 'Loamy Soil', aspect: 'South-East', curvature: 'Low', saturation: 'Moderate', stability: 'Stable',
-      historicalByYear: { 2021: 0, 2022: 0, 2023: 1, 2024: 0, 2025: 0 },
-      satellite: { ndvi: 'Stable', ndwi: 'Stable', surface: 'None', sar: 'Normal' },
-      responsePriority: 38
-    },
-    'Kohima': {
-      risk: 45, probability: 40.2, level: 'WATCH',
-      rainfall: 112, soilMoisture: 58, slope: 28, elevation: 1450,
-      historicalEvents: 2, satelliteChange: false,
-      population: 1850, villages: 3, roads: 3, schools: 2, hospitals: 1, bridges: 1,
-      previousRisk: 40, confidence: 74,
-      factors: { rainfall: 18, slope: 12, soil: 9, historical: 4, satellite: 2 },
-      trend: [
-        { time: '06:00', value: 32, status: 'watch' },
-        { time: '08:00', value: 35, status: 'watch' },
-        { time: '10:00', value: 38, status: 'watch' },
-        { time: '12:00', value: 40, status: 'watch' },
-        { time: '14:00', value: 42, status: 'watch' },
-        { time: '15:00', value: 43, status: 'watch' },
-        { time: '16:00', value: 44, status: 'watch' },
-        { time: '18:00', value: 45, status: 'watch' }
-      ],
-      rainfallBreakdown: { h24: 42, h48: 78, h72: 112, threshold: 232 },
-      soilType: 'Mountain Soil', aspect: 'North-East', curvature: 'Low', saturation: 'Moderate', stability: 'Stable',
-      historicalByYear: { 2021: 0, 2022: 1, 2023: 0, 2024: 1, 2025: 0 },
-      satellite: { ndvi: 'Stable', ndwi: 'Stable', surface: 'None', sar: 'Normal' },
-      responsePriority: 44
-    },
-    'Imphal': {
-      risk: 18, probability: 14.2, level: 'SAFE',
-      rainfall: 52, soilMoisture: 38, slope: 15, elevation: 786,
-      historicalEvents: 1, satelliteChange: false,
-      population: 3800, villages: 6, roads: 5, schools: 4, hospitals: 2, bridges: 3,
-      previousRisk: 16, confidence: 82,
-      factors: { rainfall: 6, slope: 5, soil: 4, historical: 2, satellite: 1 },
-      trend: [
-        { time: '06:00', value: 14, status: 'safe' },
-        { time: '08:00', value: 15, status: 'safe' },
-        { time: '10:00', value: 16, status: 'safe' },
-        { time: '12:00', value: 17, status: 'safe' },
-        { time: '14:00', value: 17, status: 'safe' },
-        { time: '15:00', value: 18, status: 'safe' },
-        { time: '16:00', value: 18, status: 'safe' },
-        { time: '18:00', value: 18, status: 'safe' }
-      ],
-      rainfallBreakdown: { h24: 18, h48: 34, h72: 52, threshold: 232 },
-      soilType: 'Alluvial', aspect: 'South', curvature: 'Low', saturation: 'Low', stability: 'Stable',
-      historicalByYear: { 2021: 0, 2022: 0, 2023: 0, 2024: 1, 2025: 0 },
-      satellite: { ndvi: 'Stable', ndwi: 'Stable', surface: 'None', sar: 'Normal' },
-      responsePriority: 18
-    },
-    'Agartala': {
-      risk: 14, probability: 10.8, level: 'SAFE',
-      rainfall: 42, soilMoisture: 34, slope: 12, elevation: 25,
-      historicalEvents: 0, satelliteChange: false,
-      population: 2400, villages: 4, roads: 4, schools: 3, hospitals: 2, bridges: 2,
-      previousRisk: 12, confidence: 84,
-      factors: { rainfall: 5, slope: 4, soil: 3, historical: 1, satellite: 1 },
-      trend: [
-        { time: '06:00', value: 10, status: 'safe' },
-        { time: '08:00', value: 11, status: 'safe' },
-        { time: '10:00', value: 12, status: 'safe' },
-        { time: '12:00', value: 13, status: 'safe' },
-        { time: '14:00', value: 13, status: 'safe' },
-        { time: '15:00', value: 14, status: 'safe' },
-        { time: '16:00', value: 14, status: 'safe' },
-        { time: '18:00', value: 14, status: 'safe' }
-      ],
-      rainfallBreakdown: { h24: 14, h48: 28, h72: 42, threshold: 232 },
-      soilType: 'Alluvial', aspect: 'South', curvature: 'Low', saturation: 'Low', stability: 'Stable',
-      historicalByYear: { 2021: 0, 2022: 0, 2023: 0, 2024: 0, 2025: 0 },
-      satellite: { ndvi: 'Stable', ndwi: 'Stable', surface: 'None', sar: 'Normal' },
-      responsePriority: 14
-    },
-    'Guwahati': {
-      risk: 28, probability: 22.6, level: 'SAFE',
-      rainfall: 68, soilMoisture: 46, slope: 16, elevation: 55,
-      historicalEvents: 1, satelliteChange: false,
-      population: 6200, villages: 8, roads: 8, schools: 6, hospitals: 4, bridges: 5,
-      previousRisk: 24, confidence: 78,
-      factors: { rainfall: 10, slope: 8, soil: 6, historical: 3, satellite: 1 },
-      trend: [
-        { time: '06:00', value: 20, status: 'safe' },
-        { time: '08:00', value: 22, status: 'safe' },
-        { time: '10:00', value: 24, status: 'safe' },
-        { time: '12:00', value: 26, status: 'safe' },
-        { time: '14:00', value: 27, status: 'safe' },
-        { time: '15:00', value: 27, status: 'safe' },
-        { time: '16:00', value: 28, status: 'safe' },
-        { time: '18:00', value: 28, status: 'safe' }
-      ],
-      rainfallBreakdown: { h24: 24, h48: 46, h72: 68, threshold: 232 },
-      soilType: 'Alluvial', aspect: 'South', curvature: 'Low', saturation: 'Low', stability: 'Stable',
-      historicalByYear: { 2021: 0, 2022: 0, 2023: 0, 2024: 1, 2025: 0 },
-      satellite: { ndvi: 'Stable', ndwi: 'Stable', surface: 'None', sar: 'Normal' },
-      responsePriority: 28
-    }
-  },
-  comparisonLocations: ['Tawang', 'East Siang', 'Gangtok']
+  ]
 };
 
 if (typeof window !== 'undefined') {

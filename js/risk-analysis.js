@@ -1,1055 +1,1033 @@
-// js/risk-analysis.js — AI Risk Analysis Page Logic
+// js/risk-analysis.js — Risk Analysis Page Logic
+
 (function() {
     'use strict';
-  
+
     const state = {
-      currentLocation: 'Tawang',
-      currentData: null,
-      charts: { trend: null, rainfall: null, historical: null },
-      notifications: []
+        currentLocation: 'Tawang',
+        charts: { trend: null, rainfall: null },
+        data: null
     };
-  
-    // ============ INITIALIZATION ============
+
+    // ============ INIT ============
     async function init() {
-      renderSidebar();
-      await loadRiskAnalysis('Tawang');
-      setupLocationSelector();
-      setupAccordions();
-      setupEventListeners();
-      await loadNotifications();
-      setupIntersectionObservers();
+        renderSidebar();
+        renderLocationSelector();
+        await loadLocation(state.currentLocation);
+        setupEventListeners();
     }
-  
-    // ============ SIDEBAR (reuse) ============
+
+    // ============ SIDEBAR ============
     function renderSidebar() {
-      const nav = document.getElementById('sidebarNav');
-      if (!nav) return;
-      const html = DEMO_DATA.sidebarSections.map(section => `
-        <div class="sidebar-section">
-          <div class="sidebar-section-label">${section.label}</div>
-          ${section.items.map(item => `
-            <a href="${ROUTES[item.key] || '#'}" class="sidebar-item ${item.active ? 'active' : ''}" data-route="${item.key}">
-              <span class="sidebar-icon">${getSidebarIcon(item.icon)}</span>
-              <span>${item.label}</span>
-            </a>
-          `).join('')}
-        </div>
-      `).join('');
-      nav.innerHTML = html;
-    }
-  
-    function getSidebarIcon(name) {
-      const icons = {
-        'grid': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>',
-        'map': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>',
-        'chart': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>',
-        'bell': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>',
-        'clipboard': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>',
-        'check': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
-        'cloud': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>',
-        'mountain': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20l4-8 4 4 4-10 6 14"/></svg>',
-        'satellite': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="21.17" y1="8" x2="12" y2="8"/></svg>',
-        'clock': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
-        'building': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/></svg>',
-        'route': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg>',
-        'sliders': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/></svg>',
-        'bar-chart': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>',
-        'cpu': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/></svg>',
-        'users': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>',
-        'settings': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33"/></svg>'
-      };
-      return icons[name] || '';
-    }
-  
-    // ============ LOAD ANALYSIS ============
-    async function loadRiskAnalysis(location) {
-      showLoadingState();
-      try {
-        const data = await Services.getRiskAnalysis(location);
-        state.currentLocation = location;
-        state.currentData = data;
-  
-        updateHeader();
-        updateRiskOverview();
-        updateRiskTrend();
-        updateAIExplanation();
-        updateConfidence();
-        updateEnvironmentalFactors();
-        updateRainfallAnalysis();
-        updateTerrainAnalysis();
-        updateHistoricalContext();
-        updateSatelliteIndicators();
-        updateTimeline();
-        updateExposure();
-        updateComparison();
-        updateDataFreshness();
-  
-        hideLoadingState();
-      } catch (err) {
-        showErrorState();
-      }
-    }
-  
-    function showLoadingState() {
-      const overlay = document.getElementById('analysisLoading');
-      if (overlay) overlay.classList.add('active');
-    }
-  
-    function hideLoadingState() {
-      const overlay = document.getElementById('analysisLoading');
-      if (overlay) overlay.classList.remove('active');
-    }
-  
-    function showErrorState() {
-      const overlay = document.getElementById('analysisLoading');
-      if (!overlay) return;
-      overlay.innerHTML = `
-        <div style="padding: var(--space-6); text-align: center;">
-          <div class="loading-spinner" style="margin: 0 auto var(--space-3);"></div>
-          <div style="font-size: var(--fs-sm); color: var(--text-700); font-weight: 600;">Analysis data temporarily unavailable</div>
-          <button class="btn btn-outline" style="margin-top: var(--space-3);" onclick="window.SahayakRiskAnalysis.retryLoad()">Retry</button>
-        </div>
-      `;
-      overlay.classList.add('active');
-    }
-  
-    async function retryLoad() {
-      hideLoadingState();
-      await loadRiskAnalysis(state.currentLocation);
-    }
-  
-    // ============ HEADER ============
-    function updateHeader() {
-      const zone = DEMO_DATA.riskZones.find(z => z.location === state.currentLocation);
-      const stateName = zone?.state || 'Arunachal Pradesh';
-      const locEl = document.getElementById('analysisLocationDisplay');
-      if (locEl) locEl.textContent = `${state.currentLocation}, ${stateName}`;
-    }
-  
-    // ============ RISK OVERVIEW ============
-    function updateRiskOverview() {
-      const d = state.currentData;
-      const overview = document.getElementById('riskOverview');
-      if (!overview) return;
-  
-      const level = d.level.toLowerCase();
-      overview.className = `risk-overview level-${level}`;
-  
-      // Gauge
-      const circumference = 534;
-      const dashoffset = circumference * (1 - d.risk / 100);
-      const gaugeProgress = overview.querySelector('.risk-gauge .progress');
-      if (gaugeProgress) {
-        gaugeProgress.className = `progress level-${level}`;
-        gaugeProgress.style.strokeDashoffset = circumference;
-        requestAnimationFrame(() => {
-          gaugeProgress.style.strokeDashoffset = dashoffset;
-        });
-      }
-  
-      // Score
-      const scoreEl = overview.querySelector('.risk-gauge-value');
-      if (scoreEl) animateCount(scoreEl, d.risk, 1400);
-  
-      // Status
-      const statusEl = overview.querySelector('.risk-overview-status');
-      if (statusEl) {
-        statusEl.className = `risk-overview-status status-${level}`;
-        statusEl.innerHTML = `<span class="status-dot"></span><span>${d.level}</span>`;
-      }
-  
-      // Probability
-      const probEl = overview.querySelector('.risk-overview-probability-value');
-      if (probEl) animateCount(probEl, d.probability, 1400, true);
-  
-      // Message
-      const messageText = overview.querySelector('.risk-overview-message-text');
-      if (messageText) {
-        const delta = d.risk - d.previousRisk;
-        const direction = delta > 0 ? 'increased' : delta < 0 ? 'decreased' : 'remained stable';
-        messageText.innerHTML = `
-          <strong>High landslide risk conditions detected in the selected demonstration area.</strong><br>
-          Risk ${direction} significantly compared with the previous monitoring period.
-        `;
-      }
-  
-      // Change card
-      const changeValue = overview.querySelector('.risk-change-value');
-      const changeRange = overview.querySelector('.risk-change-range');
-      const changeText = overview.querySelector('.risk-change-text');
-      const delta = d.risk - d.previousRisk;
-      if (changeValue) {
-        const sign = delta > 0 ? '+' : '';
-        changeValue.className = `risk-change-value ${delta > 0 ? '' : delta < 0 ? 'decrease' : 'neutral'}`;
-        changeValue.innerHTML = `${sign}${delta} ${delta > 0 ? '↑' : delta < 0 ? '↓' : '—'}`;
-      }
-      if (changeRange) changeRange.textContent = `${d.previousRisk} → ${d.risk}`;
-      if (changeText) {
-        changeText.textContent = delta > 0 ? 'Risk increased' : delta < 0 ? 'Risk decreased' : 'Risk stable';
-      }
-    }
-  
-    // ============ RISK TREND CHART ============
-    function updateRiskTrend() {
-      const d = state.currentData;
-      const canvas = document.getElementById('riskTrendCanvas');
-      if (!canvas || typeof Chart === 'undefined') return;
-  
-      if (state.charts.trend) state.charts.trend.destroy();
-  
-      const labels = d.trend.map(t => t.time);
-      const values = d.trend.map(t => t.value);
-  
-      const colorMap = {
-        safe: '#16A34A',
-        watch: '#EAB308',
-        alert: '#F97316',
-        warning: '#DC2626'
-      };
-  
-      const pointColors = d.trend.map(t => colorMap[t.status] || '#19B8C7');
-  
-      state.charts.trend = new Chart(canvas, {
-        type: 'line',
-        data: {
-          labels,
-          datasets: [
-            {
-              label: 'Risk Score',
-              data: values,
-              borderColor: '#19B8C7',
-              backgroundColor: 'rgba(25, 184, 199, 0.1)',
-              borderWidth: 2.5,
-              tension: 0.35,
-              fill: true,
-              pointBackgroundColor: pointColors,
-              pointBorderColor: '#fff',
-              pointBorderWidth: 2,
-              pointRadius: 5,
-              pointHoverRadius: 7
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          animation: { duration: 1000, easing: 'easeOutQuart' },
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              backgroundColor: '#0B1728',
-              titleColor: '#fff',
-              bodyColor: '#fff',
-              borderColor: '#19B8C7',
-              borderWidth: 1,
-              padding: 10,
-              displayColors: false,
-              callbacks: {
-                label: (ctx) => `Risk: ${ctx.parsed.y}/100`
-              }
-            },
-            annotation: undefined
-          },
-          scales: {
-            x: {
-              grid: { color: 'rgba(0,0,0,0.04)', drawBorder: false },
-              ticks: { color: '#8A9BB5', font: { size: 11, weight: '600' } }
-            },
-            y: {
-              min: 0,
-              max: 100,
-              grid: { color: 'rgba(0,0,0,0.04)', drawBorder: false },
-              ticks: { color: '#8A9BB5', font: { size: 11, weight: '600' }, stepSize: 20 }
-            }
-          }
-        },
-        plugins: [{
-          id: 'thresholdLines',
-          beforeDraw: (chart) => {
-            const ctx = chart.ctx;
-            const yScale = chart.scales.y;
-            const xScale = chart.scales.x;
-            const thresholds = [
-              { value: 40, label: 'WATCH', color: '#EAB308' },
-              { value: 60, label: 'ALERT', color: '#F97316' },
-              { value: 80, label: 'WARNING', color: '#DC2626' }
-            ];
-            thresholds.forEach(t => {
-              const y = yScale.getPixelForValue(t.value);
-              ctx.save();
-              ctx.strokeStyle = t.color;
-              ctx.lineWidth = 1;
-              ctx.setLineDash([4, 4]);
-              ctx.globalAlpha = 0.5;
-              ctx.beginPath();
-              ctx.moveTo(xScale.left, y);
-              ctx.lineTo(xScale.right, y);
-              ctx.stroke();
-              ctx.restore();
-              ctx.save();
-              ctx.fillStyle = t.color;
-              ctx.font = 'bold 9px Inter, sans-serif';
-              ctx.globalAlpha = 0.7;
-              ctx.fillText(t.label, xScale.right - 48, y - 4);
-              ctx.restore();
-            });
-          }
-        }]
-      });
-    }
-  
-    // ============ AI EXPLANATION ============
-    function updateAIExplanation() {
-      const d = state.currentData;
-      const container = document.getElementById('aiExplanationPanel');
-      if (!container) return;
-  
-      const factorLabels = {
-        rainfall: 'Heavy Rainfall',
-        slope: 'Steep Slope',
-        soil: 'High Soil Moisture',
-        historical: 'Historical Landslides',
-        satellite: 'Satellite Anomaly'
-      };
-  
-      const maxFactor = Math.max(...Object.values(d.factors));
-      const barsHtml = Object.entries(d.factors).map(([key, val]) => {
-        const pct = (val / maxFactor) * 100;
-        return `
-          <div class="ai-bar" style="--target-width: ${pct}%">
-            <div class="ai-bar-label">${factorLabels[key]}</div>
-            <div class="ai-bar-track"><div class="ai-bar-fill"></div></div>
-            <div class="ai-bar-value">+${val}</div>
-          </div>
-        `;
-      }).join('');
-  
-      const driversHtml = Object.entries(d.factors)
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 5)
-        .map(([key]) => `<span class="ai-driver-chip">${factorLabels[key]}</span>`)
-        .join('');
-  
-      container.innerHTML = `
-        <div class="ai-panel">
-          <div class="ai-panel-header">
-            <div>
-              <div class="ai-panel-title">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                Why is this area high risk?
-              </div>
-              <div class="ai-panel-subtitle">Factor contribution analysis — SHAP-style</div>
+        const nav = document.getElementById('sidebarNav');
+        if (!nav) return;
+
+        const html = DEMO_DATA.sidebarSections.map(section => `
+            <div class="sidebar-section">
+                <div class="sidebar-section-label">${section.label}</div>
+                ${section.items.map(item => `
+                    <a href="${ROUTES[item.key] || '#'}" class="sidebar-item ${item.key === 'riskAnalysis' ? 'active' : ''}">
+                        <span class="sidebar-icon">${getIcon(item.icon)}</span>
+                        <span>${item.label}</span>
+                    </a>
+                `).join('')}
             </div>
-            <span class="analysis-card-badge">DEMO</span>
-          </div>
-          <div class="ai-bars">${barsHtml}</div>
-          <div class="ai-explanation-text">
-            Risk increased because accumulated rainfall and soil moisture are elevated, while steep terrain and historical landslide patterns increase susceptibility.
-          </div>
-          <div class="ai-key-drivers">
-            <div class="ai-key-drivers-title">Key Drivers</div>
-            <div class="ai-key-drivers-list">${driversHtml}</div>
-          </div>
-          <div class="ai-panel-footer">
-            <span class="ai-panel-footer-note">Illustrative SHAP-style explanation — DEMO</span>
-            <button class="ai-panel-footer-btn" onclick="window.SahayakRiskAnalysis.toggleFullExplanation()">
-              View Full Explanation →
-            </button>
-          </div>
-        </div>
-      `;
-  
-      // Animate bars after render
-      setTimeout(() => {
-        container.querySelectorAll('.ai-bar').forEach((bar, i) => {
-          setTimeout(() => bar.classList.add('revealed'), i * 120);
-        });
-      }, 200);
+        `).join('');
+        nav.innerHTML = html;
     }
-  
-    function toggleFullExplanation() {
-      const modal = document.getElementById('explanationModal');
-      if (modal) modal.classList.add('active');
-    }
-  
-    function closeExplanationModal() {
-      const modal = document.getElementById('explanationModal');
-      if (modal) modal.classList.remove('active');
-    }
-  
-    // ============ CONFIDENCE ============
-    function updateConfidence() {
-      const d = state.currentData;
-      const container = document.getElementById('confidenceCard');
-      if (!container) return;
-  
-      const level = d.confidence >= 75 ? 'high' : d.confidence >= 50 ? 'moderate' : 'low';
-      const label = d.confidence >= 75 ? 'High' : d.confidence >= 50 ? 'Moderate' : 'Low';
-  
-      container.innerHTML = `
-        <div class="confidence-header">
-          <div class="confidence-title">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            Model Confidence
-          </div>
-          <div class="confidence-value">
-            <span class="confidence-number">${d.confidence}</span>
-            <span class="confidence-unit">%</span>
-          </div>
-        </div>
-        <div class="confidence-bar">
-          <div class="confidence-bar-fill level-${level}" id="confidenceBarFill"></div>
-        </div>
-        <div class="confidence-text">
-          Confidence is influenced by data availability, input quality and model uncertainty. Current assessment: <strong>${label}</strong>.
-        </div>
-        <div class="confidence-demo">Demonstration metric — replace with validated model output.</div>
-      `;
-  
-      setTimeout(() => {
-        const fill = document.getElementById('confidenceBarFill');
-        if (fill) fill.style.width = `${d.confidence}%`;
-      }, 100);
-    }
-  
-    // ============ ENVIRONMENTAL FACTORS ============
-    function updateEnvironmentalFactors() {
-      const d = state.currentData;
-      const grid = document.getElementById('envIndicatorGrid');
-      if (!grid) return;
-  
-      const cards = [
-        { icon: 'cloud-rain', value: `${d.rainfall} mm / 72h`, label: 'Rainfall', status: d.rainfall > 200 ? 'threshold' : 'normal', statusLabel: d.rainfall > 200 ? 'Above Threshold' : 'Normal' },
-        { icon: 'droplet', value: `${d.soilMoisture}%`, label: 'Soil Moisture', status: d.soilMoisture > 70 ? 'high' : 'normal', statusLabel: d.soilMoisture > 70 ? 'High' : 'Normal' },
-        { icon: 'mountain', value: `${d.slope}°`, label: 'Slope', status: d.slope > 35 ? 'steep' : 'normal', statusLabel: d.slope > 35 ? 'Steep' : 'Moderate' },
-        { icon: 'mountain', value: `${Utils.formatNumber(d.elevation)} m`, label: 'Elevation', status: 'terrain', statusLabel: 'Terrain Factor' },
-        { icon: 'alert-triangle', value: `${d.historicalEvents}`, label: 'Historical Events', status: d.historicalEvents >= 3 ? 'elevated' : 'normal', statusLabel: d.historicalEvents >= 3 ? 'Elevated' : 'Low' },
-        { icon: 'satellite', value: d.satelliteChange ? 'Detected' : 'None', label: 'Satellite Change', status: d.satelliteChange ? 'monitor' : 'normal', statusLabel: d.satelliteChange ? 'Monitor' : 'Stable' }
-      ];
-  
-      grid.innerHTML = cards.map(c => `
-        <div class="env-indicator">
-          <div class="env-indicator-header">
-            <div class="env-indicator-icon">${getIcon(c.icon)}</div>
-            <span class="env-indicator-status ${c.status}">${c.statusLabel}</span>
-          </div>
-          <div class="env-indicator-value">${c.value}</div>
-          <div class="env-indicator-label">${c.label}</div>
-          <span class="env-indicator-demo">DEMO</span>
-        </div>
-      `).join('');
-    }
-  
-    // ============ RAINFALL ANALYSIS ============
-    function updateRainfallAnalysis() {
-      const d = state.currentData;
-      const canvas = document.getElementById('rainfallCanvas');
-      if (!canvas || typeof Chart === 'undefined') return;
-  
-      if (state.charts.rainfall) state.charts.rainfall.destroy();
-  
-      const rb = d.rainfallBreakdown;
-      const exceeds = rb.h72 > rb.threshold;
-      const exceedPct = Math.round(((rb.h72 - rb.threshold) / rb.threshold) * 100);
-  
-      state.charts.rainfall = new Chart(canvas, {
-        type: 'bar',
-        data: {
-          labels: ['24h', '48h', '72h'],
-          datasets: [
-            {
-              label: 'Rainfall (mm)',
-              data: [rb.h24, rb.h48, rb.h72],
-              backgroundColor: 'rgba(25, 184, 199, 0.7)',
-              borderColor: '#19B8C7',
-              borderWidth: 1,
-              borderRadius: 4,
-              barPercentage: 0.6
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          animation: { duration: 1000 },
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              backgroundColor: '#0B1728',
-              titleColor: '#fff',
-              bodyColor: '#fff',
-              borderColor: '#19B8C7',
-              borderWidth: 1,
-              callbacks: {
-                label: (ctx) => `${ctx.parsed.y} mm`
-              }
-            }
-          },
-          scales: {
-            x: {
-              grid: { display: false },
-              ticks: { color: '#8A9BB5', font: { size: 11, weight: '600' } }
-            },
-            y: {
-              grid: { color: 'rgba(0,0,0,0.04)', drawBorder: false },
-              ticks: { color: '#8A9BB5', font: { size: 11, weight: '600' } }
-            }
-          }
-        },
-        plugins: [{
-          id: 'thresholdLine',
-          beforeDraw: (chart) => {
-            const ctx = chart.ctx;
-            const yScale = chart.scales.y;
-            const xScale = chart.scales.x;
-            const y = yScale.getPixelForValue(rb.threshold);
-            ctx.save();
-            ctx.strokeStyle = '#DC2626';
-            ctx.lineWidth = 1.5;
-            ctx.setLineDash([5, 5]);
-            ctx.beginPath();
-            ctx.moveTo(xScale.left, y);
-            ctx.lineTo(xScale.right, y);
-            ctx.stroke();
-            ctx.restore();
-            ctx.save();
-            ctx.fillStyle = '#DC2626';
-            ctx.font = 'bold 10px Inter, sans-serif';
-            ctx.fillText(`Threshold: ${rb.threshold} mm`, xScale.right - 110, y - 6);
-            ctx.restore();
-          }
-        }]
-      });
-  
-      // Summary
-      const summaryEl = document.getElementById('rainfallSummary');
-      if (summaryEl) {
-        summaryEl.innerHTML = `
-          <div class="rainfall-summary-item">
-            <div class="rainfall-summary-value">${rb.h24} mm</div>
-            <div class="rainfall-summary-label">24h</div>
-          </div>
-          <div class="rainfall-summary-item">
-            <div class="rainfall-summary-value">${rb.h48} mm</div>
-            <div class="rainfall-summary-label">48h</div>
-          </div>
-          <div class="rainfall-summary-item">
-            <div class="rainfall-summary-value">${rb.h72} mm</div>
-            <div class="rainfall-summary-label">72h</div>
-          </div>
-        `;
-      }
-  
-      const alertEl = document.getElementById('rainfallAlert');
-      if (alertEl) {
-        if (exceeds) {
-          alertEl.style.display = 'flex';
-          alertEl.innerHTML = `
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-            72-hour threshold exceeded by ${exceedPct}%
-          `;
-        } else {
-          alertEl.style.display = 'none';
-        }
-      }
-    }
-  
-    // ============ TERRAIN ANALYSIS ============
-    function updateTerrainAnalysis() {
-      const d = state.currentData;
-      const container = document.getElementById('terrainPanel');
-      if (!container) return;
-  
-      const stabilityClass = d.stability === 'Reduced' ? 'reduced' : d.stability === 'Moderate' ? 'moderate' : 'stable';
-  
-      container.innerHTML = `
-        <div class="terrain-panel">
-          <div style="margin-bottom: var(--space-3);">
-            <div style="font-size: 10px; font-weight: 700; letter-spacing: 0.12em; color: var(--teal); margin-bottom: var(--space-2); text-transform: uppercase;">Soil</div>
-            <div class="terrain-row">
-              <span class="terrain-row-label">Soil Moisture</span>
-              <span class="terrain-row-value">${d.soilMoisture}%</span>
-            </div>
-            <div class="terrain-row">
-              <span class="terrain-row-label">Soil Type</span>
-              <span class="terrain-row-value">${d.soilType}</span>
-            </div>
-            <div class="terrain-row">
-              <span class="terrain-row-label">Saturation</span>
-              <span class="terrain-row-value">${d.saturation}</span>
-            </div>
-          </div>
-          <div>
-            <div style="font-size: 10px; font-weight: 700; letter-spacing: 0.12em; color: var(--teal); margin-bottom: var(--space-2); text-transform: uppercase;">Terrain</div>
-            <div class="terrain-row">
-              <span class="terrain-row-label">Slope</span>
-              <span class="terrain-row-value">${d.slope}°</span>
-            </div>
-            <div class="terrain-row">
-              <span class="terrain-row-label">Elevation</span>
-              <span class="terrain-row-value">${Utils.formatNumber(d.elevation)} m</span>
-            </div>
-            <div class="terrain-row">
-              <span class="terrain-row-label">Aspect</span>
-              <span class="terrain-row-value">${d.aspect}</span>
-            </div>
-            <div class="terrain-row">
-              <span class="terrain-row-label">Curvature</span>
-              <span class="terrain-row-value">${d.curvature}</span>
-            </div>
-            <div class="terrain-row">
-              <span class="terrain-row-label">Terrain Stability</span>
-              <span class="terrain-stability ${stabilityClass}">${d.stability}</span>
-            </div>
-          </div>
-        </div>
-      `;
-    }
-  
-    // ============ HISTORICAL CONTEXT ============
-    function updateHistoricalContext() {
-      const d = state.currentData;
-      const countEl = document.getElementById('historicalCount');
-      if (countEl) animateCount(countEl, d.historicalEvents, 1000);
-  
-      const canvas = document.getElementById('historicalCanvas');
-      if (!canvas || typeof Chart === 'undefined') return;
-  
-      if (state.charts.historical) state.charts.historical.destroy();
-  
-      const years = Object.keys(d.historicalByYear);
-      const values = Object.values(d.historicalByYear);
-  
-      state.charts.historical = new Chart(canvas, {
-        type: 'bar',
-        data: {
-          labels: years,
-          datasets: [{
-            label: 'Events',
-            data: values,
-            backgroundColor: 'rgba(249, 115, 22, 0.7)',
-            borderColor: '#F97316',
-            borderWidth: 1,
-            borderRadius: 4,
-            barPercentage: 0.5
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          animation: { duration: 1000 },
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              backgroundColor: '#0B1728',
-              titleColor: '#fff',
-              bodyColor: '#fff',
-              callbacks: {
-                label: (ctx) => `${ctx.parsed.y} event${ctx.parsed.y !== 1 ? 's' : ''}`
-              }
-            }
-          },
-          scales: {
-            x: {
-              grid: { display: false },
-              ticks: { color: '#8A9BB5', font: { size: 11, weight: '600' } }
-            },
-            y: {
-              beginAtZero: true,
-              ticks: { stepSize: 1, color: '#8A9BB5', font: { size: 11, weight: '600' } },
-              grid: { color: 'rgba(0,0,0,0.04)', drawBorder: false }
-            }
-          }
-        }
-      });
-    }
-  
-    // ============ SATELLITE INDICATORS ============
-    function updateSatelliteIndicators() {
-      const d = state.currentData;
-      const container = document.getElementById('satelliteGrid');
-      if (!container) return;
-  
-      const indicators = [
-        { label: 'NDVI', value: d.satellite.ndvi, dotClass: d.satellite.ndvi.includes('Change') ? 'detected' : 'stable' },
-        { label: 'NDWI', value: d.satellite.ndwi, dotClass: d.satellite.ndwi === 'Stable' ? 'stable' : 'detected' },
-        { label: 'Surface Change', value: d.satellite.surface, dotClass: d.satellite.surface === 'Detected' ? 'detected' : 'stable' },
-        { label: 'SAR Indicator', value: d.satellite.sar, dotClass: d.satellite.sar === 'Elevated' ? 'elevated' : 'normal' }
-      ];
-  
-      container.innerHTML = indicators.map(i => `
-        <div class="satellite-indicator">
-          <div class="satellite-indicator-label">${i.label}</div>
-          <div class="satellite-indicator-value">
-            <span class="satellite-indicator-dot ${i.dotClass}"></span>
-            ${i.value}
-          </div>
-        </div>
-      `).join('');
-    }
-  
-    // ============ TIMELINE ============
-    function updateTimeline() {
-      const d = state.currentData;
-      const container = document.getElementById('timelineContainer');
-      if (!container) return;
-  
-      const messages = {
-        safe: 'Normal monitoring',
-        watch: 'Elevated conditions',
-        alert: 'Risk accelerating',
-        warning: 'Warning threshold reached'
-      };
-  
-      const customMessages = {
-        '06:00': 'Normal monitoring',
-        '09:00': 'Rainfall increasing',
-        '12:00': 'Soil moisture rising',
-        '15:00': 'Risk accelerating',
-        '18:00': 'Warning threshold reached'
-      };
-  
-      container.innerHTML = d.trend.map(t => `
-        <div class="timeline-item" data-animate>
-          <div class="timeline-dot ${t.status}"></div>
-          <div class="timeline-time">${t.time}</div>
-          <div class="timeline-row">
-            <span class="timeline-score">${t.value}</span>
-            <span class="timeline-status ${t.status}">${t.status.toUpperCase()}</span>
-          </div>
-          <div class="timeline-message">${customMessages[t.time] || messages[t.status]}</div>
-        </div>
-      `).join('') + `<div class="timeline-demo">Illustrative timeline — DEMO</div>`;
-    }
-  
-    // ============ EXPOSURE ============
-    function updateExposure() {
-      const d = state.currentData;
-      const grid = document.getElementById('exposureSummaryGrid');
-      if (!grid) return;
-  
-      const items = [
-        { icon: 'users', value: Utils.formatNumber(d.population), label: 'Population' },
-        { icon: 'home', value: d.villages, label: 'Villages' },
-        { icon: 'route', value: d.roads, label: 'Roads' },
-        { icon: 'book', value: d.schools, label: 'Schools' },
-        { icon: 'heart', value: d.hospitals, label: 'Hospital' },
-        { icon: 'bridge', value: d.bridges, label: 'Bridges' }
-      ];
-  
-      grid.innerHTML = items.map(i => `
-        <div class="exposure-summary-item">
-          <div class="exposure-summary-icon">${getIcon(i.icon)}</div>
-          <div class="exposure-summary-value">${i.value}</div>
-          <div class="exposure-summary-label">${i.label}</div>
-        </div>
-      `).join('');
-  
-      // Response priority
-      const priorityEl = document.getElementById('responsePriority');
-      if (priorityEl) {
-        const level = d.responsePriority >= 80 ? 'critical' : d.responsePriority >= 60 ? 'high' : d.responsePriority >= 40 ? 'moderate' : 'low';
-        const levelLabel = level.toUpperCase();
-        priorityEl.innerHTML = `
-          <div class="response-priority-label">Response Priority</div>
-          <div class="response-priority-value">${d.responsePriority} / 100</div>
-          <div class="response-priority-level ${level}">${levelLabel}</div>
-          <div class="response-priority-text">
-            High hazard + significant population exposure + critical road connectivity.
-          </div>
-          <div class="response-priority-demo">Synthetic demonstration score</div>
-        `;
-      }
-    }
-  
-    // ============ COMPARISON ============
-    function updateComparison() {
-      const container = document.getElementById('comparisonGrid');
-      if (!container) return;
-  
-      container.innerHTML = DEMO_DATA.comparisonLocations.map(loc => {
-        const data = DEMO_DATA.riskAnalysisData[loc];
-        const zone = DEMO_DATA.riskZones.find(z => z.location === loc);
-        const level = data.level.toLowerCase();
-        const selected = loc === state.currentLocation ? 'selected' : '';
-        return `
-          <div class="comparison-card ${selected}" onclick="window.SahayakRiskAnalysis.selectComparison('${loc}')">
-            <div class="comparison-name">${loc}</div>
-            <div class="comparison-state">${zone?.state || ''}</div>
-            <div class="comparison-score-row">
-              <span class="comparison-score level-${level}">${data.risk}</span>
-              <span class="comparison-max">/ 100</span>
-            </div>
-            <span class="comparison-level ${level}">${data.level}</span>
-          </div>
-        `;
-      }).join('') + `<div style="grid-column: 1 / -1; text-align: center; font-size: 9px; color: var(--watch); font-weight: 700; letter-spacing: 0.1em; margin-top: var(--space-2);">Synthetic demo comparison</div>`;
-    }
-  
-    function selectComparison(location) {
-      if (location === state.currentLocation) return;
-      loadRiskAnalysis(location);
-      // Update selector
-      const input = document.getElementById('locationSelectorInput');
-      if (input) input.value = location;
-    }
-  
-    // ============ DATA FRESHNESS ============
-    function updateDataFreshness() {
-      const container = document.getElementById('freshnessCompact');
-      if (!container) return;
-      container.innerHTML = DEMO_DATA.dataFreshness.map(d => `
-        <div class="freshness-compact-item">
-          <span class="freshness-compact-dot ${d.status}"></span>
-          <div class="freshness-compact-content">
-            <div class="freshness-compact-source">${d.source}</div>
-            <div class="freshness-compact-time">${d.updated}</div>
-          </div>
-        </div>
-      `).join('');
-    }
-  
+
     // ============ LOCATION SELECTOR ============
-    function setupLocationSelector() {
-      const input = document.getElementById('locationSelectorInput');
-      const dropdown = document.getElementById('locationSelectorDropdown');
-      if (!input || !dropdown) return;
-  
-      input.value = state.currentLocation;
-  
-      input.addEventListener('focus', () => {
-        renderLocationOptions('');
-        dropdown.classList.add('active');
-      });
-  
-      input.addEventListener('input', Utils.debounce((e) => {
-        renderLocationOptions(e.target.value);
-        dropdown.classList.add('active');
-      }, 150));
-  
-      document.addEventListener('click', (e) => {
-        const wrap = document.querySelector('.location-selector-wrap');
-        if (wrap && !wrap.contains(e.target)) {
-          dropdown.classList.remove('active');
+    function renderLocationSelector() {
+        const select = document.getElementById('locationSelect');
+        if (!select) return;
+
+        select.innerHTML = DEMO_DATA.riskZones
+            .slice()
+            .sort((a, b) => a.location.localeCompare(b.location))
+            .map(z => `<option value="${z.location}" ${z.location === state.currentLocation ? 'selected' : ''}>${z.location}, ${z.state}</option>`)
+            .join('');
+    }
+
+    // ============ LOAD LOCATION ============
+    async function loadLocation(locationName) {
+        showLoading();
+        try {
+            const data = await Services.getRiskAnalysis(locationName);
+            if (data.error) {
+                showError(data.error);
+                return;
+            }
+            state.data = data;
+            state.currentLocation = locationName;
+            renderAll();
+        } catch (err) {
+            showError('Risk analysis temporarily unavailable');
         }
-      });
     }
-  
-    function renderLocationOptions(query) {
-      const dropdown = document.getElementById('locationSelectorDropdown');
-      if (!dropdown) return;
-  
-      const q = query.toLowerCase().trim();
-      const locations = Object.keys(DEMO_DATA.riskAnalysisData).filter(loc =>
-        !q || loc.toLowerCase().includes(q)
-      );
-  
-      dropdown.innerHTML = locations.map(loc => {
-        const data = DEMO_DATA.riskAnalysisData[loc];
-        const zone = DEMO_DATA.riskZones.find(z => z.location === loc);
-        const level = data.level.toLowerCase();
-        const color = DEMO_DATA.riskLevels[level]?.color || '#19B8C7';
-        const selected = loc === state.currentLocation ? 'selected' : '';
-        return `
-          <div class="location-option ${selected}" onclick="window.SahayakRiskAnalysis.selectLocation('${loc}')">
-            <div>
-              <div class="location-option-name">${loc}</div>
-              <div class="location-option-meta">${zone?.state || ''}</div>
+
+    function showLoading() {
+        const main = document.getElementById('analysisContent');
+        if (!main) return;
+        main.innerHTML = `
+            <div class="analysis-state">
+                <div class="analysis-state-icon"><div class="loading-spinner"></div></div>
+                <div class="analysis-state-title">Loading AI risk analysis...</div>
+                <div class="analysis-state-sub">Fetching intelligence for selected location</div>
             </div>
-            <div class="location-option-risk" style="color: ${color};">
-              <span class="location-option-dot" style="background: ${color};"></span>
-              ${data.risk} · ${data.level}
-            </div>
-          </div>
         `;
-      }).join('');
     }
-  
-    function selectLocation(location) {
-      const dropdown = document.getElementById('locationSelectorDropdown');
-      const input = document.getElementById('locationSelectorInput');
-      if (dropdown) dropdown.classList.remove('active');
-      if (input) input.value = location;
-      loadRiskAnalysis(location);
+
+    function showError(message) {
+        const main = document.getElementById('analysisContent');
+        if (!main) return;
+        main.innerHTML = `
+            <div class="analysis-state">
+                <div class="analysis-state-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                </div>
+                <div class="analysis-state-title">${message}</div>
+                <div class="analysis-state-sub">Please try again or select a different location</div>
+                <button class="btn btn-outline" onclick="window.SahayakAnalysis.retry()">Retry</button>
+            </div>
+        `;
     }
-  
-    // ============ ACCORDIONS ============
-    function setupAccordions() {
-      document.querySelectorAll('.accordion-header').forEach(header => {
-        header.addEventListener('click', () => {
-          header.parentElement.classList.toggle('open');
+
+    // ============ RENDER ALL ============
+    function renderAll() {
+        const main = document.getElementById('analysisContent');
+        if (!main) return;
+
+        const d = state.data;
+        const level = d.level.toLowerCase();
+
+        // Update breadcrumb
+        const breadcrumbLoc = document.getElementById('breadcrumbLocation');
+        if (breadcrumbLoc) breadcrumbLoc.textContent = d.location;
+
+        // Update page title badge
+        const titleBadge = document.getElementById('titleBadge');
+        if (titleBadge) titleBadge.textContent = `${d.location.toUpperCase()} · ${d.level}`;
+
+        main.innerHTML = `
+            ${renderRiskOverview(d, level)}
+            <div class="analysis-grid">
+                <div>
+                    ${renderTrendChart()}
+                    ${renderFactorSection(d)}
+                    ${renderAIExplanation(d)}
+                </div>
+                <div>
+                    ${renderEnvironmentalConditions(d)}
+                    ${renderTerrainPanel(d)}
+                    ${renderSatellitePanel(d)}
+                </div>
+            </div>
+            <div class="analysis-grid-full">
+                ${renderRainfallChart()}
+                <div>
+                    ${renderRiskHistoryTimeline(d)}
+                    ${renderHistoricalContext(d)}
+                </div>
+            </div>
+            ${renderInterpretation(d)}
+            ${renderExposureAndActions(d)}
+            ${renderRiskSummary(d, level)}
+        `;
+
+        setTimeout(() => {
+            initGauge(d);
+            initTrendChart(d);
+            initRainfallChart(d);
+            animateFactorBars();
+            animateTimeline();
+        }, 50);
+    }
+
+    // ============ RISK OVERVIEW ============
+    function renderRiskOverview(d, level) {
+        const changeClass = d.riskChangeDir === 'up' ? 'up' : 'stable';
+        const changeSymbol = d.riskChangeDir === 'up' ? '↑' : d.riskChangeDir === 'down' ? '↓' : '→';
+
+        return `
+            <section class="risk-overview" aria-label="Current risk overview">
+                <div class="risk-gauge-wrap">
+                    ${renderGaugeSVG(d.risk, level)}
+                    <div class="gauge-labels">
+                        <span class="gauge-label safe">SAFE</span>
+                        <span class="gauge-label watch">WATCH</span>
+                        <span class="gauge-label alert">ALERT</span>
+                        <span class="gauge-label warning">WARNING</span>
+                    </div>
+                </div>
+                <div class="risk-stats">
+                    <div class="risk-stat level-${level}">
+                        <div class="risk-stat-label">Landslide Probability</div>
+                        <div class="risk-stat-value">${d.probability.toFixed(1)}%</div>
+                        <div class="risk-stat-sub">Model estimate</div>
+                    </div>
+                    <div class="risk-stat level-${level}">
+                        <div class="risk-stat-label">Risk Level</div>
+                        <div class="risk-stat-value" style="color: var(--${level === 'safe' ? 'safe' : level === 'watch' ? 'watch' : level === 'alert' ? 'alert' : 'warning'});">${d.level}</div>
+                        <div class="risk-stat-sub">Current classification</div>
+                    </div>
+                    <div class="risk-stat level-${level}">
+                        <div class="risk-stat-label">Risk Change</div>
+                        <div class="risk-stat-value">${changeSymbol} ${d.riskChange}</div>
+                        <div class="risk-stat-sub ${changeClass}">points · last 12h</div>
+                    </div>
+                    <div class="risk-stat">
+                        <div class="risk-stat-label">Last Updated</div>
+                        <div class="risk-stat-value" style="font-size: var(--fs-lg);">5 min</div>
+                        <div class="risk-stat-sub">ago · DEMO</div>
+                    </div>
+                </div>
+            </section>
+        `;
+    }
+
+    // ============ GAUGE SVG ============
+    function renderGaugeSVG(score, level) {
+        const arcLength = Math.PI * 90;
+        const offset = arcLength - (arcLength * score / 100);
+        const color = DEMO_DATA.riskLevels[level]?.color || '#19B8C7';
+
+        return `
+            <svg class="risk-gauge" viewBox="0 0 220 140" aria-label="Risk score ${score} out of 100">
+                <defs>
+                    <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#16A34A"/>
+                        <stop offset="33%" stop-color="#EAB308"/>
+                        <stop offset="66%" stop-color="#F97316"/>
+                        <stop offset="100%" stop-color="#DC2626"/>
+                    </linearGradient>
+                    <filter id="gaugeShadow">
+                        <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="${color}" flood-opacity="0.3"/>
+                    </filter>
+                </defs>
+                <path class="gauge-bg" d="M 20 110 A 90 90 0 0 1 200 110"/>
+                <path class="gauge-fill" id="gaugeFill"
+                      d="M 20 110 A 90 90 0 0 1 200 110"
+                      stroke="url(#gaugeGrad)"
+                      stroke-dasharray="${arcLength}"
+                      stroke-dashoffset="${arcLength}"
+                      data-target-offset="${offset}"
+                      filter="url(#gaugeShadow)"/>
+                <g class="gauge-ticks">
+                    <text x="20" y="130" text-anchor="middle">0</text>
+                    <text x="58" y="55" text-anchor="middle">25</text>
+                    <text x="110" y="25" text-anchor="middle">50</text>
+                    <text x="162" y="55" text-anchor="middle">75</text>
+                    <text x="200" y="130" text-anchor="middle">100</text>
+                </g>
+                <text class="gauge-score" x="110" y="100" id="gaugeScoreText">0</text>
+                <text class="gauge-max" x="110" y="118">/ 100</text>
+                <text class="gauge-level" x="110" y="138" fill="${color}" id="gaugeLevelText">${DEMO_DATA.riskLevels[level]?.label || level.toUpperCase()}</text>
+            </svg>
+        `;
+    }
+
+    function initGauge(d) {
+        const fill = document.getElementById('gaugeFill');
+        const scoreText = document.getElementById('gaugeScoreText');
+        if (!fill || !scoreText) return;
+
+        const targetOffset = parseFloat(fill.dataset.targetOffset);
+        const arcLength = Math.PI * 90;
+
+        if (Utils.prefersReducedMotion()) {
+            fill.setAttribute('stroke-dashoffset', targetOffset);
+            scoreText.textContent = d.risk;
+            return;
+        }
+
+        const duration = 1500;
+        const start = performance.now();
+        const animate = (now) => {
+            const progress = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const currentOffset = arcLength - (arcLength - targetOffset) * eased;
+            fill.setAttribute('stroke-dashoffset', currentOffset);
+            scoreText.textContent = Math.round(d.risk * eased);
+            if (progress < 1) requestAnimationFrame(animate);
+        };
+        requestAnimationFrame(animate);
+    }
+
+    // ============ TREND CHART ============
+    function renderTrendChart() {
+        return `
+            <section class="analysis-card" aria-label="Risk evolution chart">
+                <div class="analysis-card-header">
+                    <div class="analysis-card-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                        Risk Evolution
+                    </div>
+                    <span class="analysis-card-badge">DEMO</span>
+                </div>
+                <div class="analysis-card-body">
+                    <div class="risk-trend-wrap"><canvas id="trendChart"></canvas></div>
+                    <div class="chart-footer">Illustrative Demo Data · Warning threshold at 80</div>
+                </div>
+            </section>
+        `;
+    }
+
+    function initTrendChart(d) {
+        const canvas = document.getElementById('trendChart');
+        if (!canvas || typeof Chart === 'undefined') return;
+
+        const labels = ['06:00', '09:00', '12:00', '15:00', '18:00'];
+        const data = d.trend;
+
+        if (state.charts.trend) state.charts.trend.destroy();
+
+        const ctx = canvas.getContext('2d');
+        const gradient = ctx.createLinearGradient(0, 0, 0, 260);
+        gradient.addColorStop(0, 'rgba(25, 184, 199, 0.25)');
+        gradient.addColorStop(1, 'rgba(25, 184, 199, 0)');
+
+        state.charts.trend = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Risk Score',
+                    data: data,
+                    borderColor: '#19B8C7',
+                    backgroundColor: gradient,
+                    borderWidth: 2.5,
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#19B8C7',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 5,
+                    pointHoverRadius: 7
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: { duration: 1200, easing: 'easeOutQuart' },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#0B1728',
+                        titleColor: '#fff',
+                        bodyColor: '#E5EAF2',
+                        borderColor: '#19B8C7',
+                        borderWidth: 1,
+                        padding: 12,
+                        cornerRadius: 8,
+                        callbacks: { label: (ctx) => `Risk: ${ctx.parsed.y}/100` }
+                    }
+                },
+                scales: {
+                    y: {
+                        min: 0, max: 100,
+                        grid: { color: 'rgba(217, 224, 232, 0.5)', drawBorder: false },
+                        ticks: { color: '#8A9BB5', font: { size: 11, family: 'Inter' } }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#8A9BB5', font: { size: 11, family: 'Inter' } }
+                    }
+                }
+            },
+            plugins: [{
+                id: 'thresholdLine',
+                afterDraw: (chart) => {
+                    const ctx = chart.ctx;
+                    const yScale = chart.scales.y;
+                    const y = yScale.getPixelForValue(80);
+                    ctx.save();
+                    ctx.strokeStyle = '#DC2626';
+                    ctx.lineWidth = 1.5;
+                    ctx.setLineDash([6, 4]);
+                    ctx.beginPath();
+                    ctx.moveTo(chart.chartArea.left, y);
+                    ctx.lineTo(chart.chartArea.right, y);
+                    ctx.stroke();
+                    ctx.fillStyle = '#DC2626';
+                    ctx.font = '600 10px Inter';
+                    ctx.textAlign = 'right';
+                    ctx.fillText('Warning Threshold', chart.chartArea.right - 4, y - 6);
+                    ctx.restore();
+                }
+            }]
         });
-      });
     }
-  
-    // ============ INTERSECTION OBSERVERS ============
-    function setupIntersectionObservers() {
-      if (Utils.prefersReducedMotion()) {
-        document.querySelectorAll('.timeline-item').forEach(el => el.classList.add('revealed'));
-        return;
-      }
-  
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry, i) => {
-          if (entry.isIntersecting) {
-            setTimeout(() => entry.target.classList.add('revealed'), i * 100);
-            observer.unobserve(entry.target);
-          }
+
+    // ============ FACTOR SECTION ============
+    function renderFactorSection(d) {
+        const barsHtml = d.factors.map(f => {
+            const pct = (f.value / 40) * 100;
+            const tier = f.value >= 25 ? 'tier-critical' : f.value >= 18 ? 'tier-high' : f.value >= 10 ? 'tier-mid' : 'tier-low';
+            return `
+                <div class="factor-bar" style="--target-width: ${pct}%">
+                    <div class="factor-bar-label">${f.label}</div>
+                    <div class="factor-bar-track"><div class="factor-bar-fill ${tier}"></div></div>
+                    <div class="factor-bar-value">+${f.value}</div>
+                </div>
+            `;
+        }).join('');
+
+        return `
+            <section class="factor-section" aria-label="Risk factor contributions">
+                <h2 class="factor-section-title">Why is this area high risk?</h2>
+                <p class="factor-section-subtitle">Factor contribution to the current risk score — SHAP-style explanation</p>
+                <div class="factor-bars" id="factorBars">${barsHtml}</div>
+                <div class="factor-section-footer">Illustrative SHAP-style explanation — DEMO</div>
+            </section>
+        `;
+    }
+
+    function animateFactorBars() {
+        const bars = document.querySelectorAll('#factorBars .factor-bar');
+        if (!bars.length) return;
+
+        if (Utils.prefersReducedMotion()) {
+            bars.forEach(b => b.classList.add('revealed'));
+            return;
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const allBars = entry.target.querySelectorAll('.factor-bar');
+                    allBars.forEach((bar, i) => setTimeout(() => bar.classList.add('revealed'), i * 120));
+                    observer.disconnect();
+                }
+            });
+        }, { threshold: 0.2 });
+
+        const container = document.getElementById('factorBars');
+        if (container) observer.observe(container);
+    }
+
+    // ============ AI EXPLANATION ============
+    function renderAIExplanation(d) {
+        const driversHtml = (d.keyDrivers || []).map(driver =>
+            `<span class="key-driver-chip">${driver}</span>`
+        ).join('');
+
+        const explanationText = generateExplanation(d);
+
+        return `
+            <section class="ai-explanation-card" aria-label="AI explanation">
+                <div class="analysis-card-header" style="padding: 0 0 var(--space-4) 0; border: none;">
+                    <div class="analysis-card-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        AI Explanation
+                    </div>
+                </div>
+                <div class="ai-explanation-quote">${explanationText}</div>
+                <div class="key-drivers">
+                    <div class="key-drivers-title">Key Drivers</div>
+                    <div class="key-drivers-list">${driversHtml}</div>
+                </div>
+                <button class="btn btn-outline" onclick="window.SahayakAnalysis.showFullExplanation()">View Full Explanation</button>
+            </section>
+        `;
+    }
+
+    function generateExplanation(d) {
+        const level = d.level;
+        const primary = d.interpretation?.primaryDriver || 'environmental conditions';
+        const secondary = d.interpretation?.secondaryDriver || 'terrain characteristics';
+
+        if (level === 'WARNING') {
+            return `Risk increased significantly because 72-hour accumulated rainfall crossed the local demonstration threshold, soil moisture is high, and the location has steep terrain with multiple historical landslide events. The combination of these factors has pushed the risk score into the WARNING range, indicating potential for imminent landslide activity.`;
+        } else if (level === 'ALERT') {
+            return `Risk has risen to ALERT level due to increasing ${primary.toLowerCase()} combined with ${secondary.toLowerCase()}. The location shows elevated susceptibility based on terrain and historical patterns. Continuous monitoring is recommended.`;
+        } else if (level === 'WATCH') {
+            return `Risk is currently in the WATCH range. ${primary} is the primary contributor, with ${secondary} playing a supporting role. Conditions are being monitored for any escalation.`;
+        } else {
+            return `Risk is currently in the SAFE range. Environmental conditions are within normal demonstration thresholds. Routine monitoring continues.`;
+        }
+    }
+
+    function showFullExplanation() {
+        const d = state.data;
+        const modal = document.getElementById('explanationModal');
+        if (!modal) return;
+
+        const factorsHtml = d.factors.map(f => `
+            <div style="display: flex; justify-content: space-between; padding: var(--space-2) 0; border-bottom: 1px solid var(--border);">
+                <span style="color: var(--text-700); font-size: var(--fs-sm);">${f.label}</span>
+                <span style="font-weight: 700; color: var(--teal); font-family: 'SF Mono', monospace;">+${f.value}</span>
+            </div>
+        `).join('');
+
+        document.getElementById('explanationModalBody').innerHTML = `
+            <div style="margin-bottom: var(--space-4);">
+                <div style="font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.1em; color: var(--text-500); margin-bottom: var(--space-2);">LOCATION</div>
+                <div style="font-size: var(--fs-lg); font-weight: 700; color: var(--text-900);">${d.location}, ${d.state}</div>
+            </div>
+            <div style="margin-bottom: var(--space-4);">
+                <div style="font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.1em; color: var(--text-500); margin-bottom: var(--space-2);">CURRENT RISK</div>
+                <div style="display: flex; align-items: baseline; gap: var(--space-2);">
+                    <span style="font-size: 2rem; font-weight: 800; color: var(--text-900);">${d.risk}</span>
+                    <span style="color: var(--text-400);">/ 100</span>
+                    <span style="padding: 3px 10px; background: var(--${d.level.toLowerCase() === 'warning' ? 'warning' : d.level.toLowerCase() === 'alert' ? 'alert' : d.level.toLowerCase() === 'watch' ? 'watch' : 'safe'}-bg); color: var(--${d.level.toLowerCase() === 'warning' ? 'warning' : d.level.toLowerCase() === 'alert' ? 'alert' : d.level.toLowerCase() === 'watch' ? 'watch' : 'safe'}); border-radius: var(--radius-sm); font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.1em;">${d.level}</span>
+                </div>
+            </div>
+            <div style="margin-bottom: var(--space-4);">
+                <div style="font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.1em; color: var(--text-500); margin-bottom: var(--space-2);">DETAILED EXPLANATION</div>
+                <p style="font-size: var(--fs-sm); color: var(--text-700); line-height: 1.7;">${generateExplanation(d)}</p>
+            </div>
+            <div style="margin-bottom: var(--space-4);">
+                <div style="font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.1em; color: var(--text-500); margin-bottom: var(--space-2);">FACTOR CONTRIBUTIONS</div>
+                ${factorsHtml}
+            </div>
+            <div style="padding: var(--space-3); background: var(--watch-bg); border: 1px solid rgba(234, 179, 8, 0.2); border-radius: var(--radius-md); font-size: var(--fs-xs); color: var(--text-700);">
+                <strong>Note:</strong> This is an illustrative demonstration. Explanations are synthetic and do not represent validated model outputs.
+            </div>
+        `;
+        modal.classList.add('active');
+    }
+
+    // ============ ENVIRONMENTAL CONDITIONS ============
+    function renderEnvironmentalConditions(d) {
+        const cards = [
+            { icon: 'cloud-rain', value: `${d.rainfall} mm`, label: '72h accumulation', status: d.rainfall > 200 ? 'above' : d.rainfall > 100 ? 'high' : 'normal', statusLabel: d.rainfall > 200 ? 'Above Threshold' : d.rainfall > 100 ? 'Elevated' : 'Normal' },
+            { icon: 'droplet', value: `${d.soilMoisture}%`, label: 'Current estimate', status: d.soilMoisture > 75 ? 'high' : d.soilMoisture > 50 ? 'elevated' : 'normal', statusLabel: d.soilMoisture > 75 ? 'High' : d.soilMoisture > 50 ? 'Elevated' : 'Normal' },
+            { icon: 'mountain', value: `${d.slope}°`, label: 'Terrain slope', status: d.slope > 35 ? 'steep' : d.slope > 25 ? 'moderate' : 'normal', statusLabel: d.slope > 35 ? 'Steep' : d.slope > 25 ? 'Moderate' : 'Gentle' },
+            { icon: 'arrow-up', value: `${Utils.formatNumber(d.elevation)} m`, label: 'Elevation', status: d.elevation > 1800 ? 'high-terrain' : 'normal', statusLabel: d.elevation > 1800 ? 'High Terrain' : 'Normal' },
+            { icon: 'satellite', value: d.satelliteChange ? 'Detected' : 'Stable', label: 'Surface change', status: d.satelliteChange ? 'monitor' : 'normal', statusLabel: d.satelliteChange ? 'Monitor' : 'Stable' },
+            { icon: 'clock', value: `${d.historical}`, label: 'Historical events', status: d.historical >= 4 ? 'elevated' : d.historical >= 2 ? 'moderate' : 'normal', statusLabel: d.historical >= 4 ? 'Elevated Susceptibility' : d.historical >= 2 ? 'Moderate' : 'Low' }
+        ];
+
+        const html = cards.map(c => `
+            <div class="env-condition">
+                <div class="env-condition-header">
+                    <div class="env-condition-icon">${getIcon(c.icon)}</div>
+                    <span class="env-condition-status ${c.status}">${c.statusLabel}</span>
+                </div>
+                <div class="env-condition-value">${c.value}</div>
+                <div class="env-condition-label">${c.label}</div>
+            </div>
+        `).join('');
+
+        return `
+            <section class="analysis-card" aria-label="Environmental conditions">
+                <div class="analysis-card-header">
+                    <div class="analysis-card-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-3"/></svg>
+                        Environmental & Terrain Conditions
+                    </div>
+                    <span class="analysis-card-badge">DEMO</span>
+                </div>
+                <div class="analysis-card-body">
+                    <div class="env-conditions-grid">${html}</div>
+                </div>
+            </section>
+        `;
+    }
+
+    // ============ TERRAIN PANEL ============
+    function renderTerrainPanel(d) {
+        const items = [
+            { label: 'Slope', value: `${d.slope}°`, indicator: d.slope > 35 ? 'high' : d.slope > 25 ? 'moderate' : 'low', indicatorLabel: d.slope > 35 ? 'Steep' : d.slope > 25 ? 'Moderate' : 'Gentle' },
+            { label: 'Elevation', value: `${Utils.formatNumber(d.elevation)} m`, indicator: d.elevation > 1800 ? 'elevated' : 'low', indicatorLabel: d.elevation > 1800 ? 'High' : 'Normal' },
+            { label: 'Aspect', value: d.aspect || 'N/A', indicator: 'low', indicatorLabel: 'Directional' },
+            { label: 'Curvature', value: d.curvature || 'Low', indicator: d.curvature === 'High' ? 'elevated' : d.curvature === 'Moderate' ? 'moderate' : 'low', indicatorLabel: d.curvature || 'Low' },
+            { label: 'Stability', value: d.terrainStability || 'Stable', indicator: d.terrainStability === 'Unstable' ? 'high' : d.terrainStability === 'Elevated' ? 'elevated' : d.terrainStability === 'Moderate' ? 'moderate' : 'low', indicatorLabel: d.terrainStability || 'Stable' }
+        ];
+
+        const html = items.map(i => `
+            <div class="terrain-item">
+                <div class="terrain-item-label">${i.label}</div>
+                <div class="terrain-item-value">${i.value}</div>
+                <span class="terrain-item-indicator ${i.indicator}">${i.indicatorLabel}</span>
+            </div>
+        `).join('');
+
+        return `
+            <section class="analysis-card" aria-label="Terrain analysis">
+                <div class="analysis-card-header">
+                    <div class="analysis-card-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20l4-8 4 4 4-10 6 14"/></svg>
+                        Terrain Analysis
+                    </div>
+                </div>
+                <div class="analysis-card-body">
+                    <div class="terrain-grid">${html}</div>
+                    <a href="${ROUTES.terrain}" class="btn btn-outline btn-block">Open Terrain Analysis →</a>
+                </div>
+            </section>
+        `;
+    }
+
+    // ============ SATELLITE PANEL ============
+    function renderSatellitePanel(d) {
+        const indicators = d.satelliteIndicators || {};
+        const items = Object.values(indicators).map(ind => `
+            <div class="satellite-indicator status-${ind.status}">
+                <div class="satellite-indicator-label">${ind.label}</div>
+                <div class="satellite-indicator-value">${ind.value}</div>
+                <div class="satellite-indicator-status ${ind.status}">${ind.status}</div>
+            </div>
+        `).join('');
+
+        return `
+            <section class="analysis-card" aria-label="Satellite intelligence">
+                <div class="analysis-card-header">
+                    <div class="analysis-card-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="21.17" y1="8" x2="12" y2="8"/><line x1="3.95" y1="6.06" x2="8.54" y2="14"/><line x1="10.88" y1="21.94" x2="15.46" y2="14"/></svg>
+                        Satellite Intelligence
+                    </div>
+                </div>
+                <div class="analysis-card-body">
+                    <div class="satellite-grid">${items}</div>
+                    <div style="font-size: 10px; color: var(--text-400); font-style: italic; margin-bottom: var(--space-3); text-align: center;">Synthetic satellite indicators — DEMO</div>
+                    <a href="${ROUTES.satellite}" class="btn btn-outline btn-block">Open Satellite Monitor →</a>
+                </div>
+            </section>
+        `;
+    }
+
+    // ============ RAINFALL CHART ============
+    function renderRainfallChart() {
+        return `
+            <section class="analysis-card" aria-label="Rainfall vs risk chart">
+                <div class="analysis-card-header">
+                    <div class="analysis-card-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="16" y1="13" x2="16" y2="21"/><line x1="8" y1="13" x2="8" y2="21"/><line x1="12" y1="15" x2="12" y2="23"/><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"/></svg>
+                        Rainfall vs Risk
+                    </div>
+                    <span class="analysis-card-badge">DEMO</span>
+                </div>
+                <div class="analysis-card-body">
+                    <div class="dual-chart-wrap"><canvas id="rainfallChart"></canvas></div>
+                    <div class="chart-footer">Illustrative relationship in demonstration data — not a causal claim</div>
+                </div>
+            </section>
+        `;
+    }
+
+    function initRainfallChart(d) {
+        const canvas = document.getElementById('rainfallChart');
+        if (!canvas || typeof Chart === 'undefined') return;
+
+        const history = d.rainfallHistory || [];
+        const labels = history.map(h => h.time);
+        const rainfall = history.map(h => h.rainfall);
+        const risk = history.map(h => h.risk);
+
+        if (state.charts.rainfall) state.charts.rainfall.destroy();
+
+        const ctx = canvas.getContext('2d');
+
+        state.charts.rainfall = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Rainfall (mm)',
+                        data: rainfall,
+                        borderColor: '#0F9D8A',
+                        backgroundColor: 'rgba(15, 157, 138, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        yAxisID: 'y',
+                        pointBackgroundColor: '#0F9D8A',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 4
+                    },
+                    {
+                        label: 'Risk Score',
+                        data: risk,
+                        borderColor: '#F97316',
+                        backgroundColor: 'rgba(249, 115, 22, 0.08)',
+                        borderWidth: 2,
+                        borderDash: [5, 3],
+                        fill: false,
+                        tension: 0.4,
+                        yAxisID: 'y1',
+                        pointBackgroundColor: '#F97316',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: { duration: 1200 },
+                interaction: { mode: 'index', intersect: false },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        align: 'end',
+                        labels: { color: '#6B7280', font: { size: 11, family: 'Inter' }, usePointStyle: true, pointStyle: 'circle', padding: 16 }
+                    },
+                    tooltip: {
+                        backgroundColor: '#0B1728',
+                        titleColor: '#fff',
+                        bodyColor: '#E5EAF2',
+                        borderColor: '#19B8C7',
+                        borderWidth: 1,
+                        padding: 12,
+                        cornerRadius: 8
+                    }
+                },
+                scales: {
+                    y: {
+                        type: 'linear', position: 'left',
+                        title: { display: true, text: 'Rainfall (mm)', color: '#0F9D8A', font: { size: 10, weight: '600' } },
+                        grid: { color: 'rgba(217, 224, 232, 0.5)' },
+                        ticks: { color: '#8A9BB5', font: { size: 10 } }
+                    },
+                    y1: {
+                        type: 'linear', position: 'right', min: 0, max: 100,
+                        title: { display: true, text: 'Risk Score', color: '#F97316', font: { size: 10, weight: '600' } },
+                        grid: { drawOnChartArea: false },
+                        ticks: { color: '#8A9BB5', font: { size: 10 } }
+                    },
+                    x: { grid: { display: false }, ticks: { color: '#8A9BB5', font: { size: 10 } } }
+                }
+            }
         });
-      }, { threshold: 0.2 });
-  
-      document.querySelectorAll('.timeline-item').forEach(el => observer.observe(el));
     }
-  
-    // ============ NOTIFICATIONS ============
-    async function loadNotifications() {
-      state.notifications = await Services.getNotifications();
-      renderNotificationBadge();
-      renderNotificationPanel();
+
+    // ============ RISK HISTORY TIMELINE ============
+    function renderRiskHistoryTimeline(d) {
+        const events = d.riskHistoryEvents || [];
+        const html = events.map(e => `
+            <div class="timeline-event level-${e.level}">
+                <div class="timeline-dot"></div>
+                <div class="timeline-time">${e.time}</div>
+                <div class="timeline-content">
+                    <div><div class="timeline-event-text">${e.event}</div></div>
+                    <div style="display: flex; align-items: center; gap: var(--space-2);">
+                        <span class="timeline-level ${e.level}">${DEMO_DATA.riskLevels[e.level]?.label || e.level.toUpperCase()}</span>
+                        <span class="timeline-score">${e.score}</span>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        return `
+            <section class="analysis-card" aria-label="Risk history timeline">
+                <div class="analysis-card-header">
+                    <div class="analysis-card-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        Risk History
+                    </div>
+                </div>
+                <div class="analysis-card-body">
+                    <div class="risk-timeline" id="riskTimeline">${html}</div>
+                </div>
+            </section>
+        `;
     }
-  
-    function renderNotificationBadge() {
-      const badge = document.getElementById('notificationBadge');
-      if (!badge) return;
-      const unread = state.notifications.filter(n => !n.read).length;
-      if (unread > 0) {
-        badge.textContent = unread;
-        badge.style.display = 'flex';
-      } else {
-        badge.style.display = 'none';
-      }
+
+    function animateTimeline() {
+        const events = document.querySelectorAll('#riskTimeline .timeline-event');
+        if (!events.length) return;
+
+        if (Utils.prefersReducedMotion()) {
+            events.forEach(e => e.classList.add('revealed'));
+            return;
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const allEvents = entry.target.querySelectorAll('.timeline-event');
+                    allEvents.forEach((ev, i) => setTimeout(() => ev.classList.add('revealed'), i * 150));
+                    observer.disconnect();
+                }
+            });
+        }, { threshold: 0.2 });
+
+        const timeline = document.getElementById('riskTimeline');
+        if (timeline) observer.observe(timeline);
     }
-  
-    function renderNotificationPanel() {
-      const list = document.getElementById('notificationList');
-      if (!list) return;
-      list.innerHTML = state.notifications.map(n => `
-        <div class="notification-item ${n.read ? '' : 'unread'}" data-id="${n.id}" onclick="window.SahayakRiskAnalysis.markNotificationRead('${n.id}')">
-          <div class="notification-icon">${n.icon}</div>
-          <div class="notification-content">
-            <div class="notification-title">${n.title}</div>
-            <div class="notification-message">${n.message}</div>
-            <div class="notification-time">${n.timestamp}</div>
-          </div>
-        </div>
-      `).join('');
+
+    // ============ HISTORICAL CONTEXT ============
+    function renderHistoricalContext(d) {
+        const events = d.historicalEventsList || [];
+        const count = d.historical || events.length;
+
+        const yearsHtml = events.map(e => `
+            <div class="historical-year">
+                <span class="mag-dot ${e.magnitude}"></span>
+                <span>${e.year}</span>
+                <span style="color: var(--text-400); font-size: 10px;">${e.month || ''}</span>
+            </div>
+        `).join('');
+
+        return `
+            <section class="analysis-card" aria-label="Historical context">
+                <div class="analysis-card-header">
+                    <div class="analysis-card-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg>
+                        Historical Landslide Context
+                    </div>
+                </div>
+                <div class="analysis-card-body">
+                    <div class="historical-count">
+                        <span class="historical-count-value">${count}</span>
+                        <span class="historical-count-label">historical events near ${d.location}</span>
+                    </div>
+                    <div class="historical-years">${yearsHtml || '<div style="font-size: var(--fs-xs); color: var(--text-400);">No recorded events in demonstration data</div>'}</div>
+                    <div class="historical-note">Historical patterns are included as demonstration context.</div>
+                    <a href="${ROUTES.historical}" class="btn btn-outline btn-block">Explore Historical Events →</a>
+                </div>
+            </section>
+        `;
     }
-  
-    function markNotificationRead(id) {
-      const n = state.notifications.find(x => x.id === id);
-      if (n) n.read = true;
-      renderNotificationBadge();
-      renderNotificationPanel();
+
+    // ============ INTERPRETATION ============
+    function renderInterpretation(d) {
+        const interp = d.interpretation || {};
+        const statusLevel = (interp.status || d.level).toLowerCase();
+
+        return `
+            <section class="analysis-card" aria-label="Risk interpretation">
+                <div class="analysis-card-header">
+                    <div class="analysis-card-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                        Risk Interpretation
+                    </div>
+                </div>
+                <div class="analysis-card-body">
+                    <div class="interpretation-grid">
+                        <div class="interpretation-item">
+                            <div class="interpretation-label">Current Status</div>
+                            <div class="interpretation-value status-${statusLevel}">${interp.status || d.level}</div>
+                        </div>
+                        <div class="interpretation-item">
+                            <div class="interpretation-label">Confidence</div>
+                            <div class="interpretation-value">${interp.confidence || 'Demonstration value'}</div>
+                            <div class="interpretation-note">Demo / illustrative value</div>
+                        </div>
+                        <div class="interpretation-item">
+                            <div class="interpretation-label">Trend</div>
+                            <div class="interpretation-value">${interp.trend || 'Stable'}</div>
+                        </div>
+                        <div class="interpretation-item">
+                            <div class="interpretation-label">Primary Driver</div>
+                            <div class="interpretation-value">${interp.primaryDriver || '—'}</div>
+                        </div>
+                        <div class="interpretation-item">
+                            <div class="interpretation-label">Secondary Driver</div>
+                            <div class="interpretation-value">${interp.secondaryDriver || '—'}</div>
+                        </div>
+                        <div class="interpretation-item">
+                            <div class="interpretation-label">Terrain Factor</div>
+                            <div class="interpretation-value">${interp.terrainFactor || '—'}</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        `;
     }
-  
-    function markAllNotificationsRead() {
-      state.notifications.forEach(n => n.read = true);
-      renderNotificationBadge();
-      renderNotificationPanel();
+
+    // ============ EXPOSURE & ACTIONS ============
+    function renderExposureAndActions(d) {
+        const rp = d.responsePriority || { score: d.risk, level: d.level };
+        const rpLevel = rp.level.toLowerCase();
+
+        return `
+            <div class="analysis-grid-full">
+                <section class="analysis-card" aria-label="Potential exposure">
+                    <div class="analysis-card-header">
+                        <div class="analysis-card-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                            Potential Exposure
+                        </div>
+                    </div>
+                    <div class="analysis-card-body">
+                        <div class="exposure-compact">
+                            <div class="exposure-compact-item">
+                                <div class="exposure-compact-value">${Utils.formatNumber(d.population)}</div>
+                                <div class="exposure-compact-label">Population</div>
+                            </div>
+                            <div class="exposure-compact-item">
+                                <div class="exposure-compact-value">${d.roads}</div>
+                                <div class="exposure-compact-label">Roads</div>
+                            </div>
+                            <div class="exposure-compact-item">
+                                <div class="exposure-compact-value">${d.schools}</div>
+                                <div class="exposure-compact-label">Schools</div>
+                            </div>
+                            <div class="exposure-compact-item">
+                                <div class="exposure-compact-value">${d.hospitals}</div>
+                                <div class="exposure-compact-label">Hospitals</div>
+                            </div>
+                            <div class="exposure-compact-item">
+                                <div class="exposure-compact-value">${Math.max(2, Math.round(d.population / 300))}</div>
+                                <div class="exposure-compact-label">Villages</div>
+                            </div>
+                            <div class="exposure-compact-item">
+                                <div class="exposure-compact-value">${d.bridges}</div>
+                                <div class="exposure-compact-label">Bridges</div>
+                            </div>
+                        </div>
+                        <div class="response-priority level-${rpLevel}">
+                            <div class="response-priority-header">
+                                <span class="response-priority-label">Response Priority</span>
+                                <span class="response-priority-score">${rp.score}/100</span>
+                            </div>
+                            <span class="response-priority-level ${rpLevel}">${rp.level}</span>
+                            <div class="response-priority-explanation">${generatePriorityExplanation(d, rp)}</div>
+                            <div class="response-priority-note">Demonstration priority score</div>
+                        </div>
+                        <a href="${ROUTES.infrastructure}" class="btn btn-outline btn-block">View Impact Assessment →</a>
+                    </div>
+                </section>
+
+                <section class="analysis-card" aria-label="Recommended actions">
+                    <div class="analysis-card-header">
+                        <div class="analysis-card-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                            Recommended Early Actions
+                        </div>
+                    </div>
+                    <div class="analysis-card-body">
+                        <div style="font-size: var(--fs-xs); color: var(--text-500); margin-bottom: var(--space-3); font-style: italic;">
+                            Illustrative decision-support recommendations — not official instructions
+                        </div>
+                        <div class="actions-list">
+                            ${(d.recommendedActions || []).map(a => `
+                                <div class="action-item priority-${a.priority}">
+                                    <span class="action-priority ${a.priority}">${a.priority.toUpperCase()}</span>
+                                    <span class="action-label">${a.label}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="actions-cta">
+                            <a href="${ROUTES.fieldReports}" class="btn btn-outline" style="flex: 1;">Request Field Inspection</a>
+                            <a href="${ROUTES.alerts}" class="btn btn-primary" style="flex: 1;">Generate Warning</a>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        `;
     }
-  
-    // ============ UTILITIES ============
-    function animateCount(el, target, duration, isPercent = false) {
-      if (Utils.prefersReducedMotion()) {
-        el.textContent = isPercent ? `${target}%` : Utils.formatNumber(target);
-        return;
-      }
-      const start = performance.now();
-      const animate = (now) => {
-        const progress = Math.min((now - start) / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        const current = eased * target;
-        el.textContent = isPercent ? `${current.toFixed(1)}%` : Utils.formatNumber(Math.round(current));
-        if (progress < 1) requestAnimationFrame(animate);
-        else el.textContent = isPercent ? `${target}%` : Utils.formatNumber(target);
-      };
-      requestAnimationFrame(animate);
+
+    function generatePriorityExplanation(d, rp) {
+        if (rp.level === 'CRITICAL') return `High hazard combined with significant population exposure and nearby critical infrastructure requires immediate attention.`;
+        if (rp.level === 'HIGH') return `Elevated hazard with notable population exposure and infrastructure presence warrants priority monitoring.`;
+        if (rp.level === 'MODERATE') return `Moderate hazard with some exposure. Continue monitoring and review contingency plans.`;
+        return `Low hazard with minimal exposure. Routine monitoring sufficient.`;
     }
-  
-    function getIcon(name) {
-      const icons = {
-        'cloud-rain': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="16" y1="13" x2="16" y2="21"/><line x1="8" y1="13" x2="8" y2="21"/><line x1="12" y1="15" x2="12" y2="23"/><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"/></svg>',
-        'droplet': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>',
-        'mountain': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20l4-8 4 4 4-10 6 14"/></svg>',
-        'satellite': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="21.17" y1="8" x2="12" y2="8"/></svg>',
-        'alert-triangle': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
-        'users': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>',
-        'home': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
-        'route': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg>',
-        'book': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
-        'heart': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
-        'bridge': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18h18M5 18V9a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v9M9 6v12M15 6v12"/></svg>',
-        'alert-circle': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
-        'map-pin': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
-        'chevron-down': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>',
-        'info': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
-        'cpu': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/></svg>'
-      };
-      return icons[name] || '';
+
+    // ============ RISK SUMMARY ============
+    function renderRiskSummary(d, level) {
+        const drivers = (d.keyDrivers || []).slice(0, 3).join(', ') || '—';
+
+        return `
+            <section class="risk-summary" aria-label="Risk summary">
+                <div class="risk-summary-score">
+                    <div class="risk-summary-score-value">${d.risk}</div>
+                    <div class="risk-summary-score-max">/ 100</div>
+                    <div class="risk-summary-level ${level}">${d.level}</div>
+                </div>
+                <div class="risk-summary-details">
+                    <div class="risk-summary-item">
+                        <div class="risk-summary-item-label">TREND</div>
+                        <div class="risk-summary-item-value">${d.interpretation?.trend || 'Increasing'}</div>
+                    </div>
+                    <div class="risk-summary-item">
+                        <div class="risk-summary-item-label">PRIMARY DRIVERS</div>
+                        <div class="risk-summary-item-value">${drivers}</div>
+                    </div>
+                    <div class="risk-summary-item">
+                        <div class="risk-summary-item-label">EXPOSURE</div>
+                        <div class="risk-summary-item-value">${Utils.formatNumber(d.population)} people · ${d.roads} roads · ${d.schools} schools · ${d.hospitals} hospital</div>
+                    </div>
+                    <div class="risk-summary-item">
+                        <div class="risk-summary-item-label">LOCATION</div>
+                        <div class="risk-summary-item-value">${d.location}, ${d.state}</div>
+                    </div>
+                </div>
+                <div class="risk-summary-cta">
+                    <a href="${ROUTES.riskMap}" class="btn btn-primary btn-lg">View on Risk Map →</a>
+                    <a href="${ROUTES.dashboard}" class="btn btn-outline">Back to Dashboard</a>
+                </div>
+            </section>
+        `;
     }
-  
+
     // ============ EVENT LISTENERS ============
     function setupEventListeners() {
-      // Notifications
-      const notifBtn = document.getElementById('notificationBtn');
-      const notifPanel = document.getElementById('notificationPanel');
-      if (notifBtn && notifPanel) {
-        notifBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          notifPanel.classList.toggle('active');
-        });
-        document.addEventListener('click', (e) => {
-          if (!notifPanel.contains(e.target) && !notifBtn.contains(e.target)) {
-            notifPanel.classList.remove('active');
-          }
-        });
-      }
-  
-      // Sidebar toggle (mobile)
-      const sidebarToggle = document.getElementById('sidebarToggle');
-      const sidebar = document.getElementById('sidebar');
-      const sidebarOverlay = document.getElementById('sidebarOverlay');
-      if (sidebarToggle && sidebar) {
-        sidebarToggle.addEventListener('click', () => {
-          sidebar.classList.toggle('active');
-          if (sidebarOverlay) sidebarOverlay.classList.toggle('active');
-        });
-      }
-      if (sidebarOverlay) {
-        sidebarOverlay.addEventListener('click', () => {
-          sidebar.classList.remove('active');
-          sidebarOverlay.classList.remove('active');
-        });
-      }
-  
-      // Explanation modal
-      const modal = document.getElementById('explanationModal');
-      if (modal) {
-        modal.addEventListener('click', (e) => {
-          if (e.target === modal) closeExplanationModal();
-        });
-      }
-  
-      // Escape key
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-          if (notifPanel) notifPanel.classList.remove('active');
-          closeExplanationModal();
+        const select = document.getElementById('locationSelect');
+        if (select) {
+            select.addEventListener('change', (e) => loadLocation(e.target.value));
         }
-      });
+
+        const modal = document.getElementById('explanationModal');
+        if (modal) {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) modal.classList.remove('active');
+            });
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal) modal.classList.remove('active');
+        });
+
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        if (sidebarToggle && sidebar) {
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
+                if (sidebarOverlay) sidebarOverlay.classList.toggle('active');
+            });
+        }
+        if (sidebarOverlay) {
+            sidebarOverlay.addEventListener('click', () => {
+                sidebar.classList.remove('active');
+                sidebarOverlay.classList.remove('active');
+            });
+        }
     }
-  
-    // ============ PUBLIC API ============
-    window.SahayakRiskAnalysis = {
-      selectLocation,
-      selectComparison,
-      toggleFullExplanation,
-      closeExplanationModal,
-      markNotificationRead,
-      markAllNotificationsRead,
-      retryLoad
+
+    function retry() { loadLocation(state.currentLocation); }
+
+    // ============ ICON HELPER ============
+    function getIcon(name) {
+        const icons = {
+            'grid': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>',
+            'map': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>',
+            'chart': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>',
+            'bell': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>',
+            'clipboard': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>',
+            'check': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+            'cloud': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>',
+            'mountain': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20l4-8 4 4 4-10 6 14"/></svg>',
+            'satellite': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="21.17" y1="8" x2="12" y2="8"/><line x1="3.95" y1="6.06" x2="8.54" y2="14"/><line x1="10.88" y1="21.94" x2="15.46" y2="14"/></svg>',
+            'clock': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+            'building': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/></svg>',
+            'route': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg>',
+            'sliders': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/></svg>',
+            'bar-chart': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>',
+            'cpu': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/></svg>',
+            'users': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>',
+            'settings': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4"/></svg>',
+            'cloud-rain': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="16" y1="13" x2="16" y2="21"/><line x1="8" y1="13" x2="8" y2="21"/><line x1="12" y1="15" x2="12" y2="23"/><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"/></svg>',
+            'droplet': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>',
+            'arrow-up': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>'
+        };
+        return icons[name] || '';
+    }
+
+    // ============ EXPOSE PUBLIC API ============
+    window.SahayakAnalysis = {
+        retry,
+        showFullExplanation,
+        loadLocation
     };
-  
+
     // ============ BOOT ============
     document.addEventListener('DOMContentLoaded', init);
-  })();
+})();

@@ -114,10 +114,6 @@ const Services = {
         const newScore = Math.max(0, Math.min(100, baseScore + rainfallDelta + soilDelta));
         return { originalScore: baseScore, newScore: Math.round(newScore), delta: Math.round(newScore - baseScore), isDemo: true };
     },
-
-    _delay(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }, 
     async getHistoricalLandslides() {
         await this._delay(150);
         return DEMO_DATA.historicalLandslides.map(h => ({ ...h, isDemo: true }));
@@ -183,51 +179,105 @@ const Services = {
         const data = DEMO_DATA.riskAnalysisData[location] || DEMO_DATA.riskAnalysisData['Tawang'];
         return { ...data.satellite, isDemo: true };
       },
-      async getRiskAnalysis(location = 'Tawang') {
+      async getRiskAnalysis(locationName) {
+        await this._delay(200);
+        const zone = DEMO_DATA.riskZones.find(z => z.location === locationName);
+        if (!zone) return { error: 'Location not found', isDemo: true };
+        return { ...zone, timestamp: new Date().toISOString(), isDemo: true };
+    },
+    async getRiskFactors(locationName) {
         await this._delay(150);
-        const data = DEMO_DATA.riskAnalysisData[location] || DEMO_DATA.riskAnalysisData['Tawang'];
-        return { ...data, location, isDemo: true };
-      },
-      async getRiskFactors(location = 'Tawang') {
-        await this._delay(100);
-        const data = DEMO_DATA.riskAnalysisData[location] || DEMO_DATA.riskAnalysisData['Tawang'];
-        return { factors: data.factors, isDemo: true };
-      },
-      async getRainfallAnalysis(location = 'Tawang') {
-        await this._delay(100);
-        const data = DEMO_DATA.riskAnalysisData[location] || DEMO_DATA.riskAnalysisData['Tawang'];
-        return { rainfall: data.rainfallBreakdown, isDemo: true };
-      },
-      async getTerrainAnalysis(location = 'Tawang') {
-        await this._delay(100);
-        const data = DEMO_DATA.riskAnalysisData[location] || DEMO_DATA.riskAnalysisData['Tawang'];
+        const zone = DEMO_DATA.riskZones.find(z => z.location === locationName);
+        if (!zone) return { error: 'Location not found', isDemo: true };
         return {
-          slope: data.slope, elevation: data.elevation,
-          soilType: data.soilType, aspect: data.aspect,
-          curvature: data.curvature, stability: data.stability,
-          isDemo: true
+            location: locationName,
+            factors: zone.factors,
+            keyDrivers: zone.keyDrivers || [],
+            isDemo: true
         };
-      },
-      async getHistoricalContext(location = 'Tawang') {
-        await this._delay(100);
-        const data = DEMO_DATA.riskAnalysisData[location] || DEMO_DATA.riskAnalysisData['Tawang'];
-        return { events: data.historicalEvents, byYear: data.historicalByYear, isDemo: true };
-      },
-      async getExposureData(location = 'Tawang') {
-        await this._delay(100);
-        const data = DEMO_DATA.riskAnalysisData[location] || DEMO_DATA.riskAnalysisData['Tawang'];
+    },
+
+    async getExposureData(locationName) {
+        await this._delay(120);
+        const zone = DEMO_DATA.riskZones.find(z => z.location === locationName);
+        if (!zone) return { error: 'Location not found', isDemo: true };
         return {
-          population: data.population, villages: data.villages,
-          roads: data.roads, schools: data.schools,
-          hospitals: data.hospitals, bridges: data.bridges,
-          responsePriority: data.responsePriority, isDemo: true
+            location: locationName,
+            population: zone.population,
+            roads: zone.roads,
+            schools: zone.schools,
+            hospitals: zone.hospitals,
+            bridges: zone.bridges,
+            villages: Math.max(2, Math.round(zone.population / 300)),
+            responsePriority: zone.responsePriority,
+            isDemo: true
         };
-      },
-      async getSatelliteIndicators(location = 'Tawang') {
-        await this._delay(100);
-        const data = DEMO_DATA.riskAnalysisData[location] || DEMO_DATA.riskAnalysisData['Tawang'];
-        return { ...data.satellite, isDemo: true };
-      },
+    },
+
+    async getRiskHistory(locationName) {
+        await this._delay(150);
+        const zone = DEMO_DATA.riskZones.find(z => z.location === locationName);
+        if (!zone) return { error: 'Location not found', isDemo: true };
+        return {
+            location: locationName,
+            trend: zone.trend,
+            events: zone.riskHistoryEvents || [],
+            isDemo: true
+        };
+    },
+
+    async getRainfallHistory(locationName) {
+        await this._delay(150);
+        const zone = DEMO_DATA.riskZones.find(z => z.location === locationName);
+        if (!zone) return { error: 'Location not found', isDemo: true };
+        return {
+            location: locationName,
+            data: zone.rainfallHistory || [],
+            isDemo: true
+        };
+    },
+
+    async getTerrainAnalysis(locationName) {
+        await this._delay(150);
+        const zone = DEMO_DATA.riskZones.find(z => z.location === locationName);
+        if (!zone) return { error: 'Location not found', isDemo: true };
+        return {
+            location: locationName,
+            slope: zone.slope,
+            elevation: zone.elevation,
+            aspect: zone.aspect || 'N',
+            curvature: zone.curvature || 'Low',
+            terrainStability: zone.terrainStability || 'Stable',
+            isDemo: true
+        };
+    },
+
+    async getSatelliteAnalysis(locationName) {
+        await this._delay(150);
+        const zone = DEMO_DATA.riskZones.find(z => z.location === locationName);
+        if (!zone) return { error: 'Location not found', isDemo: true };
+        return {
+            location: locationName,
+            indicators: zone.satelliteIndicators || {},
+            surfaceChange: zone.satelliteChange,
+            isDemo: true
+        };
+    },
+
+    async getHistoricalContext(locationName) {
+        await this._delay(150);
+        const zone = DEMO_DATA.riskZones.find(z => z.location === locationName);
+        if (!zone) return { error: 'Location not found', isDemo: true };
+        return {
+            location: locationName,
+            events: zone.historicalEventsList || [],
+            count: zone.historical || 0,
+            isDemo: true
+        };
+    },
+    _delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }, 
 };
 
 if (typeof window !== 'undefined') {

@@ -1,0 +1,966 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SAHAYAK — AI-driven Landslide Intelligence & Early Action Platform for Northeast India. Predict Early. Warn Faster. Save Lives.">
+    <title>SAHAYAK — Smart AI Hazard Assessment & Actionable Knowledge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/landing.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <!-- NAVBAR -->
+    <header class="navbar" id="navbar" role="banner">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand" aria-label="SAHAYAK Home">
+                <div class="brand-logo" aria-hidden="true">
+                    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#19B8C7"/>
+                                <stop offset="100%" stop-color="#0F9D8A"/>
+                            </linearGradient>
+                        </defs>
+                        <!-- Shield -->
+                        <path d="M20 3 L34 8 V20 C34 28 28 34 20 37 C12 34 6 28 6 20 V8 Z" 
+                              fill="none" stroke="url(#logoGrad)" stroke-width="1.5"/>
+                        <!-- Mountain -->
+                        <path d="M10 26 L16 16 L20 22 L24 14 L30 26 Z" 
+                              fill="url(#logoGrad)" opacity="0.85"/>
+                        <!-- Location pin -->
+                        <circle cx="24" cy="14" r="2" fill="#19B8C7"/>
+                        <!-- AI signal arcs -->
+                        <path d="M27 11 Q30 9 32 11" fill="none" stroke="#19B8C7" stroke-width="1" stroke-linecap="round"/>
+                        <path d="M29 9 Q31 7 33 9" fill="none" stroke="#19B8C7" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">SAHAYAK</span>
+                    <span class="brand-sub">NER Landslide Intelligence</span>
+                </div>
+            </a>
+            <nav class="nav-menu" id="navMenu" aria-label="Primary navigation">
+                <a href="#platform" class="nav-link">Platform</a>
+                <a href="#intelligence" class="nav-link">Intelligence</a>
+                <a href="#how-it-works" class="nav-link">How It Works</a>
+                <a href="#capabilities" class="nav-link">Capabilities</a>
+                <a href="#about" class="nav-link">About</a>
+            </nav>
+            <div class="nav-actions">
+                <a href="dashboard.html" class="btn btn-ghost">Live Demo</a>
+                <a href="login.html" class="btn btn-primary">Login</a>
+                <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="navMenu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- HERO -->
+        <section class="hero" id="hero">
+            <div class="hero-bg-grid" aria-hidden="true"></div>
+            <div class="hero-container">
+                <div class="hero-content">
+                    <span class="hero-badge">
+                        <span class="badge-dot"></span>
+                        SIH 2026 PROTOTYPE
+                    </span>
+                    <h1 class="hero-title">
+                        Predict Early.<br>
+                        Warn Faster.<br>
+                        <span class="title-accent">Save Lives.</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        SAHAYAK transforms environmental data into explainable landslide risk intelligence, 
+                        helping authorities monitor hazards, prioritize vulnerable areas, issue early warnings 
+                        and coordinate field response across Northeast India.
+                    </p>
+                    <div class="hero-cta">
+                        <a href="dashboard.html" class="btn btn-primary btn-lg">
+                            Explore Command Center
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        </a>
+                        <a href="#intelligence" class="btn btn-outline btn-lg">
+                            See How It Works ↓
+                        </a>
+                    </div>
+                    <div class="hero-meta">
+                        <div class="meta-item">
+                            <span class="meta-dot"></span>
+                            AI + GIS + Early Warning
+                        </div>
+                        <div class="meta-divider"></div>
+                        <div class="meta-item">DEMO ENVIRONMENT</div>
+                    </div>
+                </div>
+
+                <!-- HERO VISUAL: GIS Intelligence Panel -->
+                <div class="hero-visual" aria-hidden="true">
+                    <div class="gis-panel">
+                        <div class="gis-header">
+                            <div class="gis-header-left">
+                                <span class="gis-live-dot"></span>
+                                <span class="gis-label">NER RISK MONITOR</span>
+                            </div>
+                            <span class="gis-time" id="gisTime">--:--:--</span>
+                        </div>
+                        <div class="gis-map">
+                            <svg class="gis-map-svg" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                                        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#1e2d44" stroke-width="0.5"/>
+                                    </pattern>
+                                    <radialGradient id="riskGlow" cx="50%" cy="50%" r="50%">
+                                        <stop offset="0%" stop-color="#F97316" stop-opacity="0.5"/>
+                                        <stop offset="100%" stop-color="#F97316" stop-opacity="0"/>
+                                    </radialGradient>
+                                    <radialGradient id="safeGlow" cx="50%" cy="50%" r="50%">
+                                        <stop offset="0%" stop-color="#16A34A" stop-opacity="0.3"/>
+                                        <stop offset="100%" stop-color="#16A34A" stop-opacity="0"/>
+                                    </radialGradient>
+                                </defs>
+                                <!-- Grid background -->
+                                <rect width="400" height="320" fill="url(#grid)"/>
+                                <!-- Topographic contours -->
+                                <g class="contours" stroke="#1e3a5f" stroke-width="0.8" fill="none" opacity="0.6">
+                                    <path d="M 20 180 Q 80 140 140 160 T 260 140 T 380 160"/>
+                                    <path d="M 20 200 Q 90 160 150 180 T 270 160 T 380 180"/>
+                                    <path d="M 20 220 Q 100 180 160 200 T 280 180 T 380 200"/>
+                                    <path d="M 40 100 Q 100 80 180 100 T 320 90"/>
+                                    <path d="M 40 120 Q 110 100 190 120 T 330 110"/>
+                                    <path d="M 60 250 Q 140 230 220 250 T 360 240"/>
+                                </g>
+                                <!-- Terrain polygons (stylized NE India) -->
+                                <g class="terrain" opacity="0.35">
+                                    <path d="M 80 140 L 120 110 L 160 120 L 180 150 L 150 180 L 100 170 Z" 
+                                          fill="#0F9D8A" opacity="0.3"/>
+                                    <path d="M 180 150 L 220 130 L 260 150 L 240 190 L 200 180 Z" 
+                                          fill="#19B8C7" opacity="0.25"/>
+                                    <path d="M 240 190 L 280 170 L 320 200 L 300 230 L 260 220 Z" 
+                                          fill="#0F9D8A" opacity="0.3"/>
+                                    <path d="M 100 200 L 140 210 L 160 240 L 120 250 L 90 230 Z" 
+                                          fill="#19B8C7" opacity="0.2"/>
+                                </g>
+                                <!-- Risk zone glow -->
+                                <circle cx="140" cy="140" r="50" fill="url(#riskGlow)"/>
+                                <circle cx="280" cy="190" r="35" fill="url(#safeGlow)"/>
+                                <!-- Location markers -->
+                                <g class="markers">
+                                    <!-- High risk marker -->
+                                    <g class="marker marker-alert">
+                                        <circle cx="140" cy="140" r="12" class="marker-pulse"/>
+                                        <circle cx="140" cy="140" r="5" fill="#F97316"/>
+                                        <circle cx="140" cy="140" r="2" fill="#fff"/>
+                                    </g>
+                                    <!-- Watch marker -->
+                                    <g class="marker marker-watch">
+                                        <circle cx="220" cy="170" r="10" class="marker-pulse"/>
+                                        <circle cx="220" cy="170" r="4" fill="#EAB308"/>
+                                    </g>
+                                    <!-- Safe markers -->
+                                    <g class="marker marker-safe">
+                                        <circle cx="280" cy="190" r="4" fill="#16A34A"/>
+                                    </g>
+                                    <g class="marker marker-safe">
+                                        <circle cx="100" cy="220" r="4" fill="#16A34A"/>
+                                    </g>
+                                    <g class="marker marker-safe">
+                                        <circle cx="320" cy="130" r="4" fill="#16A34A"/>
+                                    </g>
+                                    <!-- Data points -->
+                                    <g class="data-points" fill="#19B8C7" opacity="0.7">
+                                        <circle cx="160" cy="120" r="1.5"/>
+                                        <circle cx="200" cy="150" r="1.5"/>
+                                        <circle cx="240" cy="160" r="1.5"/>
+                                        <circle cx="180" cy="180" r="1.5"/>
+                                        <circle cx="260" cy="200" r="1.5"/>
+                                        <circle cx="120" cy="160" r="1.5"/>
+                                        <circle cx="300" cy="170" r="1.5"/>
+                                    </g>
+                                </g>
+                                <!-- Labels -->
+                                <g class="labels" font-family="Inter" font-size="9" fill="#8a9bb5">
+                                    <text x="148" y="138">TAWANG</text>
+                                    <text x="228" y="168">SHILLONG</text>
+                                    <text x="288" y="188">AIZAWL</text>
+                                </g>
+                            </svg>
+                            <!-- Demo watermark -->
+                            <div class="gis-demo-badge">ILLUSTRATIVE DEMO DATA</div>
+                        </div>
+                        <!-- Risk panel -->
+                        <div class="gis-risk-panel">
+                            <div class="risk-panel-header">
+                                <div>
+                                    <div class="risk-panel-label">LANDSLIDE RISK</div>
+                                    <div class="risk-panel-location">Tawang</div>
+                                </div>
+                                <div class="risk-score-wrap">
+                                    <div class="risk-score" id="riskScore" data-target="84">0</div>
+                                    <div class="risk-score-max">/ 100</div>
+                                </div>
+                            </div>
+                            <div class="risk-status status-alert">
+                                <span class="status-indicator"></span>
+                                <span>WARNING</span>
+                            </div>
+                            <div class="risk-params">
+                                <div class="risk-param">
+                                    <span class="param-label">Rainfall</span>
+                                    <span class="param-value param-high">High</span>
+                                </div>
+                                <div class="risk-param">
+                                    <span class="param-label">Soil Moisture</span>
+                                    <span class="param-value param-high">High</span>
+                                </div>
+                                <div class="risk-param">
+                                    <span class="param-label">Slope</span>
+                                    <span class="param-value param-steep">Steep</span>
+                                </div>
+                                <div class="risk-param">
+                                    <span class="param-label">Satellite</span>
+                                    <span class="param-value param-anomaly">Anomaly</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Bottom stats -->
+                        <div class="gis-stats">
+                            <div class="gis-stat">
+                                <div class="stat-label">ZONES</div>
+                                <div class="stat-value">127</div>
+                            </div>
+                            <div class="gis-stat">
+                                <div class="stat-label">ALERTS</div>
+                                <div class="stat-value stat-alert">14</div>
+                            </div>
+                            <div class="gis-stat">
+                                <div class="stat-label">SENSORS</div>
+                                <div class="stat-value">48</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TRUST / STATUS STRIP -->
+        <section class="status-strip" aria-label="Platform capabilities">
+            <div class="strip-container">
+                <div class="strip-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    <span>8 States</span>
+                </div>
+                <div class="strip-divider"></div>
+                <div class="strip-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 10v6M4.22 4.22l4.24 4.24m7.08 7.08l4.24 4.24M1 12h6m10 0h6M4.22 19.78l4.24-4.24m7.08-7.08l4.24-4.24"/></svg>
+                    <span>AI Risk Intelligence</span>
+                </div>
+                <div class="strip-divider"></div>
+                <div class="strip-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+                    <span>GIS Visualization</span>
+                </div>
+                <div class="strip-divider"></div>
+                <div class="strip-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                    <span>Field Verification</span>
+                </div>
+                <div class="strip-divider"></div>
+                <div class="strip-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                    <span>Early Warning</span>
+                </div>
+                <div class="strip-divider"></div>
+                <div class="strip-item strip-demo">
+                    <span class="demo-indicator"></span>
+                    <span>DEMO / PROTOTYPE</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROBLEM → SOLUTION -->
+        <section class="section problem-solution" id="platform">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-eyebrow">THE MISSION</span>
+                    <h2 class="section-title">From Environmental Signals to Early Action</h2>
+                    <p class="section-subtitle">Landslide risk emerges from complex interactions between weather, terrain, soil, and human exposure. SAHAYAK turns these signals into decisions.</p>
+                </div>
+                <div class="two-col">
+                    <div class="col-card challenge-card">
+                        <div class="col-card-header">
+                            <div class="col-icon challenge-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                            </div>
+                            <h3>The Challenge</h3>
+                        </div>
+                        <p class="col-desc">Landslide risk depends on multiple environmental and terrain conditions that evolve continuously.</p>
+                        <ul class="challenge-list">
+                            <li><span class="list-icon">⬢</span>Heavy rainfall events</li>
+                            <li><span class="list-icon">⬢</span>Soil saturation thresholds</li>
+                            <li><span class="list-icon">⬢</span>Steep and unstable terrain</li>
+                            <li><span class="list-icon">⬢</span>Historical landslide patterns</li>
+                            <li><span class="list-icon">⬢</span>Satellite-detected changes</li>
+                            <li><span class="list-icon">⬢</span>Population and infrastructure exposure</li>
+                        </ul>
+                    </div>
+                    <div class="col-card solution-card">
+                        <div class="col-card-header">
+                            <div class="col-icon solution-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                            </div>
+                            <h3>The SAHAYAK Approach</h3>
+                        </div>
+                        <p class="col-desc">A continuous intelligence pipeline from raw environmental signals to coordinated field response.</p>
+                        <div class="solution-flow">
+                            <div class="flow-step"><span class="flow-num">01</span>Environmental Data</div>
+                            <div class="flow-arrow">↓</div>
+                            <div class="flow-step"><span class="flow-num">02</span>AI Risk Prediction</div>
+                            <div class="flow-arrow">↓</div>
+                            <div class="flow-step"><span class="flow-num">03</span>Explainable Intelligence</div>
+                            <div class="flow-arrow">↓</div>
+                            <div class="flow-step"><span class="flow-num">04</span>GIS + Exposure Analysis</div>
+                            <div class="flow-arrow">↓</div>
+                            <div class="flow-step"><span class="flow-num">05</span>Early Warning</div>
+                            <div class="flow-arrow">↓</div>
+                            <div class="flow-step"><span class="flow-num">06</span>Field Verification</div>
+                            <div class="flow-arrow">↓</div>
+                            <div class="flow-step flow-final"><span class="flow-num">07</span>Response</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CORE INTELLIGENCE FLOW -->
+        <section class="section intelligence-flow" id="intelligence">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-eyebrow">INTELLIGENCE LIFECYCLE</span>
+                    <h2 class="section-title">Predict → Explain → Prioritize → Warn → Verify → Respond → Learn</h2>
+                </div>
+                <div class="timeline" id="timeline">
+                    <div class="timeline-line"></div>
+                    <div class="timeline-step" data-step="1">
+                        <div class="step-marker">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        </div>
+                        <div class="step-content">
+                            <div class="step-num">01</div>
+                            <h4>Predict</h4>
+                            <p>AI models analyze rainfall, soil, terrain, and satellite signals to estimate landslide risk.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-step" data-step="2">
+                        <div class="step-marker">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                        </div>
+                        <div class="step-content">
+                            <div class="step-num">02</div>
+                            <h4>Explain</h4>
+                            <p>Explainable AI reveals which factors are driving the risk at each location.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-step" data-step="3">
+                        <div class="step-marker">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                        </div>
+                        <div class="step-content">
+                            <div class="step-num">03</div>
+                            <h4>Prioritize</h4>
+                            <p>Rank locations by risk severity and exposure to focus limited resources.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-step" data-step="4">
+                        <div class="step-marker">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                        </div>
+                        <div class="step-content">
+                            <div class="step-num">04</div>
+                            <h4>Warn</h4>
+                            <p>Generate actionable warnings with clear severity and recommended actions.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-step" data-step="5">
+                        <div class="step-marker">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                        </div>
+                        <div class="step-content">
+                            <div class="step-num">05</div>
+                            <h4>Verify</h4>
+                            <p>Field officers confirm conditions and feed observations back into the system.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-step" data-step="6">
+                        <div class="step-marker">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        </div>
+                        <div class="step-content">
+                            <div class="step-num">06</div>
+                            <h4>Respond</h4>
+                            <p>Coordinate evacuation, road closures, and relief deployment across agencies.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-step" data-step="7">
+                        <div class="step-marker">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                        </div>
+                        <div class="step-content">
+                            <div class="step-num">07</div>
+                            <h4>Learn</h4>
+                            <p>Outcomes refine the models — the system improves with every event.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PLATFORM CAPABILITIES -->
+        <section class="section capabilities" id="capabilities">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-eyebrow">CAPABILITIES</span>
+                    <h2 class="section-title">One Platform. Complete Landslide Intelligence.</h2>
+                </div>
+                <div class="capabilities-grid">
+                    <article class="capability-card">
+                        <div class="cap-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M22 2L12 12"/><path d="M16 2h6v6"/></svg>
+                        </div>
+                        <h3>AI Risk Prediction</h3>
+                        <p>Estimate landslide risk using environmental and terrain signals through trained ML models.</p>
+                    </article>
+                    <article class="capability-card">
+                        <div class="cap-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        </div>
+                        <h3>Explainable AI</h3>
+                        <p>Understand why a location is considered high risk through transparent feature contributions.</p>
+                    </article>
+                    <article class="capability-card">
+                        <div class="cap-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+                        </div>
+                        <h3>GIS Intelligence</h3>
+                        <p>Visualize risk zones, infrastructure, roads, and field reports on interactive maps.</p>
+                    </article>
+                    <article class="capability-card">
+                        <div class="cap-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                        </div>
+                        <h3>Early Warning</h3>
+                        <p>Generate actionable warnings with severity levels and recommended response actions.</p>
+                    </article>
+                    <article class="capability-card">
+                        <div class="cap-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                        </div>
+                        <h3>Field Verification</h3>
+                        <p>Connect AI predictions with ground-truth observations from field officers.</p>
+                    </article>
+                    <article class="capability-card">
+                        <div class="cap-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="21.17" y1="8" x2="12" y2="8"/><line x1="3.95" y1="6.06" x2="8.54" y2="14"/><line x1="10.88" y1="21.94" x2="15.46" y2="14"/></svg>
+                        </div>
+                        <h3>Satellite Monitoring</h3>
+                        <p>Monitor surface deformation, vegetation stress, and land-cover changes from space.</p>
+                    </article>
+                    <article class="capability-card">
+                        <div class="cap-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+                        </div>
+                        <h3>Impact Assessment</h3>
+                        <p>Understand population and infrastructure exposure within risk zones.</p>
+                    </article>
+                    <article class="capability-card">
+                        <div class="cap-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                        </div>
+                        <h3>What-If Simulation</h3>
+                        <p>Explore how changing rainfall, soil, or terrain conditions may affect risk.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- COMMAND CENTER PREVIEW -->
+        <section class="section command-preview">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-eyebrow">COMMAND CENTER</span>
+                    <h2 class="section-title">A Command Center Built for Decisions</h2>
+                </div>
+                <div class="command-wrap">
+                    <div class="command-mock">
+                        <div class="command-topbar">
+                            <div class="topbar-left">
+                                <span class="topbar-dot"></span>
+                                <span class="topbar-title">SAHAYAK Command Center</span>
+                            </div>
+                            <div class="topbar-right">
+                                <span class="topbar-status">LIVE · DEMO</span>
+                            </div>
+                        </div>
+                        <div class="command-body">
+                            <div class="command-sidebar">
+                                <div class="sidebar-item active"><span class="sidebar-icon">◉</span>Overview</div>
+                                <div class="sidebar-item"><span class="sidebar-icon">◈</span>Risk Map</div>
+                                <div class="sidebar-item"><span class="sidebar-icon">⚠</span>Alerts</div>
+                                <div class="sidebar-item"><span class="sidebar-icon">◐</span>Analysis</div>
+                                <div class="sidebar-item"><span class="sidebar-icon">✦</span>Field Reports</div>
+                            </div>
+                            <div class="command-main">
+                                <div class="command-map">
+                                    <svg viewBox="0 0 600 320" xmlns="http://www.w3.org/2000/svg">
+                                        <rect width="600" height="320" fill="#0B1728"/>
+                                        <defs>
+                                            <pattern id="cmdGrid" width="30" height="30" patternUnits="userSpaceOnUse">
+                                                <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#162235" stroke-width="0.5"/>
+                                            </pattern>
+                                        </defs>
+                                        <rect width="600" height="320" fill="url(#cmdGrid)"/>
+                                        <!-- Stylized NE India shape -->
+                                        <g opacity="0.4">
+                                            <path d="M 100 140 L 180 100 L 260 110 L 320 140 L 380 130 L 440 160 L 480 200 L 440 230 L 380 240 L 320 220 L 260 240 L 200 230 L 140 210 L 100 180 Z" 
+                                                  fill="#0F9D8A" opacity="0.15" stroke="#0F9D8A" stroke-width="1"/>
+                                        </g>
+                                        <!-- Risk zones -->
+                                        <circle cx="200" cy="160" r="30" fill="#F97316" opacity="0.25"/>
+                                        <circle cx="320" cy="180" r="25" fill="#EAB308" opacity="0.25"/>
+                                        <circle cx="420" cy="200" r="20" fill="#16A34A" opacity="0.2"/>
+                                        <!-- Markers -->
+                                        <circle cx="200" cy="160" r="6" fill="#F97316"/>
+                                        <circle cx="320" cy="180" r="5" fill="#EAB308"/>
+                                        <circle cx="420" cy="200" r="5" fill="#16A34A"/>
+                                        <circle cx="150" cy="180" r="4" fill="#19B8C7"/>
+                                        <circle cx="260" cy="140" r="4" fill="#19B8C7"/>
+                                        <circle cx="380" cy="170" r="4" fill="#19B8C7"/>
+                                        <text x="210" y="155" fill="#8a9bb5" font-size="10" font-family="Inter">TAWANG</text>
+                                        <text x="330" y="175" fill="#8a9bb5" font-size="10" font-family="Inter">SHILLONG</text>
+                                    </svg>
+                                </div>
+                                <div class="command-panels">
+                                    <div class="cmd-panel">
+                                        <div class="cmd-panel-title">Risk Score</div>
+                                        <div class="cmd-score">84<span class="cmd-score-max">/100</span></div>
+                                        <div class="cmd-status status-alert">WARNING</div>
+                                    </div>
+                                    <div class="cmd-panel">
+                                        <div class="cmd-panel-title">Rainfall (24h)</div>
+                                        <svg class="cmd-chart" viewBox="0 0 120 40" preserveAspectRatio="none">
+                                            <polyline points="0,30 15,25 30,20 45,15 60,18 75,10 90,12 105,8 120,5" 
+                                                      fill="none" stroke="#19B8C7" stroke-width="1.5"/>
+                                            <polyline points="0,30 15,25 30,20 45,15 60,18 75,10 90,12 105,8 120,5 120,40 0,40" 
+                                                      fill="#19B8C7" opacity="0.15"/>
+                                        </svg>
+                                    </div>
+                                    <div class="cmd-panel">
+                                        <div class="cmd-panel-title">Population Exposed</div>
+                                        <div class="cmd-big">12,480</div>
+                                        <div class="cmd-sub">across 14 zones</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="command-badge">COMMAND CENTER — DEMO</div>
+                    <div class="command-cta">
+                        <a href="dashboard.html" class="btn btn-primary btn-lg">
+                            Open Command Center
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EXPLAINABLE AI -->
+        <section class="section explainable-ai">
+            <div class="container">
+                <div class="section-header section-header-light">
+                    <span class="section-eyebrow">EXPLAINABLE AI</span>
+                    <h2 class="section-title">Don't Just Predict Risk. Understand It.</h2>
+                </div>
+                <div class="xai-wrap">
+                    <div class="xai-question">WHY IS THIS AREA HIGH RISK?</div>
+                    <div class="xai-bars" id="xaiBars">
+                        <div class="xai-bar" data-value="32" data-max="40">
+                            <div class="xai-bar-label">Heavy Rainfall</div>
+                            <div class="xai-bar-track">
+                                <div class="xai-bar-fill" style="--target-width: 80%"></div>
+                            </div>
+                            <div class="xai-bar-value">+32</div>
+                        </div>
+                        <div class="xai-bar" data-value="24" data-max="40">
+                            <div class="xai-bar-label">Steep Slope</div>
+                            <div class="xai-bar-track">
+                                <div class="xai-bar-fill" style="--target-width: 60%"></div>
+                            </div>
+                            <div class="xai-bar-value">+24</div>
+                        </div>
+                        <div class="xai-bar" data-value="17" data-max="40">
+                            <div class="xai-bar-label">High Soil Moisture</div>
+                            <div class="xai-bar-track">
+                                <div class="xai-bar-fill" style="--target-width: 42%"></div>
+                            </div>
+                            <div class="xai-bar-value">+17</div>
+                        </div>
+                        <div class="xai-bar" data-value="11" data-max="40">
+                            <div class="xai-bar-label">Historical Landslides</div>
+                            <div class="xai-bar-track">
+                                <div class="xai-bar-fill" style="--target-width: 28%"></div>
+                            </div>
+                            <div class="xai-bar-value">+11</div>
+                        </div>
+                        <div class="xai-bar" data-value="6" data-max="40">
+                            <div class="xai-bar-label">Satellite Anomaly</div>
+                            <div class="xai-bar-track">
+                                <div class="xai-bar-fill" style="--target-width: 15%"></div>
+                            </div>
+                            <div class="xai-bar-value">+6</div>
+                        </div>
+                    </div>
+                    <div class="xai-explanation">
+                        <div class="xai-exp-label">AI Explanation</div>
+                        <p class="xai-exp-text">
+                            Risk increased because accumulated rainfall and soil moisture are elevated, 
+                            while steep terrain and historical landslide patterns increase susceptibility.
+                        </p>
+                        <div class="xai-exp-note">Illustrative SHAP-style explanation — DEMO</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- NORTHEAST INDIA -->
+        <section class="section northeast" id="about">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-eyebrow">OPERATIONAL REGION</span>
+                    <h2 class="section-title">Designed for Northeast India</h2>
+                    <p class="section-subtitle">SAHAYAK is purpose-built for the unique terrain, climate, and infrastructure challenges of the Northeast.</p>
+                </div>
+                <div class="ner-wrap">
+                    <div class="ner-map">
+                        <svg viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg" class="ner-map-svg">
+                            <defs>
+                                <linearGradient id="stateGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#0F9D8A" stop-opacity="0.3"/>
+                                    <stop offset="100%" stop-color="#19B8C7" stop-opacity="0.15"/>
+                                </linearGradient>
+                            </defs>
+                            <!-- Simplified NE India state polygons -->
+                            <g class="ner-states">
+                                <!-- Arunachal Pradesh (top) -->
+                                <path class="ner-state" d="M 80 60 L 180 40 L 280 50 L 340 80 L 320 120 L 240 130 L 160 120 L 100 100 Z" 
+                                      fill="url(#stateGrad)" stroke="#0F9D8A" stroke-width="1.2"/>
+                                <!-- Sikkim (left) -->
+                                <path class="ner-state" d="M 60 140 L 90 130 L 100 160 L 80 180 L 55 170 Z" 
+                                      fill="url(#stateGrad)" stroke="#0F9D8A" stroke-width="1.2"/>
+                                <!-- Assam (large middle) -->
+                                <path class="ner-state" d="M 100 160 L 180 150 L 260 170 L 320 180 L 300 220 L 240 240 L 180 230 L 120 220 L 90 200 Z" 
+                                      fill="url(#stateGrad)" stroke="#0F9D8A" stroke-width="1.2"/>
+                                <!-- Meghalaya -->
+                                <path class="ner-state" d="M 180 150 L 240 140 L 280 160 L 260 180 L 200 175 Z" 
+                                      fill="url(#stateGrad)" stroke="#0F9D8A" stroke-width="1.2"/>
+                                <!-- Nagaland -->
+                                <path class="ner-state" d="M 320 180 L 370 170 L 390 200 L 360 220 L 330 210 Z" 
+                                      fill="url(#stateGrad)" stroke="#0F9D8A" stroke-width="1.2"/>
+                                <!-- Manipur -->
+                                <path class="ner-state" d="M 330 220 L 370 215 L 385 250 L 355 270 L 325 255 Z" 
+                                      fill="url(#stateGrad)" stroke="#0F9D8A" stroke-width="1.2"/>
+                                <!-- Mizoram -->
+                                <path class="ner-state" d="M 300 260 L 340 260 L 350 300 L 320 320 L 290 300 Z" 
+                                      fill="url(#stateGrad)" stroke="#0F9D8A" stroke-width="1.2"/>
+                                <!-- Tripura -->
+                                <path class="ner-state" d="M 250 270 L 285 265 L 290 300 L 265 310 L 245 295 Z" 
+                                      fill="url(#stateGrad)" stroke="#0F9D8A" stroke-width="1.2"/>
+                            </g>
+                            <!-- State labels -->
+                            <g class="ner-labels" font-family="Inter" font-size="10" fill="#8a9bb5" font-weight="500">
+                                <text x="180" y="85" text-anchor="middle">ARUNACHAL PRADESH</text>
+                                <text x="75" y="160" text-anchor="middle" font-size="9">SIKKIM</text>
+                                <text x="190" y="200" text-anchor="middle">ASSAM</text>
+                                <text x="230" y="165" text-anchor="middle" font-size="9">MEGHALAYA</text>
+                                <text x="355" y="195" text-anchor="middle" font-size="9">NAGALAND</text>
+                                <text x="355" y="245" text-anchor="middle" font-size="9">MANIPUR</text>
+                                <text x="320" y="295" text-anchor="middle" font-size="9">MIZORAM</text>
+                                <text x="268" y="290" text-anchor="middle" font-size="9">TRIPURA</text>
+                            </g>
+                            <!-- City markers -->
+                            <g class="ner-cities">
+                                <g class="ner-city"><circle cx="140" cy="90" r="4" fill="#19B8C7"/><text x="150" y="88" font-size="9" fill="#fff" font-family="Inter">Tawang</text></g>
+                                <g class="ner-city"><circle cx="240" cy="130" r="4" fill="#19B8C7"/><text x="250" y="128" font-size="9" fill="#fff" font-family="Inter">Itanagar</text></g>
+                                <g class="ner-city"><circle cx="75" cy="155" r="4" fill="#19B8C7"/><text x="30" y="153" font-size="9" fill="#fff" font-family="Inter">Gangtok</text></g>
+                                <g class="ner-city"><circle cx="230" cy="155" r="4" fill="#19B8C7"/><text x="175" y="148" font-size="9" fill="#fff" font-family="Inter">Shillong</text></g>
+                                <g class="ner-city"><circle cx="320" cy="285" r="4" fill="#19B8C7"/><text x="260" y="278" font-size="9" fill="#fff" font-family="Inter">Aizawl</text></g>
+                                <g class="ner-city"><circle cx="355" cy="195" r="4" fill="#19B8C7"/><text x="365" y="193" font-size="9" fill="#fff" font-family="Inter">Kohima</text></g>
+                                <g class="ner-city"><circle cx="355" cy="240" r="4" fill="#19B8C7"/><text x="365" y="238" font-size="9" fill="#fff" font-family="Inter">Imphal</text></g>
+                                <g class="ner-city"><circle cx="268" cy="285" r="4" fill="#19B8C7"/><text x="210" y="300" font-size="9" fill="#fff" font-family="Inter">Agartala</text></g>
+                                <g class="ner-city"><circle cx="150" cy="195" r="4" fill="#19B8C7"/><text x="115" y="210" font-size="9" fill="#fff" font-family="Inter">Guwahati</text></g>
+                            </g>
+                        </svg>
+                        <div class="ner-legend">
+                            <div class="legend-item"><span class="legend-dot"></span>Demonstration Locations</div>
+                        </div>
+                    </div>
+                    <div class="ner-info">
+                        <div class="ner-states-list">
+                            <h4>Covered States</h4>
+                            <div class="state-chips">
+                                <span class="state-chip">Arunachal Pradesh</span>
+                                <span class="state-chip">Assam</span>
+                                <span class="state-chip">Manipur</span>
+                                <span class="state-chip">Meghalaya</span>
+                                <span class="state-chip">Mizoram</span>
+                                <span class="state-chip">Nagaland</span>
+                                <span class="state-chip">Tripura</span>
+                                <span class="state-chip">Sikkim</span>
+                            </div>
+                        </div>
+                        <div class="ner-note">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                            <span>These are demonstration locations only. The platform does not claim that any location currently has a specific risk level.</span>
+                        </div>
+                        <div class="ner-badge">Prototype Demonstration Region</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EARLY ACTION -->
+        <section class="section early-action">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-eyebrow">EARLY ACTION</span>
+                    <h2 class="section-title">When Risk Changes, Action Should Follow</h2>
+                </div>
+                <div class="action-steps">
+                    <div class="action-step">
+                        <div class="action-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        </div>
+                        <div class="action-label">01</div>
+                        <h3>DETECT</h3>
+                        <p>Identify changing environmental conditions across monitored zones in real time.</p>
+                    </div>
+                    <div class="action-connector">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </div>
+                    <div class="action-step">
+                        <div class="action-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+                        </div>
+                        <div class="action-label">02</div>
+                        <h3>ASSESS</h3>
+                        <p>Estimate risk severity and population exposure using AI and GIS analysis.</p>
+                    </div>
+                    <div class="action-connector">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </div>
+                    <div class="action-step">
+                        <div class="action-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        </div>
+                        <div class="action-label">03</div>
+                        <h3>ACT</h3>
+                        <p>Generate warnings and coordinate response across agencies and field teams.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DATA → AI → ACTION PIPELINE -->
+        <section class="section pipeline">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-eyebrow">INTELLIGENCE PIPELINE</span>
+                    <h2 class="section-title">From Raw Data to Field Response</h2>
+                </div>
+                <div class="pipeline-wrap">
+                    <div class="pipeline-track" id="pipelineTrack">
+                        <div class="pipeline-particles" aria-hidden="true"></div>
+                        <div class="pipeline-node">
+                            <div class="node-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 17H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2z"/><path d="M2 13h20"/></svg>
+                            </div>
+                            <div class="node-label">RAIN</div>
+                        </div>
+                        <div class="pipeline-node">
+                            <div class="node-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 22h20"/><path d="M6 18h12"/><path d="M10 14h4"/><path d="M12 10v4"/></svg>
+                            </div>
+                            <div class="node-label">SOIL</div>
+                        </div>
+                        <div class="pipeline-node">
+                            <div class="node-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20l4-8 4 4 4-10 6 14"/></svg>
+                            </div>
+                            <div class="node-label">TERRAIN</div>
+                        </div>
+                        <div class="pipeline-node">
+                            <div class="node-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="21.17" y1="8" x2="12" y2="8"/><line x1="3.95" y1="6.06" x2="8.54" y2="14"/><line x1="10.88" y1="21.94" x2="15.46" y2="14"/></svg>
+                            </div>
+                            <div class="node-label">SATELLITE</div>
+                        </div>
+                        <div class="pipeline-node">
+                            <div class="node-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="12 8 12 12 14 14"/><circle cx="12" cy="12" r="10"/></svg>
+                            </div>
+                            <div class="node-label">HISTORY</div>
+                        </div>
+                    </div>
+                    <div class="pipeline-flow">
+                        <div class="flow-node flow-ai">
+                            <div class="flow-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3"/></svg>
+                            </div>
+                            <div class="flow-label">AI ENGINE</div>
+                        </div>
+                        <div class="flow-node">
+                            <div class="flow-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-3"/></svg></div>
+                            <div class="flow-label">RISK SCORE</div>
+                        </div>
+                        <div class="flow-node">
+                            <div class="flow-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
+                            <div class="flow-label">EXPLANATION</div>
+                        </div>
+                        <div class="flow-node">
+                            <div class="flow-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg></div>
+                            <div class="flow-label">EXPOSURE</div>
+                        </div>
+                        <div class="flow-node">
+                            <div class="flow-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg></div>
+                            <div class="flow-label">WARNING</div>
+                        </div>
+                        <div class="flow-node flow-final">
+                            <div class="flow-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+                            <div class="flow-label">FIELD RESPONSE</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DEMO NOTICE -->
+        <section class="section demo-notice">
+            <div class="container">
+                <div class="notice-card">
+                    <div class="notice-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    </div>
+                    <div class="notice-content">
+                        <h3>Prototype Notice</h3>
+                        <p><strong>SAHAYAK is an SIH 2026 prototype.</strong> All values, risk scores, charts, locations and measurements shown in this demonstration are synthetic/demo data unless connected to validated live data sources. Do not present prototype values as real-world measurements.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FINAL CTA -->
+        <section class="section final-cta">
+            <div class="container">
+                <div class="cta-content">
+                    <h2 class="cta-title">Turn Risk Intelligence Into Early Action.</h2>
+                    <p class="cta-subtitle">Explore how SAHAYAK brings AI, GIS, environmental intelligence and field verification together in one decision-support platform.</p>
+                    <div class="cta-buttons">
+                        <a href="dashboard.html" class="btn btn-primary btn-lg">
+                            Open Command Center
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        </a>
+                        <a href="#capabilities" class="btn btn-outline btn-lg">Explore Platform</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <div class="brand-logo" aria-hidden="true">
+                            <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="logoGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stop-color="#19B8C7"/>
+                                        <stop offset="100%" stop-color="#0F9D8A"/>
+                                    </linearGradient>
+                                </defs>
+                                <path d="M20 3 L34 8 V20 C34 28 28 34 20 37 C12 34 6 28 6 20 V8 Z" 
+                                      fill="none" stroke="url(#logoGrad2)" stroke-width="1.5"/>
+                                <path d="M10 26 L16 16 L20 22 L24 14 L30 26 Z" 
+                                      fill="url(#logoGrad2)" opacity="0.85"/>
+                                <circle cx="24" cy="14" r="2" fill="#19B8C7"/>
+                            </svg>
+                        </div>
+                        <div class="brand-text">
+                            <span class="brand-name">SAHAYAK</span>
+                            <span class="brand-sub">NER Landslide Intelligence</span>
+                        </div>
+                    </div>
+                    <p class="footer-full-name">Smart AI Hazard Assessment & Actionable Knowledge</p>
+                    <p class="footer-tagline">Predict Early. Warn Faster. Save Lives.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Platform</h4>
+                    <ul>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                        <li><a href="risk-map.html">Risk Map</a></li>
+                        <li><a href="risk-analysis.html">Risk Analysis</a></li>
+                        <li><a href="alerts.html">Alerts</a></li>
+                        <li><a href="simulator.html">Simulator</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Intelligence</h4>
+                    <ul>
+                        <li><a href="rainfall.html">Rainfall</a></li>
+                        <li><a href="terrain.html">Terrain</a></li>
+                        <li><a href="satellite.html">Satellite</a></li>
+                        <li><a href="historical.html">Historical</a></li>
+                        <li><a href="analytics.html">Analytics</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Operations</h4>
+                    <ul>
+                        <li><a href="field-reports.html">Field Reports</a></li>
+                        <li><a href="verification.html">Verification</a></li>
+                        <li><a href="infrastructure.html">Infrastructure</a></li>
+                        <li><a href="route-risk.html">Route Risk</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Prototype</h4>
+                    <ul>
+                        <li>SIH 2026 Prototype</li>
+                    </ul>
+                    <h4>Environment</h4>
+                    <ul>
+                        <li>Demo Environment</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-copy">© 2026 SAHAYAK</div>
+                <div class="footer-note">Prototype / Demonstration System</div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/data.js"></script>
+    <script src="js/services.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/landing.js"></script>
+</body>
+</html>

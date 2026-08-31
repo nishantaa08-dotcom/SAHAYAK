@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SAHAYAK Command Center — AI-driven landslide risk monitoring for Northeast India">
+    <title>Command Center — SAHAYAK</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/landing.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <div class="app-shell">
+        <!-- ============ SIDEBAR ============ -->
+        <aside class="sidebar" id="sidebar" role="navigation" aria-label="Primary navigation">
+            <div class="sidebar-brand">
+                <div class="brand-logo" aria-hidden="true">
+                    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#19B8C7"/>
+                                <stop offset="100%" stop-color="#0F9D8A"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M20 3 L34 8 V20 C34 28 28 34 20 37 C12 34 6 28 6 20 V8 Z" fill="none" stroke="url(#logoGrad)" stroke-width="1.5"/>
+                        <path d="M10 26 L16 16 L20 22 L24 14 L30 26 Z" fill="url(#logoGrad)" opacity="0.85"/>
+                        <circle cx="24" cy="14" r="2" fill="#19B8C7"/>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">SAHAYAK</span>
+                    <span class="brand-sub">NER Landslide Intelligence</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav" id="sidebarNav">
+                <!-- Rendered by JS -->
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="sidebar-status">
+                    <span class="status-dot"></span>
+                    <span>System Operational</span>
+                </div>
+                <div class="sidebar-user">
+                    <div class="user-avatar">AU</div>
+                    <div class="user-info">
+                        <div class="user-name">Authority</div>
+                        <div class="user-role">Administrator</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- ============ TOP HEADER ============ -->
+        <header class="top-header">
+            <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            </button>
+
+            <div class="header-title-wrap">
+                <h1 class="header-title">NER LANDSLIDE SITUATION AWARENESS</h1>
+                <div class="header-subtitle">AI-powered landslide risk monitoring and early action</div>
+            </div>
+
+            <div class="header-search">
+                <svg class="header-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" id="searchInput" placeholder="Search state, district, village, road..." aria-label="Search locations">
+                <div class="search-results" id="searchResults"></div>
+            </div>
+
+            <div class="header-actions">
+                <div class="header-system-status" id="systemStatus">
+                    <span class="status-dot"></span>
+                    <span>All systems operational</span>
+                </div>
+
+                <div style="position: relative;">
+                    <button class="icon-btn" id="notificationBtn" aria-label="Notifications">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                        <span class="notification-badge" id="notificationBadge" style="display:none;">0</span>
+                    </button>
+                    <div class="notification-panel" id="notificationPanel">
+                        <div class="notification-panel-header">
+                            <div class="notification-panel-title">Notifications</div>
+                            <span class="notification-mark-read" onclick="window.SahayakDashboard.markAllNotificationsRead()">Mark all read</span>
+                        </div>
+                        <div class="notification-list" id="notificationList"></div>
+                    </div>
+                </div>
+
+                <select class="lang-selector" aria-label="Language">
+                    <option>EN</option>
+                    <option>HI</option>
+                    <option>BN</option>
+                    <option>AS</option>
+                </select>
+
+                <button class="header-user" aria-label="User profile">
+                    <div class="user-avatar">AU</div>
+                    <span class="header-user-name">Authority</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- ============ STATUS BAR ============ -->
+        <div class="status-bar">
+            <div class="status-bar-item">
+                <span class="status-bar-label">System Status</span>
+                <span class="status-bar-value" style="color: var(--safe);">Operational</span>
+            </div>
+            <div class="status-bar-divider"></div>
+            <div class="status-bar-item">
+                <span class="status-bar-label">Data Sources</span>
+                <span class="status-bar-value">5/5 Online</span>
+            </div>
+            <div class="status-bar-divider"></div>
+            <div class="status-bar-item">
+                <span class="status-bar-label">Active Monitoring Regions</span>
+                <span class="status-bar-value">8 States</span>
+            </div>
+            <div class="status-bar-divider"></div>
+            <div class="status-bar-item">
+                <span class="status-bar-label">Last Model Update</span>
+                <span class="status-bar-value">5 min ago</span>
+            </div>
+            <div class="status-bar-divider"></div>
+            <div class="status-bar-item">
+                <span class="status-bar-label">Environment</span>
+                <span class="status-bar-value" style="color: var(--watch);">DEMO</span>
+            </div>
+            <div class="status-bar-demo">
+                <span class="demo-indicator"></span>
+                PROTOTYPE ENVIRONMENT
+            </div>
+        </div>
+
+        <!-- ============ MAIN CONTENT ============ -->
+        <main class="main-content">
+            <!-- Quick Actions -->
+            <div class="quick-actions" id="quickActions"></div>
+
+            <!-- Metrics -->
+            <div class="metrics-grid" id="metricsGrid"></div>
+
+            <!-- Main Dashboard Grid -->
+            <div class="dashboard-grid">
+                <!-- MAP PANEL -->
+                <div class="map-panel">
+                    <div class="map-header">
+                        <div class="map-title">
+                            <span class="map-title-dot"></span>
+                            Northeast India — Live Risk Monitor
+                        </div>
+                        <div class="map-demo-badge">DEMO RISK DATA</div>
+                    </div>
+                    <div class="map-container">
+                        <div id="map"></div>
+
+                        <!-- Map controls -->
+                        <div class="map-controls">
+                            <button class="map-ctrl-btn" id="layerToggleBtn" aria-label="Toggle layers" title="Layers">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                            </button>
+                            <button class="map-ctrl-btn" id="mapLocateBtn" aria-label="Locate" title="Locate">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="6" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="18"/></svg>
+                            </button>
+                            <button class="map-ctrl-btn" id="mapResetBtn" aria-label="Reset view" title="Reset view">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                            </button>
+                            <button class="map-ctrl-btn" aria-label="Fullscreen" title="Fullscreen" onclick="document.getElementById('map').requestFullscreen?.()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+                            </button>
+                        </div>
+
+                        <!-- Layer panel -->
+                        <div class="layer-panel" id="layerPanel">
+                            <div class="layer-panel-title">
+                                <span>Map Layers</span>
+                            </div>
+                            <div class="layer-group">
+                                <div class="layer-group-label">HAZARD</div>
+                                <label class="layer-item"><input type="checkbox" class="layer-checkbox" data-layer="risk" checked> AI Landslide Risk</label>
+                                <label class="layer-item"><input type="checkbox" class="layer-checkbox" data-layer="historical"> Historical Landslides</label>
+                                <label class="layer-item"><input type="checkbox" class="layer-checkbox" data-layer="rainfall"> Rainfall</label>
+                                <label class="layer-item"><input type="checkbox" class="layer-checkbox" data-layer="soil"> Soil Moisture</label>
+                                <label class="layer-item"><input type="checkbox" class="layer-checkbox" data-layer="slope"> Slope</label>
+                                <label class="layer-item"><input type="checkbox" class="layer-checkbox" data-layer="elevation"> Elevation</label>
+                                <label class="layer-item"><input type="checkbox" class="layer-checkbox" data-layer="satellite"> Satellite Change</label>
+                            </div>
+                            <div class="layer-group">
+                                <div class="layer-group-label">EXPOSURE</div>
+                                <label class="layer-item"><input type="checkbox" class="layer-checkbox" data-layer="villages"> Villages</label>
+                                <label class="layer-item"><input type="checkbox" class="layer-checkbox" data-layer="population"> Population</label>
+                                <label class="layer-item"><input type="checkbox" class="layer-checkbox" data-layer="roads"> Roads</label>
+                                <label class="layer-item"><input type="checkbox" class="layer-checkbox" data-layer="bridges"> Bridges</label>
+                                <label class="layer-item"><input type="checkbox" class="layer-checkbox" data-layer="schools"> Schools</label>
+                                <label class="layer-item"><input type="checkbox" class="layer-checkbox" data-layer="hospitals"> Hospitals</label>
+                                <label class="layer-item"><input type="checkbox" class="layer-checkbox" data-layer="police"> Police Stations</label>
+                                <label class="layer-item"><input type="checkbox" class="layer-checkbox" data-layer="relief"> Relief Centers</label>
+                            </div>
+                            <div class="layer-group">
+                                <div class="layer-group-label">REPORTS</div>
+                                <label class="layer-item"><input type="checkbox" class="layer-checkbox" data-layer="citizenReports"> Citizen Reports</label>
+                                <label class="layer-item"><input type="checkbox" class="layer-checkbox" data-layer="fieldReports"> Field Officer Reports</label>
+                                <label class="layer-item"><input type="checkbox" class="layer-checkbox" data-layer="verified"> Verified Incidents</label>
+                            </div>
+                        </div>
+
+                        <!-- Legend -->
+                        <div class="map-legend">
+                            <div class="map-legend-title">RISK LEVEL</div>
+                            <div class="map-legend-item"><span class="legend-dot safe"></span> SAFE (0-30)</div>
+                            <div class="map-legend-item"><span class="legend-dot watch"></span> WATCH (31-60)</div>
+                            <div class="map-legend-item"><span class="legend-dot alert"></span> ALERT (61-80)</div>
+                            <div class="map-legend-item"><span class="legend-dot warning"></span> WARNING (81-100)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT INTELLIGENCE PANEL -->
+                <div class="intel-panel">
+                    <div id="locationPanelContainer"></div>
+                    <div id="riskTrendChart"></div>
+                    <div class="intel-card">
+                        <div class="intel-card-header">
+                            <div class="intel-card-title">Environmental Conditions</div>
+                        </div>
+                        <div class="intel-card-body">
+                            <div class="env-grid" id="envGrid"></div>
+                        </div>
+                    </div>
+                    <div id="aiExplanation"></div>
+                </div>
+            </div>
+
+            <!-- Alerts -->
+            <div class="section-card">
+                <div class="section-card-header">
+                    <div class="section-card-title">
+                        Active Early Warnings
+                        <span class="count-badge" id="alertCount">4</span>
+                    </div>
+                    <a href="alerts.html" class="section-card-link">View all alerts →</a>
+                </div>
+                <div class="section-card-body">
+                    <div class="alerts-list" id="alertsList"></div>
+                </div>
+            </div>
+
+            <!-- Exposure -->
+            <div class="section-card">
+                <div class="section-card-header">
+                    <div class="section-card-title">Impact & Exposure Summary</div>
+                </div>
+                <div class="section-card-body">
+                    <div class="exposure-grid" id="exposureGrid"></div>
+                    <div style="text-align: center; margin-top: var(--space-3); font-size: 10px; color: var(--text-400); font-style: italic;">
+                        Synthetic demonstration data
+                    </div>
+                </div>
+            </div>
+
+            <!-- Field Operations + Data Freshness -->
+            <div class="dashboard-grid" style="grid-template-columns: 1fr 1fr;">
+                <div class="section-card" style="margin-bottom: 0;">
+                    <div class="section-card-header">
+                        <div class="section-card-title">Field Activity</div>
+                        <a href="field-reports.html" class="section-card-link">View reports →</a>
+                    </div>
+                    <div class="section-card-body">
+                        <div class="field-ops-grid">
+                            <div class="field-stats-grid" id="fieldStatsGrid"></div>
+                            <div class="activity-list" id="activityList"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-card" style="margin-bottom: 0;">
+                    <div class="section-card-header">
+                        <div class="section-card-title">Data Sources</div>
+                    </div>
+                    <div class="section-card-body">
+                        <div class="freshness-list" id="freshnessList"></div>
+                        <div style="margin-top: var(--space-4); padding-top: var(--space-3); border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-size: 10px; color: var(--text-400);">Connection status</span>
+                            <button class="btn btn-ghost" style="padding: 4px 10px; font-size: 11px;" onclick="window.SahayakDashboard.toggleOffline()">
+                                Toggle Offline Mode
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Offline Banner -->
+    <div class="offline-banner" id="offlineBanner">
+        <div class="offline-banner-header">
+            <div class="offline-banner-dot"></div>
+            <div class="offline-banner-title">Offline — Demo Mode</div>
+        </div>
+        <div class="offline-banner-message">3 reports waiting for synchronization</div>
+        <div class="offline-banner-actions">
+            <button class="btn btn-primary" onclick="window.SahayakDashboard.syncNow()">Sync Now</button>
+            <button class="btn btn-outline" onclick="window.SahayakDashboard.toggleOffline()">Close</button>
+        </div>
+    </div>
+
+    <!-- Assign Officer Modal -->
+    <div class="modal-overlay" id="assignModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">Assign Field Officer</div>
+                <button class="modal-close" onclick="window.SahayakDashboard.closeAssignModal()" aria-label="Close">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group" style="margin-bottom: var(--space-4);">
+                    <label style="display:block; font-size: var(--fs-sm); font-weight: 500; color: var(--text-700); margin-bottom: var(--space-2);">Select Officer</label>
+                    <select style="width: 100%; padding: var(--space-2) var(--space-3); border: 1px solid var(--border); border-radius: var(--radius-md); font-family: inherit; font-size: var(--fs-sm);">
+                        <option>Officer R. Singh — Tawang District</option>
+                        <option>Officer M. Das — East Siang</option>
+                        <option>Officer K. Bora — West Siang</option>
+                        <option>Officer L. Guite — Churachandpur</option>
+                        <option>Officer P. Lyngdoh — West Khasi Hills</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin-bottom: var(--space-4);">
+                    <label style="display:block; font-size: var(--fs-sm); font-weight: 500; color: var(--text-700); margin-bottom: var(--space-2);">Priority</label>
+                    <select style="width: 100%; padding: var(--space-2) var(--space-3); border: 1px solid var(--border); border-radius: var(--radius-md); font-family: inherit; font-size: var(--fs-sm);">
+                        <option>High — Immediate verification</option>
+                        <option>Medium — Within 24 hours</option>
+                        <option>Low — Routine inspection</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label style="display:block; font-size: var(--fs-sm); font-weight: 500; color: var(--text-700); margin-bottom: var(--space-2);">Notes</label>
+                    <textarea style="width: 100%; padding: var(--space-2) var(--space-3); border: 1px solid var(--border); border-radius: var(--radius-md); font-family: inherit; font-size: var(--fs-sm); min-height: 80px; resize: vertical;" placeholder="Additional instructions..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="window.SahayakDashboard.closeAssignModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="window.SahayakDashboard.closeAssignModal()">Assign Officer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/services.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

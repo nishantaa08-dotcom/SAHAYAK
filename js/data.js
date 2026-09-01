@@ -772,13 +772,7 @@ const DEMO_DATA = {
                 { key: 'simulator', label: 'Simulator', icon: 'sliders' }
             ]
         },
-        {
-            label: 'ANALYTICS',
-            items: [
-                { key: 'analytics', label: 'Analytics', icon: 'bar-chart' },
-                { key: 'modelPerformance', label: 'Model Performance', icon: 'cpu' }
-            ]
-        },
+        
         {
             label: 'ADMINISTRATION',
             items: [

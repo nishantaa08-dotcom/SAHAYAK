@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SAHAYAK Infrastructure & Impact Assessment — Assess population and infrastructure exposure">
+    <title>Impact & Exposure — SAHAYAK</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/landing.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/infrastructure.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <div class="app-shell">
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar" role="navigation" aria-label="Primary navigation">
+            <div class="sidebar-brand">
+                <div class="brand-logo" aria-hidden="true">
+                    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#19B8C7"/>
+                                <stop offset="100%" stop-color="#0F9D8A"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M20 3 L34 8 V20 C34 28 28 34 20 37 C12 34 6 28 6 20 V8 Z" fill="none" stroke="url(#logoGrad)" stroke-width="1.5"/>
+                        <path d="M10 26 L16 16 L20 22 L24 14 L30 26 Z" fill="url(#logoGrad)" opacity="0.85"/>
+                        <circle cx="24" cy="14" r="2" fill="#19B8C7"/>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">SAHAYAK</span>
+                    <span class="brand-sub">NER Landslide Intelligence</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav" id="sidebarNav"></nav>
+            <div class="sidebar-footer">
+                <div class="sidebar-status">
+                    <span class="status-dot"></span>
+                    <span>System Operational</span>
+                </div>
+                <div class="sidebar-user">
+                    <div class="user-avatar">AU</div>
+                    <div class="user-info">
+                        <div class="user-name">Authority</div>
+                        <div class="user-role">Administrator</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- TOP HEADER -->
+        <header class="top-header">
+            <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            </button>
+
+            <div class="header-title-wrap">
+                <nav class="infra-breadcrumb" aria-label="Breadcrumb">
+                    <a href="dashboard.html">Dashboard</a>
+                    <span class="infra-breadcrumb-sep">/</span>
+                    <a href="risk-map.html">Risk Map</a>
+                    <span class="infra-breadcrumb-sep">/</span>
+                    <span class="infra-breadcrumb-current" id="breadcrumbLocation">Tawang</span>
+                </nav>
+            </div>
+
+            <div class="header-actions">
+                <div class="header-system-status">
+                    <span class="status-dot"></span>
+                    <span>All systems operational</span>
+                </div>
+                <button class="header-user" aria-label="User profile">
+                    <div class="user-avatar">AU</div>
+                    <span class="header-user-name">Authority</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- MAIN -->
+        <main class="main-content" style="padding: 0;">
+            <!-- Page Header -->
+            <div class="infra-header">
+                <div class="infra-header-top">
+                    <div class="infra-title-wrap">
+                        <h1 class="infra-title">
+                            Impact & Exposure
+                            <span class="infra-title-badge">EXPOSURE INTELLIGENCE</span>
+                        </h1>
+                        <p class="infra-subtitle">Assess population, infrastructure and response priority within monitored risk zones</p>
+                    </div>
+                    <div class="location-selector">
+                        <span class="location-selector-label">LOCATION</span>
+                        <select id="locationSelect" aria-label="Select location"></select>
+                    </div>
+                </div>
+                <div class="infra-meta">
+                    <span class="demo-indicator"></span>
+                    <span>DEMO DATA</span>
+                    <span style="color: var(--border);">·</span>
+                    <span>SIH 2026 PROTOTYPE</span>
+                </div>
+            </div>
+
+            <!-- Dynamic content -->
+            <div class="infra-main" id="infraContent">
+                <!-- Loading state -->
+                <div class="infra-card">
+                    <div class="infra-card-body" style="padding: var(--space-10); text-align: center;">
+                        <div class="loading-spinner" style="margin: 0 auto var(--space-3);"></div>
+                        <div style="font-size: var(--fs-sm); color: var(--text-500);">Loading exposure intelligence...</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Task Modal -->
+    <div class="modal-overlay" id="taskModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">Create Field Task</div>
+                <button class="modal-close" onclick="document.getElementById('taskModal').classList.remove('active')" aria-label="Close">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div class="modal-body" id="taskModalBody"></div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="document.getElementById('taskModal').classList.remove('active')">Cancel</button>
+                <button class="btn btn-primary" onclick="window.SahayakInfra.submitTask()">Assign Task</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/services.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/infrastructure.js"></script>
+</body>
+</html>

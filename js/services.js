@@ -572,6 +572,428 @@ async getMonitoringData(location = 'Tawang') {
     }
     return events.map(e => ({ ...e, isDemo: true }));
   },
+async getExposureData(locationName) {
+    await this._delay(200);
+    const zone = DEMO_DATA.riskZones.find(z => z.location === locationName);
+    if (!zone) return { error: 'Location not found', isDemo: true };
+    
+    const exposure = zone.exposure || {
+        population: zone.population || 1000,
+        villages: Math.max(2, Math.round((zone.population || 1000) / 300)),
+        roads: zone.roads || 3,
+        schools: zone.schools || 2,
+        hospitals: zone.hospitals || 1,
+        bridges: zone.bridges || 1
+    };
+    
+    const populationBreakdown = zone.populationBreakdown || {
+        high: Math.round(exposure.population * 0.34),
+        moderate: Math.round(exposure.population * 0.43),
+        low: Math.round(exposure.population * 0.23)
+    };
+    
+    return {
+        location: locationName,
+        state: zone.state,
+        risk: zone.risk,
+        level: zone.level,
+        exposure,
+        populationBreakdown,
+        isDemo: true
+    };
+},
+
+async getInfrastructure(locationName) {
+    await this._delay(200);
+    const zone = DEMO_DATA.riskZones.find(z => z.location === locationName);
+    if (!zone) return { error: 'Location not found', isDemo: true };
+    
+    // Generate default infrastructure if not present
+    let infrastructure = zone.infrastructure;
+    if (!infrastructure) {
+        infrastructure = [
+            { id: 'INF-AUTO-001', type: 'hospital', name: `${zone.location} District Hospital`, distance: 2.8, status: 'POTENTIALLY_EXPOSED', lat: zone.lat + 0.005, lng: zone.lng - 0.005, capacity: 40 },
+            { id: 'INF-AUTO-002', type: 'school', name: `${zone.location} Govt School`, distance: 1.5, status: 'POTENTIALLY_EXPOSED', lat: zone.lat - 0.003, lng: zone.lng + 0.004, capacity: 280 },
+            { id: 'INF-AUTO-003', type: 'bridge', name: `${zone.location} River Bridge`, distance: 2.2, status: 'MONITOR', lat: zone.lat + 0.002, lng: zone.lng + 0.003 }
+        ];
+    }
+    
+    return { location: locationName, infrastructure, isDemo: true };
+},
+
+async getRoadRisk(locationName) {
+    await this._delay(150);
+    const zone = DEMO_DATA.riskZones.find(z => z.location === locationName);
+    if (!zone) return { error: 'Location not found', isDemo: true };
+    
+    let roads = zone.roads;
+    if (!roads) {
+        roads = [
+            { id: 'RD-AUTO-001', name: `${zone.location} Main Road`, risk: zone.risk > 60 ? 'HIGH' : 'MODERATE', distance: 1.2, status: 'Monitor' },
+            { id: 'RD-AUTO-002', name: `${zone.location} Access Road`, risk: 'MODERATE', distance: 2.5, status: 'Monitor' }
+        ];
+    }
+    
+    const summary = {
+        total: roads.length,
+        critical: roads.filter(r => r.risk === 'CRITICAL').length,
+        high: roads.filter(r => r.risk === 'HIGH').length,
+        moderate: roads.filter(r => r.risk === 'MODERATE' || r.risk === 'WATCH').length
+    };
+    
+    return { location: locationName, roads, summary, isDemo: true };
+},
+
+async getVillages(locationName) {
+    await this._delay(150);
+    const zone = DEMO_DATA.riskZones.find(z => z.location === locationName);
+    if (!zone) return { error: 'Location not found', isDemo: true };
+    
+    let villages = zone.villages;
+    if (!villages) {
+        const count = Math.max(2, Math.round((zone.population || 1000) / 300));
+        villages = Array.from({ length: count }, (_, i) => ({
+            id: `VLG-AUTO-${i+1}`,
+            name: `${zone.location} Village ${i+1}`,
+            population: Math.round((zone.population || 1000) / count * (0.7 + Math.random() * 0.6)),
+            distance: 1.5 + i * 1.2,
+            exposure: i === 0 ? 'HIGH' : i === 1 ? 'MODERATE' : 'LOW',
+            lat: zone.lat + (Math.random() - 0.5) * 0.02,
+            lng: zone.lng + (Math.random() - 0.5) * 0.02
+        }));
+    }
+    
+    return { location: locationName, villages, isDemo: true };
+},
+
+async getEmergencyServices(locationName) {
+    await this._delay(150);
+    const zone = DEMO_DATA.riskZones.find(z => z.location === locationName);
+    if (!zone) return { error: 'Location not found', isDemo: true };
+    
+    const services = zone.emergencyServices || {
+        police: Math.max(1, Math.round(zone.roads / 2)),
+        relief: 1,
+        hospitals: zone.hospitals || 1,
+        fire: 1
+    };
+    
+    const nearest = zone.nearestResponse || {
+        name: `${zone.location} Relief Center`,
+        distance: 3.5 + Math.random() * 2,
+        responseTime: Math.round(12 + Math.random() * 10)
+    };
+    
+    return { location: locationName, services, nearest, isDemo: true };
+},
+
+async getResponsePriority(locationName) {
+    await this._delay(150);
+    const zone = DEMO_DATA.riskZones.find(z => z.location === locationName);
+    if (!zone) return { error: 'Location not found', isDemo: true };
+    
+    const priority = zone.responsePriority || {
+        score: Math.min(100, zone.risk + 10),
+        level: zone.risk >= 80 ? 'CRITICAL' : zone.risk >= 60 ? 'HIGH' : zone.risk >= 40 ? 'MODERATE' : 'LOW'
+    };
+    
+    const factors = zone.priorityFactors || [
+        { label: 'Hazard Severity', value: Math.round(zone.risk * 0.4) },
+        { label: 'Population Exposure', value: Math.round((zone.population || 1000) / 100) },
+        { label: 'Road Connectivity', value: (zone.roads || 3) * 4 },
+        { label: 'Critical Facilities', value: ((zone.schools || 2) + (zone.hospitals || 1)) * 3 }
+    ];
+    
+    return { location: locationName, priority, factors, isDemo: true };
+},
+
+async assignFieldTask(taskData) {
+    await this._delay(400);
+    const officer = DEMO_DATA.officers?.find(o => o.id === taskData.officerId);
+    
+    // Add to recent activity
+    if (DEMO_DATA.recentActivity) {
+        DEMO_DATA.recentActivity.unshift({
+            type: 'action',
+            icon: '📍',
+            title: `Field task assigned: ${taskData.taskType}`,
+            location: taskData.location,
+            time: 'Just now'
+        });
+    }
+    
+    return {
+        success: true,
+        taskId: 'TASK-' + Date.now(),
+        officer: officer?.name || 'Officer',
+        isDemo: true
+    };
+},
+async getExposureActivity(locationName) {
+    await this._delay(100);
+    const zone = DEMO_DATA.riskZones.find(z => z.location === locationName);
+    if (!zone) return { error: 'Location not found', isDemo: true };
+    
+    return {
+        location: locationName,
+        activity: zone.recentExposureActivity || [
+            { type: 'info', icon: '📊', title: 'Exposure assessment updated', location: locationName, time: '1 hr ago' }
+        ],
+        isDemo: true
+    };
+},
+// js/services.js — Services object ke andar ye method add karo
+
+async analyzeRoute(start, destination) {
+    await this._delay(600);
+    
+    // Check predefined routes
+    const key1 = `${start}-${destination}`;
+    const key2 = `${destination}-${start}`;
+    const predefined = DEMO_DATA.routes?.[key1] || DEMO_DATA.routes?.[key2];
+    
+    if (predefined) {
+        return { ...predefined, isDemo: true };
+    }
+    
+    // Generate route dynamically for other pairs
+    const startZone = DEMO_DATA.riskZones.find(z => z.location === start);
+    const destZone = DEMO_DATA.riskZones.find(z => z.location === destination);
+    
+    if (!startZone || !destZone) {
+        return { error: 'Location not found', isDemo: true };
+    }
+    
+    // Generate synthetic route
+    const distance = Math.round(this._haversine(startZone.lat, startZone.lng, destZone.lat, destZone.lng) * 1.4); // 1.4 for road factor
+    const avgRisk = Math.round((startZone.risk + destZone.risk) / 2);
+    const level = avgRisk >= 80 ? 'CRITICAL' : avgRisk >= 60 ? 'HIGH' : avgRisk >= 30 ? 'WATCH' : 'SAFE';
+    
+    // Generate waypoints
+    const waypoints = this._generateWaypoints(startZone, destZone, 5);
+    
+    // Generate segments
+    const segmentCount = 4;
+    const segDistance = Math.round(distance / segmentCount);
+    const primarySegments = [];
+    for (let i = 0; i < segmentCount; i++) {
+        const segRisk = Math.max(10, Math.min(95, avgRisk + Math.round((Math.random() - 0.5) * 30)));
+        const segLevel = segRisk >= 80 ? 'CRITICAL' : segRisk >= 60 ? 'HIGH' : segRisk >= 30 ? 'WATCH' : 'SAFE';
+        primarySegments.push({
+            id: `SEG-GEN-${i+1}`,
+            name: `Segment ${i+1}`,
+            risk: segRisk,
+            level: segLevel,
+            distance: segDistance,
+            reason: this._generateReason(segRisk),
+            factors: {
+                rainfall: Math.round(segRisk * 0.35),
+                slope: Math.round(segRisk * 0.25),
+                soil: Math.round(segRisk * 0.2),
+                historical: Math.round(segRisk * 0.12),
+                satellite: Math.round(segRisk * 0.08)
+            }
+        });
+    }
+    
+    // Alternative route (slightly longer, lower risk)
+    const altWaypoints = this._generateWaypoints(startZone, destZone, 6, true);
+    const altDistance = Math.round(distance * 1.15);
+    const altSegments = [];
+    for (let i = 0; i < segmentCount; i++) {
+        const segRisk = Math.max(10, Math.min(85, avgRisk - 10 + Math.round((Math.random() - 0.5) * 20)));
+        const segLevel = segRisk >= 80 ? 'CRITICAL' : segRisk >= 60 ? 'HIGH' : segRisk >= 30 ? 'WATCH' : 'SAFE';
+        altSegments.push({
+            id: `SEG-GEN-A-${i+1}`,
+            name: `Alt Segment ${i+1}`,
+            risk: segRisk,
+            level: segLevel,
+            distance: Math.round(altDistance / segmentCount),
+            reason: this._generateReason(segRisk),
+            factors: {
+                rainfall: Math.round(segRisk * 0.35),
+                slope: Math.round(segRisk * 0.25),
+                soil: Math.round(segRisk * 0.2),
+                historical: Math.round(segRisk * 0.12),
+                satellite: Math.round(segRisk * 0.08)
+            }
+        });
+    }
+    
+    const altOverallRisk = Math.round(altSegments.reduce((s, seg) => s + seg.risk, 0) / altSegments.length);
+    const altLevel = altOverallRisk >= 80 ? 'CRITICAL' : altOverallRisk >= 60 ? 'HIGH' : altOverallRisk >= 30 ? 'WATCH' : 'SAFE';
+    
+    return {
+        id: `ROUTE-GEN-${Date.now()}`,
+        start,
+        destination,
+        primary: {
+            name: 'Route A (Recommended)',
+            distance,
+            time: Math.round(distance * 1.3),
+            overallRisk: avgRisk,
+            level,
+            waypoints,
+            segments: primarySegments
+        },
+        alternative: {
+            name: 'Route B (Alternative)',
+            distance: altDistance,
+            time: Math.round(altDistance * 1.3),
+            overallRisk: altOverallRisk,
+            level: altLevel,
+            waypoints: altWaypoints,
+            segments: altSegments
+        },
+        riskFactors: [
+            { label: 'Terrain', value: Math.round(avgRisk * 0.35), description: 'Elevation and slope characteristics' },
+            { label: 'Rainfall', value: Math.round(avgRisk * 0.28), description: 'Current rainfall conditions' },
+            { label: 'Soil Moisture', value: Math.round(avgRisk * 0.18), description: 'Soil saturation levels' },
+            { label: 'Historical', value: Math.round(avgRisk * 0.12), description: 'Past landslide events' },
+            { label: 'Satellite', value: Math.round(avgRisk * 0.07), description: 'Satellite-detected changes' }
+        ],
+        isDemo: true
+    };
+},
+
+async getRouteActivity() {
+    await this._delay(100);
+    return (DEMO_DATA.routeActivity || []).map(a => ({ ...a, isDemo: true }));
+},
+
+// Helper: Haversine distance
+_haversine(lat1, lng1, lat2, lng2) {
+    const R = 6371;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLng = (lng2 - lng1) * Math.PI / 180;
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLng/2) * Math.sin(dLng/2);
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+},
+
+// Helper: Generate waypoints between two zones
+_generateWaypoints(startZone, destZone, count, alternative = false) {
+    const waypoints = [[startZone.lat, startZone.lng]];
+    const offset = alternative ? 0.08 : 0.04;
+    for (let i = 1; i < count; i++) {
+        const t = i / count;
+        const lat = startZone.lat + (destZone.lat - startZone.lat) * t + (Math.random() - 0.5) * offset;
+        const lng = startZone.lng + (destZone.lng - startZone.lng) * t + (Math.random() - 0.5) * offset;
+        waypoints.push([lat, lng]);
+    }
+    waypoints.push([destZone.lat, destZone.lng]);
+    return waypoints;
+},
+
+// Helper: Generate reason based on risk level
+_generateReason(risk) {
+    if (risk >= 80) return 'Critical terrain + heavy rainfall';
+    if (risk >= 60) return 'Steep terrain + elevated rainfall';
+    if (risk >= 30) return 'Moderate rainfall + winding road';
+    return 'Stable terrain, low risk';
+},
+// js/services.js — Services object ke andar ye methods add karo
+
+async runSimulation(locationName, scenario) {
+    await this._delay(400);
+    
+    const zone = DEMO_DATA.riskZones.find(z => z.location === locationName);
+    if (!zone) return { error: 'Location not found', isDemo: true };
+    
+    const baseline = zone.simulatorBaseline || {
+        rainfall: zone.rainfall || 100,
+        soilMoisture: zone.soilMoisture || 50,
+        slope: zone.slope || 25,
+        historicalWeight: 50,
+        satelliteWeight: 20
+    };
+    
+    // Calculate contributions (transparent demo formula)
+    const rainfallDelta = ((scenario.rainfall - baseline.rainfall) / 200) * 25;
+    const soilDelta = ((scenario.soilMoisture - baseline.soilMoisture) / 80) * 20;
+    const slopeDelta = ((scenario.slope - baseline.slope) / 50) * 20;
+    const historicalDelta = ((scenario.historicalWeight - baseline.historicalWeight) / 100) * 15;
+    const satelliteDelta = ((scenario.satelliteWeight - baseline.satelliteWeight) / 80) * 10;
+    
+    const totalDelta = rainfallDelta + soilDelta + slopeDelta + historicalDelta + satelliteDelta;
+    const simulatedRisk = Math.max(0, Math.min(100, Math.round(zone.risk + totalDelta)));
+    
+    const contributions = {
+        rainfall: Math.round(rainfallDelta),
+        soil: Math.round(soilDelta),
+        slope: Math.round(slopeDelta),
+        historical: Math.round(historicalDelta),
+        satellite: Math.round(satelliteDelta)
+    };
+    
+    // Generate projection (illustrative)
+    const projection = this._generateProjection(zone.risk, simulatedRisk);
+    
+    // Determine level
+    const getLevel = (score) => {
+        if (score >= 80) return 'WARNING';
+        if (score >= 60) return 'ALERT';
+        if (score >= 30) return 'WATCH';
+        return 'SAFE';
+    };
+    
+    return {
+        location: locationName,
+        baseline: {
+            risk: zone.risk,
+            level: zone.level,
+            params: baseline
+        },
+        simulated: {
+            risk: simulatedRisk,
+            level: getLevel(simulatedRisk),
+            params: scenario
+        },
+        delta: Math.round(totalDelta),
+        contributions,
+        projection,
+        isDemo: true
+    };
+},
+
+_generateProjection(currentRisk, simulatedRisk) {
+    // Simple linear interpolation over 24h (illustrative)
+    const steps = [0, 6, 12, 24];
+    return steps.map((h, i) => {
+        const t = i / (steps.length - 1);
+        const eased = t * t * (3 - 2 * t); // smoothstep
+        return {
+            hour: h,
+            label: h === 0 ? 'Now' : `+${h}h`,
+            risk: Math.round(currentRisk + (simulatedRisk - currentRisk) * eased)
+        };
+    });
+},
+
+async getSimulationPresets() {
+    await this._delay(100);
+    return {
+        moderate: {
+            name: 'Moderate Scenario',
+            description: 'Slightly elevated conditions',
+            rainfallMultiplier: 1.3,
+            soilMultiplier: 1.15,
+            slopeMultiplier: 1.0,
+            historicalMultiplier: 1.1,
+            satelliteMultiplier: 1.2
+        },
+        severe: {
+            name: 'Severe Scenario',
+            description: 'Significantly worse conditions',
+            rainfallMultiplier: 1.8,
+            soilMultiplier: 1.4,
+            slopeMultiplier: 1.2,
+            historicalMultiplier: 1.3,
+            satelliteMultiplier: 1.5
+        }
+    };
+}
 };
 
 if (typeof window !== 'undefined') {

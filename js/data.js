@@ -119,7 +119,57 @@ const DEMO_DATA = {
                 secondaryDriver: 'Soil moisture',
                 terrainFactor: 'Steep slope'
             },
-            responsePriority: { score: 91, level: 'CRITICAL' }
+            responsePriority: { score: 91, level: 'CRITICAL' },
+            simulatorBaseline: {
+               rainfall: 286,      // mm (72h)
+               soilMoisture: 81,   // %
+               slope: 41,          // degrees
+               historicalWeight: 65, // 0-100
+               satelliteWeight: 45   // 0-100
+            },
+    // === INFRASTRUCTURE PAGE FIELDS ===
+            exposure: {
+                population: 1240,
+                villages: 4,
+                roads: 3,
+                schools: 2,
+                hospitals: 1,
+                bridges: 1
+            },
+            infrastructure: [
+                { id: 'INF-001', type: 'hospital', name: 'Tawang District Hospital', distance: 3.1, status: 'POTENTIALLY_EXPOSED', lat: 27.468, lng: 91.862, capacity: 50 },
+                { id: 'INF-002', type: 'school', name: 'Govt Senior Secondary School', distance: 1.2, status: 'POTENTIALLY_EXPOSED', lat: 27.472, lng: 91.858, capacity: 320 },
+                { id: 'INF-003', type: 'school', name: 'Jawahar Navodaya Vidyalaya', distance: 2.8, status: 'MONITOR', lat: 27.465, lng: 91.870, capacity: 450 },
+                { id: 'INF-004', type: 'bridge', name: 'Tawang River Bridge', distance: 2.4, status: 'POTENTIALLY_EXPOSED', lat: 27.470, lng: 91.855 },
+                { id: 'INF-005', type: 'police', name: 'Tawang Police Station', distance: 1.8, status: 'OPERATIONAL', lat: 27.474, lng: 91.865 },
+                { id: 'INF-006', type: 'relief', name: 'Tawang Relief Center', distance: 4.2, status: 'STANDBY', lat: 27.460, lng: 91.850, capacity: 200 }
+            ],
+            roads: [
+                { id: 'RD-001', name: 'Tawang Highway Segment A', risk: 'CRITICAL', distance: 0.8, status: 'Monitor' },
+                { id: 'RD-002', name: 'Monastery Road Segment B', risk: 'HIGH', distance: 1.6, status: 'Monitor' },
+                { id: 'RD-003', name: 'Lumla Road Segment C', risk: 'HIGH', distance: 2.3, status: 'Monitor' }
+            ],
+            villages: [
+                { id: 'VLG-001', name: 'Lungthung', population: 320, distance: 2.1, exposure: 'HIGH', lat: 27.480, lng: 91.870 },
+                { id: 'VLG-002', name: 'Dirang Chu', population: 180, distance: 3.4, exposure: 'MODERATE', lat: 27.455, lng: 91.845 },
+                { id: 'VLG-003', name: 'Sela Top Settlement', population: 95, distance: 4.2, exposure: 'LOW', lat: 27.490, lng: 91.880 },
+                { id: 'VLG-004', name: 'Jang Valley', population: 645, distance: 1.8, exposure: 'HIGH', lat: 27.465, lng: 91.850 }
+            ],
+            populationBreakdown: { high: 420, moderate: 530, low: 290 },
+            emergencyServices: { police: 2, relief: 1, hospitals: 1, fire: 1 },
+            nearestResponse: { name: 'Tawang Relief Center', distance: 4.2, responseTime: 18 },
+            priorityFactors: [
+                { label: 'Hazard Severity', value: 35 },
+                { label: 'Population Exposure', value: 24 },
+                { label: 'Road Connectivity', value: 16 },
+                { label: 'Critical Facilities', value: 10 }
+            ],
+            recentExposureActivity: [
+                { type: 'info', icon: '🏥', title: 'Infrastructure identified', location: 'Tawang District Hospital', time: '8 min ago' },
+                { type: 'alert', icon: '🛣', title: 'Road segment flagged', location: 'Tawang Highway Segment A', time: '14 min ago' },
+                { type: 'action', icon: '📍', title: 'Field inspection requested', location: 'Tawang', time: '22 min ago' },
+                { type: 'info', icon: '📊', title: 'Exposure assessment updated', location: 'Tawang', time: '31 min ago' }
+            ],
         },
         {
             id: 'RZ-002', location: 'East Siang', state: 'Arunachal Pradesh',
@@ -173,7 +223,53 @@ const DEMO_DATA = {
                 status: 'ALERT', confidence: 'Demonstration value', trend: 'Increasing',
                 primaryDriver: 'Heavy rainfall', secondaryDriver: 'Steep terrain', terrainFactor: 'Moderate slope'
             },
-            responsePriority: { score: 74, level: 'HIGH' }
+            responsePriority: { score: 74, level: 'HIGH' },
+             simulatorBaseline: {
+        rainfall: 198, soilMoisture: 74, slope: 36,
+        historicalWeight: 55, satelliteWeight: 35
+    },
+    exposure: {
+        population: 1240,
+        villages: 4,
+        roads: 3,
+        schools: 2,
+        hospitals: 1,
+        bridges: 1
+    },
+    infrastructure: [
+        { id: 'INF-001', type: 'hospital', name: 'Tawang District Hospital', distance: 3.1, status: 'POTENTIALLY_EXPOSED', lat: 27.468, lng: 91.862, capacity: 50 },
+        { id: 'INF-002', type: 'school', name: 'Govt Senior Secondary School', distance: 1.2, status: 'POTENTIALLY_EXPOSED', lat: 27.472, lng: 91.858, capacity: 320 },
+        { id: 'INF-003', type: 'school', name: 'Jawahar Navodaya Vidyalaya', distance: 2.8, status: 'MONITOR', lat: 27.465, lng: 91.870, capacity: 450 },
+        { id: 'INF-004', type: 'bridge', name: 'Tawang River Bridge', distance: 2.4, status: 'POTENTIALLY_EXPOSED', lat: 27.470, lng: 91.855 },
+        { id: 'INF-005', type: 'police', name: 'Tawang Police Station', distance: 1.8, status: 'OPERATIONAL', lat: 27.474, lng: 91.865 },
+        { id: 'INF-006', type: 'relief', name: 'Tawang Relief Center', distance: 4.2, status: 'STANDBY', lat: 27.460, lng: 91.850, capacity: 200 }
+    ],
+    roads: [
+        { id: 'RD-001', name: 'Tawang Highway Segment A', risk: 'CRITICAL', distance: 0.8, status: 'Monitor' },
+        { id: 'RD-002', name: 'Monastery Road Segment B', risk: 'HIGH', distance: 1.6, status: 'Monitor' },
+        { id: 'RD-003', name: 'Lumla Road Segment C', risk: 'HIGH', distance: 2.3, status: 'Monitor' }
+    ],
+    villages: [
+        { id: 'VLG-001', name: 'Lungthung', population: 320, distance: 2.1, exposure: 'HIGH', lat: 27.480, lng: 91.870 },
+        { id: 'VLG-002', name: 'Dirang Chu', population: 180, distance: 3.4, exposure: 'MODERATE', lat: 27.455, lng: 91.845 },
+        { id: 'VLG-003', name: 'Sela Top Settlement', population: 95, distance: 4.2, exposure: 'LOW', lat: 27.490, lng: 91.880 },
+        { id: 'VLG-004', name: 'Jang Valley', population: 645, distance: 1.8, exposure: 'HIGH', lat: 27.465, lng: 91.850 }
+    ],
+    populationBreakdown: { high: 420, moderate: 530, low: 290 },
+    emergencyServices: { police: 2, relief: 1, hospitals: 1, fire: 1 },
+    nearestResponse: { name: 'Tawang Relief Center', distance: 4.2, responseTime: 18 },
+    priorityFactors: [
+        { label: 'Hazard Severity', value: 35 },
+        { label: 'Population Exposure', value: 24 },
+        { label: 'Road Connectivity', value: 16 },
+        { label: 'Critical Facilities', value: 10 }
+    ],
+    recentExposureActivity: [
+        { type: 'info', icon: '🏥', title: 'Infrastructure identified', location: 'Tawang District Hospital', time: '8 min ago' },
+        { type: 'alert', icon: '🛣', title: 'Road segment flagged', location: 'Tawang Highway Segment A', time: '14 min ago' },
+        { type: 'action', icon: '📍', title: 'Field inspection requested', location: 'Tawang', time: '22 min ago' },
+        { type: 'info', icon: '📊', title: 'Exposure assessment updated', location: 'Tawang', time: '31 min ago' }
+    ],
         },
         {
             id: 'RZ-003', location: 'West Khasi Hills', state: 'Meghalaya',
@@ -227,7 +323,11 @@ const DEMO_DATA = {
                 status: 'ALERT', confidence: 'Demonstration value', trend: 'Increasing',
                 primaryDriver: 'Heavy rainfall', secondaryDriver: 'Soil moisture', terrainFactor: 'Moderate slope'
             },
-            responsePriority: { score: 68, level: 'HIGH' }
+            responsePriority: { score: 68, level: 'HIGH' },
+            simulatorBaseline: {
+        rainfall: 224, soilMoisture: 78, slope: 34,
+        historicalWeight: 50, satelliteWeight: 20
+    },
         },
         {
             id: 'RZ-004', location: 'Gangtok', state: 'Sikkim',
@@ -278,7 +378,11 @@ const DEMO_DATA = {
                 status: 'WATCH', confidence: 'Demonstration value', trend: 'Increasing',
                 primaryDriver: 'Rainfall', secondaryDriver: 'Terrain', terrainFactor: 'Moderate slope'
             },
-            responsePriority: { score: 52, level: 'MODERATE' }
+            responsePriority: { score: 52, level: 'MODERATE' },
+            simulatorBaseline: {
+        rainfall: 142, soilMoisture: 62, slope: 32,
+        historicalWeight: 40, satelliteWeight: 25
+    },
         },
         {
             id: 'RZ-005', location: 'Kohima', state: 'Nagaland',
@@ -326,7 +430,11 @@ const DEMO_DATA = {
                 status: 'WATCH', confidence: 'Demonstration value', trend: 'Stable',
                 primaryDriver: 'Rainfall', secondaryDriver: 'Terrain', terrainFactor: 'Moderate slope'
             },
-            responsePriority: { score: 42, level: 'MODERATE' }
+            responsePriority: { score: 42, level: 'MODERATE' },
+            simulatorBaseline: {
+        rainfall: 112, soilMoisture: 58, slope: 28,
+        historicalWeight: 35, satelliteWeight: 20
+    },
         },
         {
             id: 'RZ-006', location: 'Aizawl', state: 'Mizoram',
@@ -371,7 +479,11 @@ const DEMO_DATA = {
                 status: 'WATCH', confidence: 'Demonstration value', trend: 'Stable',
                 primaryDriver: 'Rainfall', secondaryDriver: 'Terrain', terrainFactor: 'Moderate slope'
             },
-            responsePriority: { score: 34, level: 'LOW' }
+            responsePriority: { score: 34, level: 'LOW' },
+            simulatorBaseline: {
+        rainfall: 98, soilMoisture: 54, slope: 26,
+        historicalWeight: 30, satelliteWeight: 18
+    },
         },
         {
             id: 'RZ-007', location: 'Shillong', state: 'Meghalaya',
@@ -416,7 +528,11 @@ const DEMO_DATA = {
                 status: 'SAFE', confidence: 'Demonstration value', trend: 'Stable',
                 primaryDriver: 'Rainfall', secondaryDriver: '—', terrainFactor: 'Gentle slope'
             },
-            responsePriority: { score: 22, level: 'LOW' }
+            responsePriority: { score: 22, level: 'LOW' },
+            simulatorBaseline: {
+        rainfall: 64, soilMoisture: 42, slope: 18,
+        historicalWeight: 25, satelliteWeight: 15
+    },
         },
         {
             id: 'RZ-008', location: 'Imphal', state: 'Manipur',
@@ -461,7 +577,11 @@ const DEMO_DATA = {
                 status: 'SAFE', confidence: 'Demonstration value', trend: 'Stable',
                 primaryDriver: 'Rainfall', secondaryDriver: '—', terrainFactor: 'Gentle slope'
             },
-            responsePriority: { score: 18, level: 'LOW' }
+            responsePriority: { score: 18, level: 'LOW' },
+            simulatorBaseline: {
+        rainfall: 52, soilMoisture: 38, slope: 15,
+        historicalWeight: 20, satelliteWeight: 12
+    },
         },
         {
             id: 'RZ-009', location: 'Guwahati', state: 'Assam',
@@ -506,7 +626,11 @@ const DEMO_DATA = {
                 status: 'SAFE', confidence: 'Demonstration value', trend: 'Stable',
                 primaryDriver: 'Rainfall', secondaryDriver: '—', terrainFactor: 'Gentle slope'
             },
-            responsePriority: { score: 14, level: 'LOW' }
+            responsePriority: { score: 14, level: 'LOW' },
+            simulatorBaseline: {
+        rainfall: 42, soilMoisture: 34, slope: 12,
+        historicalWeight: 10, satelliteWeight: 8
+    },
         },
         // Extra locations for selector
         {
@@ -558,7 +682,11 @@ const DEMO_DATA = {
                 status: 'WATCH', confidence: 'Demonstration value', trend: 'Increasing',
                 primaryDriver: 'Rainfall', secondaryDriver: 'Soil moisture', terrainFactor: 'Moderate slope'
             },
-            responsePriority: { score: 48, level: 'MODERATE' }
+            responsePriority: { score: 48, level: 'MODERATE' },
+            simulatorBaseline: {
+        rainfall: 156, soilMoisture: 66, slope: 30,
+        historicalWeight: 40, satelliteWeight: 22
+    },
         },
         {
             id: 'RZ-IT', location: 'Itanagar', state: 'Arunachal Pradesh',
@@ -603,7 +731,11 @@ const DEMO_DATA = {
                 status: 'WATCH', confidence: 'Demonstration value', trend: 'Stable',
                 primaryDriver: 'Rainfall', secondaryDriver: 'Terrain', terrainFactor: 'Gentle slope'
             },
-            responsePriority: { score: 28, level: 'LOW' }
+            responsePriority: { score: 28, level: 'LOW' },
+            simulatorBaseline: {
+        rainfall: 88, soilMoisture: 48, slope: 22,
+        historicalWeight: 25, satelliteWeight: 15
+    },
         },
         {
             id: 'RZ-AG', location: 'Agartala', state: 'Tripura',
@@ -648,7 +780,11 @@ const DEMO_DATA = {
                 status: 'SAFE', confidence: 'Demonstration value', trend: 'Stable',
                 primaryDriver: 'Rainfall', secondaryDriver: '—', terrainFactor: 'Gentle slope'
             },
-            responsePriority: { score: 16, level: 'LOW' }
+            responsePriority: { score: 16, level: 'LOW' },
+            simulatorBaseline: {
+        rainfall: 48, soilMoisture: 36, slope: 14,
+        historicalWeight: 15, satelliteWeight: 10
+    },
         }
     ],
     alerts: [
@@ -1722,7 +1858,205 @@ monitoringData: {
       vegetationPct: 93, surfaceStabilityPct: 91, waterSoilPct: 46, anomaly: false
     },
     historical: { total: 6, critical: 0, high: 1, moderate: 3, low: 2, byYear: { 2021: 1, 2022: 1, 2023: 1, 2024: 2, 2025: 1 } }
-  }
+  },
+routes: {
+    'Tawang-Itanagar': {
+        id: 'ROUTE-001',
+        start: 'Tawang',
+        destination: 'Itanagar',
+        primary: {
+            name: 'Route A (NH-13)',
+            distance: 148,
+            time: 195, // minutes
+            overallRisk: 62,
+            level: 'HIGH',
+            waypoints: [
+                [27.47, 91.86], [27.42, 92.05], [27.35, 92.28],
+                [27.28, 92.55], [27.20, 92.85], [27.15, 93.20],
+                [27.10, 93.62]
+            ],
+            segments: [
+                { id: 'SEG-001-A', name: 'Tawang - Bomdila', risk: 78, level: 'HIGH', distance: 22, reason: 'Steep terrain + historical landslides', factors: { rainfall: 18, slope: 26, soil: 14, historical: 14, satellite: 6 } },
+                { id: 'SEG-001-B', name: 'Bomdila - Dirang', risk: 68, level: 'HIGH', distance: 28, reason: 'Elevated rainfall + steep slope', factors: { rainfall: 22, slope: 20, soil: 12, historical: 10, satellite: 4 } },
+                { id: 'SEG-001-C', name: 'Dirang - Nizulam', risk: 52, level: 'WATCH', distance: 32, reason: 'Moderate rainfall + winding road', factors: { rainfall: 16, slope: 14, soil: 10, historical: 8, satellite: 4 } },
+                { id: 'SEG-001-D', name: 'Nizulam - Bhalukpong', risk: 38, level: 'WATCH', distance: 34, reason: 'Elevated soil moisture', factors: { rainfall: 12, slope: 10, soil: 10, historical: 4, satellite: 2 } },
+                { id: 'SEG-001-E', name: 'Bhalukpong - Itanagar', risk: 28, level: 'SAFE', distance: 32, reason: 'Low elevation, stable terrain', factors: { rainfall: 8, slope: 6, soil: 8, historical: 4, satellite: 2 } }
+            ]
+        },
+        alternative: {
+            name: 'Route B (via Tezpur)',
+            distance: 172,
+            time: 225,
+            overallRisk: 44,
+            level: 'WATCH',
+            waypoints: [
+                [27.47, 91.86], [27.38, 91.95], [27.25, 92.10],
+                [27.10, 92.35], [26.95, 92.65], [26.85, 93.00],
+                [26.95, 93.35], [27.10, 93.62]
+            ],
+            segments: [
+                { id: 'SEG-001-A2', name: 'Tawang - Jang', risk: 58, level: 'WATCH', distance: 28, reason: 'High altitude + rainfall', factors: { rainfall: 18, slope: 18, soil: 10, historical: 8, satellite: 4 } },
+                { id: 'SEG-001-B2', name: 'Jang - Tenga Valley', risk: 42, level: 'WATCH', distance: 32, reason: 'Moderate slope', factors: { rainfall: 14, slope: 12, soil: 8, historical: 6, satellite: 2 } },
+                { id: 'SEG-001-C2', name: 'Tenga - Bhalukpong', risk: 38, level: 'WATCH', distance: 34, reason: 'Winding ghat section', factors: { rainfall: 12, slope: 10, soil: 8, historical: 6, satellite: 2 } },
+                { id: 'SEG-001-D2', name: 'Bhalukpong - Tezpur', risk: 32, level: 'WATCH', distance: 42, reason: 'Foothill transition', factors: { rainfall: 10, slope: 8, soil: 8, historical: 4, satellite: 2 } },
+                { id: 'SEG-001-E2', name: 'Tezpur - Itanagar', risk: 22, level: 'SAFE', distance: 36, reason: 'Plains, stable terrain', factors: { rainfall: 6, slope: 4, soil: 6, historical: 4, satellite: 2 } }
+            ]
+        },
+        riskFactors: [
+            { label: 'Steep Terrain', value: 28, description: 'Multiple high-altitude ghat sections' },
+            { label: 'Elevated Rainfall', value: 22, description: 'Monsoon-heavy region' },
+            { label: 'Historical Landslides', value: 18, description: 'Known landslide corridors' },
+            { label: 'Soil Moisture', value: 14, description: 'Elevated saturation in upper reaches' },
+            { label: 'Satellite Anomaly', value: 8, description: 'Minor surface changes detected' }
+        ]
+    },
+    'Gangtok-Guwahati': {
+        id: 'ROUTE-002',
+        start: 'Gangtok',
+        destination: 'Guwahati',
+        primary: {
+            name: 'Route A (NH-10)',
+            distance: 245,
+            time: 320,
+            overallRisk: 48,
+            level: 'WATCH',
+            waypoints: [
+                [27.33, 88.62], [27.15, 88.75], [26.95, 88.95],
+                [26.75, 89.25], [26.55, 89.65], [26.40, 90.15],
+                [26.25, 90.85], [26.14, 91.74]
+            ],
+            segments: [
+                { id: 'SEG-002-A', name: 'Gangtok - Melli', risk: 58, level: 'WATCH', distance: 32, reason: 'Steep mountain descent', factors: { rainfall: 16, slope: 18, soil: 10, historical: 10, satellite: 4 } },
+                { id: 'SEG-002-B', name: 'Melli - Kalimpong', risk: 42, level: 'WATCH', distance: 38, reason: 'Moderate terrain', factors: { rainfall: 12, slope: 12, soil: 8, historical: 8, satellite: 2 } },
+                { id: 'SEG-002-C', name: 'Kalimpong - Jalpaiguri', risk: 32, level: 'WATCH', distance: 48, reason: 'Foothill transition', factors: { rainfall: 10, slope: 8, soil: 8, historical: 4, satellite: 2 } },
+                { id: 'SEG-002-D', name: 'Jalpaiguri - Goalpara', risk: 22, level: 'SAFE', distance: 72, reason: 'Plains, stable', factors: { rainfall: 6, slope: 4, soil: 6, historical: 4, satellite: 2 } },
+                { id: 'SEG-002-E', name: 'Goalpara - Guwahati', risk: 18, level: 'SAFE', distance: 55, reason: 'Flat terrain', factors: { rainfall: 4, slope: 4, soil: 4, historical: 4, satellite: 2 } }
+            ]
+        },
+        alternative: {
+            name: 'Route B (via Siliguri)',
+            distance: 268,
+            time: 348,
+            overallRisk: 38,
+            level: 'WATCH',
+            waypoints: [
+                [27.33, 88.62], [27.05, 88.50], [26.72, 88.40],
+                [26.50, 88.70], [26.45, 89.30], [26.40, 90.15],
+                [26.25, 90.85], [26.14, 91.74]
+            ],
+            segments: [
+                { id: 'SEG-002-A2', name: 'Gangtok - Rangpo', risk: 48, level: 'WATCH', distance: 38, reason: 'Mountain descent', factors: { rainfall: 14, slope: 14, soil: 8, historical: 8, satellite: 4 } },
+                { id: 'SEG-002-B2', name: 'Rangpo - Siliguri', risk: 32, level: 'WATCH', distance: 58, reason: 'Moderate terrain', factors: { rainfall: 10, slope: 8, soil: 8, historical: 4, satellite: 2 } },
+                { id: 'SEG-002-C2', name: 'Siliguri - Goalpara', risk: 24, level: 'SAFE', distance: 105, reason: 'Plains', factors: { rainfall: 6, slope: 4, soil: 8, historical: 4, satellite: 2 } },
+                { id: 'SEG-002-D2', name: 'Goalpara - Guwahati', risk: 18, level: 'SAFE', distance: 67, reason: 'Flat terrain', factors: { rainfall: 4, slope: 4, soil: 4, historical: 4, satellite: 2 } }
+            ]
+        },
+        riskFactors: [
+            { label: 'Mountain Descent', value: 22, description: 'Initial steep sections from Gangtok' },
+            { label: 'Rainfall', value: 16, description: 'Moderate rainfall in upper reaches' },
+            { label: 'Historical Patterns', value: 12, description: 'Some known landslide zones' },
+            { label: 'Soil Moisture', value: 10, description: 'Elevated in Sikkim sections' },
+            { label: 'Satellite', value: 4, description: 'Minor anomalies' }
+        ]
+    },
+    'Shillong-Guwahati': {
+        id: 'ROUTE-003',
+        start: 'Shillong',
+        destination: 'Guwahati',
+        primary: {
+            name: 'Route A (NH-6)',
+            distance: 105,
+            time: 150,
+            overallRisk: 32,
+            level: 'WATCH',
+            waypoints: [
+                [25.57, 91.88], [25.65, 91.72], [25.80, 91.55],
+                [25.95, 91.45], [26.05, 91.55], [26.14, 91.74]
+            ],
+            segments: [
+                { id: 'SEG-003-A', name: 'Shillong - Jorabat', risk: 42, level: 'WATCH', distance: 28, reason: 'Plateau descent', factors: { rainfall: 12, slope: 12, soil: 8, historical: 8, satellite: 2 } },
+                { id: 'SEG-003-B', name: 'Jorabat - Khanapara', risk: 28, level: 'SAFE', distance: 32, reason: 'Moderate terrain', factors: { rainfall: 8, slope: 8, soil: 6, historical: 4, satellite: 2 } },
+                { id: 'SEG-003-C', name: 'Khanapara - Guwahati', risk: 18, level: 'SAFE', distance: 45, reason: 'Plains, stable', factors: { rainfall: 4, slope: 4, soil: 4, historical: 4, satellite: 2 } }
+            ]
+        },
+        alternative: {
+            name: 'Route B (via Nongpoh)',
+            distance: 118,
+            time: 168,
+            overallRisk: 26,
+            level: 'SAFE',
+            waypoints: [
+                [25.57, 91.88], [25.55, 92.05], [25.65, 92.15],
+                [25.85, 92.00], [26.00, 91.85], [26.14, 91.74]
+            ],
+            segments: [
+                { id: 'SEG-003-A2', name: 'Shillong - Nongpoh', risk: 32, level: 'WATCH', distance: 35, reason: 'Plateau edge', factors: { rainfall: 10, slope: 10, soil: 6, historical: 4, satellite: 2 } },
+                { id: 'SEG-003-B2', name: 'Nongpoh - Rani', risk: 22, level: 'SAFE', distance: 42, reason: 'Moderate terrain', factors: { rainfall: 6, slope: 8, soil: 4, historical: 4, satellite: 0 } },
+                { id: 'SEG-003-C2', name: 'Rani - Guwahati', risk: 18, level: 'SAFE', distance: 41, reason: 'Plains', factors: { rainfall: 4, slope: 4, soil: 4, historical: 4, satellite: 2 } }
+            ]
+        },
+        riskFactors: [
+            { label: 'Plateau Descent', value: 14, description: 'Initial ghat section from Shillong' },
+            { label: 'Rainfall', value: 10, description: 'Moderate monsoon impact' },
+            { label: 'Historical', value: 8, description: 'Some past incidents' },
+            { label: 'Soil Moisture', value: 6, description: 'Elevated in upper reaches' },
+            { label: 'Satellite', value: 2, description: 'Minimal anomalies' }
+        ]
+    },
+    'Kohima-Imphal': {
+        id: 'ROUTE-004',
+        start: 'Kohima',
+        destination: 'Imphal',
+        primary: {
+            name: 'Route A (NH-2)',
+            distance: 82,
+            time: 135,
+            overallRisk: 44,
+            level: 'WATCH',
+            waypoints: [
+                [25.67, 94.11], [25.50, 94.05], [25.25, 93.98],
+                [25.05, 93.95], [24.90, 93.95], [24.82, 93.95]
+            ],
+            segments: [
+                { id: 'SEG-004-A', name: 'Kohima - Viswema', risk: 52, level: 'WATCH', distance: 18, reason: 'Steep descent', factors: { rainfall: 14, slope: 16, soil: 10, historical: 8, satellite: 4 } },
+                { id: 'SEG-004-B', name: 'Viswema - Mao', risk: 58, level: 'WATCH', distance: 22, reason: 'Mountain section', factors: { rainfall: 16, slope: 18, soil: 10, historical: 10, satellite: 4 } },
+                { id: 'SEG-004-C', name: 'Mao - Kangpokpi', risk: 38, level: 'WATCH', distance: 22, reason: 'Moderate terrain', factors: { rainfall: 10, slope: 10, soil: 8, historical: 8, satellite: 2 } },
+                { id: 'SEG-004-D', name: 'Kangpokpi - Imphal', risk: 22, level: 'SAFE', distance: 20, reason: 'Valley approach', factors: { rainfall: 6, slope: 6, soil: 4, historical: 4, satellite: 2 } }
+            ]
+        },
+        alternative: {
+            name: 'Route B (via Meluri)',
+            distance: 112,
+            time: 175,
+            overallRisk: 36,
+            level: 'WATCH',
+            waypoints: [
+                [25.67, 94.11], [25.55, 94.25], [25.35, 94.30],
+                [25.15, 94.15], [24.95, 94.05], [24.82, 93.95]
+            ],
+            segments: [
+                { id: 'SEG-004-A2', name: 'Kohima - Pfutsero', risk: 42, level: 'WATCH', distance: 32, reason: 'Moderate terrain', factors: { rainfall: 12, slope: 12, soil: 8, historical: 8, satellite: 2 } },
+                { id: 'SEG-004-B2', name: 'Pfutsero - Meluri', risk: 38, level: 'WATCH', distance: 28, reason: 'Hilly section', factors: { rainfall: 10, slope: 10, soil: 8, historical: 8, satellite: 2 } },
+                { id: 'SEG-004-C2', name: 'Meluri - Imphal', risk: 26, level: 'SAFE', distance: 52, reason: 'Valley approach', factors: { rainfall: 6, slope: 6, soil: 6, historical: 6, satellite: 2 } }
+            ]
+        },
+        riskFactors: [
+            { label: 'Mountain Sections', value: 18, description: 'Steep hills between Kohima and Mao' },
+            { label: 'Rainfall', value: 14, description: 'Moderate monsoon' },
+            { label: 'Historical', value: 12, description: 'Known landslide corridors' },
+            { label: 'Soil Moisture', value: 10, description: 'Elevated in upper reaches' },
+            { label: 'Satellite', value: 4, description: 'Minor changes' }
+        ]
+    }
+},
+
+// Route analysis activity
+routeActivity: [
+    { type: 'info', icon: '🛣', title: 'Route analyzed', location: 'Tawang → Itanagar', time: '12 min ago' },
+    { type: 'alert', icon: '⚠', title: 'High-risk segment flagged', location: 'Bomdila - Dirang', time: '28 min ago' },
+    { type: 'action', icon: '🔄', title: 'Alternative route suggested', location: 'Gangtok → Guwahati', time: '1 hr ago' },
+    { type: 'success', icon: '✓', title: 'Route verified safe', location: 'Shillong → Guwahati', time: '2 hr ago' }
+]
 }
 };
 

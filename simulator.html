@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SAHAYAK Landslide Scenario Simulator — Explore what-if environmental scenarios">
+    <title>Scenario Simulator — SAHAYAK</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/landing.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/simulator.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <div class="app-shell">
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar" role="navigation" aria-label="Primary navigation">
+            <div class="sidebar-brand">
+                <div class="brand-logo" aria-hidden="true">
+                    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#19B8C7"/>
+                                <stop offset="100%" stop-color="#0F9D8A"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M20 3 L34 8 V20 C34 28 28 34 20 37 C12 34 6 28 6 20 V8 Z" fill="none" stroke="url(#logoGrad)" stroke-width="1.5"/>
+                        <path d="M10 26 L16 16 L20 22 L24 14 L30 26 Z" fill="url(#logoGrad)" opacity="0.85"/>
+                        <circle cx="24" cy="14" r="2" fill="#19B8C7"/>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">SAHAYAK</span>
+                    <span class="brand-sub">NER Landslide Intelligence</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav" id="sidebarNav"></nav>
+            <div class="sidebar-footer">
+                <div class="sidebar-status">
+                    <span class="status-dot"></span>
+                    <span>System Operational</span>
+                </div>
+                <div class="sidebar-user">
+                    <div class="user-avatar">AU</div>
+                    <div class="user-info">
+                        <div class="user-name">Authority</div>
+                        <div class="user-role">Administrator</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- TOP HEADER -->
+        <header class="top-header">
+            <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            </button>
+
+            <div class="header-title-wrap">
+                <nav class="sim-breadcrumb" aria-label="Breadcrumb">
+                    <a href="dashboard.html">Dashboard</a>
+                    <span class="sim-breadcrumb-sep">/</span>
+                    <span class="sim-breadcrumb-current">Scenario Simulator</span>
+                </nav>
+            </div>
+
+            <div class="header-actions">
+                <div class="header-system-status">
+                    <span class="status-dot"></span>
+                    <span>All systems operational</span>
+                </div>
+                <button class="header-user" aria-label="User profile">
+                    <div class="user-avatar">AU</div>
+                    <span class="header-user-name">Authority</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- MAIN -->
+        <main class="main-content" style="padding: 0;">
+            <!-- Page Header -->
+            <div class="sim-header">
+                <div class="sim-header-top">
+                    <div class="sim-title-wrap">
+                        <h1 class="sim-title">
+                            Landslide Scenario Simulator
+                            <span class="sim-title-badge">DEMO SIMULATION</span>
+                        </h1>
+                        <p class="sim-subtitle">Explore how changing environmental conditions could affect modeled landslide risk</p>
+                    </div>
+                </div>
+                <div class="sim-meta">
+                    <span class="demo-indicator"></span>
+                    <span>ILLUSTRATIVE DEMO SIMULATION</span>
+                    <span style="color: var(--border);">·</span>
+                    <span>SIH 2026 PROTOTYPE</span>
+                </div>
+            </div>
+
+            <!-- Location Bar -->
+            <div class="sim-location-bar">
+                <span class="sim-location-label">Simulation Location</span>
+                <select class="sim-location-select" id="locationSelect" aria-label="Select simulation location"></select>
+                <span class="sim-location-state" id="locationState">Arunachal Pradesh</span>
+            </div>
+
+            <div class="sim-main">
+                <!-- Risk Comparison -->
+                <div class="risk-comparison">
+                    <div class="risk-compare-card current">
+                        <div class="risk-compare-label">Current Risk</div>
+                        <div class="risk-compare-score" id="currentRiskScore">84</div>
+                        <div class="risk-compare-max">/ 100</div>
+                        <div class="risk-compare-level" id="currentRiskLevel">WARNING</div>
+                    </div>
+
+                    <div class="risk-transition">
+                        <div class="risk-transition-label">Change</div>
+                        <div class="risk-transition-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        </div>
+                        <div class="risk-transition-delta neutral" id="riskTransitionDelta">0 points</div>
+                    </div>
+
+                    <div class="risk-compare-card simulated">
+                        <div class="risk-compare-label">Simulated Risk</div>
+                        <div class="risk-compare-score" id="simulatedRiskScore">84</div>
+                        <div class="risk-compare-max">/ 100</div>
+                        <div class="risk-compare-level" id="simulatedRiskLevel">WARNING</div>
+                    </div>
+                </div>
+
+                <!-- Scenario Presets -->
+                <div class="scenario-presets">
+                    <div class="scenario-preset current">
+                        <div class="scenario-preset-label">Current</div>
+                        <div class="scenario-preset-score" id="presetCurrentScore">84</div>
+                        <div class="scenario-preset-level" id="presetCurrentLevel">WARNING</div>
+                        <div class="scenario-preset-desc">Baseline conditions</div>
+                        <button class="scenario-preset-btn" data-preset="current">Apply Current</button>
+                    </div>
+                    <div class="scenario-preset moderate">
+                        <div class="scenario-preset-label">Moderate Scenario</div>
+                        <div class="scenario-preset-score" id="presetModerateScore">—</div>
+                        <div class="scenario-preset-level" id="presetModerateLevel">—</div>
+                        <div class="scenario-preset-desc">Slightly elevated conditions</div>
+                        <button class="scenario-preset-btn" data-preset="moderate">Apply Moderate</button>
+                    </div>
+                    <div class="scenario-preset severe">
+                        <div class="scenario-preset-label">Severe Scenario</div>
+                        <div class="scenario-preset-score" id="presetSevereScore">—</div>
+                        <div class="scenario-preset-level" id="presetSevereLevel">—</div>
+                        <div class="scenario-preset-desc">Significantly worse conditions</div>
+                        <button class="scenario-preset-btn" data-preset="severe">Apply Severe</button>
+                    </div>
+                </div>
+
+                <!-- Main Grid -->
+                <div class="sim-grid">
+                    <!-- Controls -->
+                    <div class="controls-panel">
+                        <div class="controls-header">
+                            <div class="controls-title">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/></svg>
+                                Adjust Scenario Conditions
+                            </div>
+                        </div>
+                        <div class="controls-body">
+                            <div id="slidersContainer"></div>
+                        </div>
+                    </div>
+
+                    <!-- Right Panel -->
+                    <div class="right-panel">
+                        <!-- Live Preview -->
+                        <div class="live-preview">
+                            <div class="live-preview-header">
+                                <div class="live-preview-title">
+                                    <span class="live-preview-dot"></span>
+                                    Live Simulated Risk
+                                </div>
+                                <div class="live-preview-status">REAL-TIME</div>
+                            </div>
+                            <div class="live-preview-score">
+                                <div class="live-preview-value" id="livePreviewValue">84</div>
+                                <div class="live-preview-max">/ 100</div>
+                                <div class="live-preview-level" id="livePreviewLevel">WARNING</div>
+                            </div>
+                            <div class="live-preview-contributions">
+                                <div class="live-preview-contrib-title">Live Contributions</div>
+                                <div id="liveContributions"></div>
+                            </div>
+                        </div>
+
+                        <!-- Mini Map -->
+                        <div class="mini-map-wrap">
+                            <div class="mini-map-header">
+                                <div class="mini-map-title">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+                                    Risk Zone
+                                </div>
+                                <span style="font-size: 10px; font-weight: 700; letter-spacing: 0.1em; padding: 2px 8px; background: var(--watch-bg); color: var(--watch); border-radius: var(--radius-sm);">DEMO</span>
+                            </div>
+                            <div class="mini-map-container">
+                                <div id="simMiniMap"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="sim-actions">
+                    <button class="sim-run-btn" id="runSimulationBtn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                        Run Simulation
+                    </button>
+                    <button class="sim-reset-btn" id="resetScenarioBtn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                        Reset Scenario
+                    </button>
+                </div>
+
+                <!-- Result Section (hidden initially) -->
+                <div id="resultSection" style="display: none;"></div>
+
+                <!-- Projection Chart -->
+                <div class="projection-section">
+                    <div class="projection-header">
+                        <div class="projection-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                            Risk Projection
+                        </div>
+                        <span style="font-size: 9px; font-weight: 700; letter-spacing: 0.1em; padding: 2px 8px; background: var(--watch-bg); color: var(--watch); border-radius: var(--radius-sm);">DEMO</span>
+                    </div>
+                    <div class="projection-body">
+                        <div class="projection-chart-wrap">
+                            <canvas id="projectionChart"></canvas>
+                        </div>
+                        <div class="projection-footer">Illustrative scenario projection — DEMO · Not an actual forecast</div>
+                    </div>
+                </div>
+
+                <!-- AI Explanation -->
+                <div class="sim-explanation">
+                    <div class="sim-explanation-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        Why did the risk change?
+                    </div>
+                    <div class="sim-explanation-quote" id="explanationQuote">
+                        Adjust the scenario conditions and run a simulation to see an explanation of how the modeled risk responds to changing environmental parameters.
+                    </div>
+                    <div class="sim-drivers-title">Main Contributors</div>
+                    <div class="sim-drivers-list" id="driversList">
+                        <span class="sim-driver-chip">Rainfall</span>
+                        <span class="sim-driver-chip">Soil Moisture</span>
+                        <span class="sim-driver-chip">Slope</span>
+                        <span class="sim-driver-chip">Historical Susceptibility</span>
+                        <span class="sim-driver-chip">Satellite Anomaly</span>
+                    </div>
+                    <div class="sim-explanation-note">Illustrative explanation for prototype demonstration · Not a validated SHAP explanation</div>
+                </div>
+
+                <!-- Cross-Page Actions -->
+                <div class="sim-cross-actions">
+                    <a href="risk-analysis.html" class="cross-action-btn">
+                        <div class="cross-action-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        </div>
+                        <span class="cross-action-label">View Risk Analysis</span>
+                    </a>
+                    <a href="risk-map.html" class="cross-action-btn">
+                        <div class="cross-action-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+                        </div>
+                        <span class="cross-action-label">View Risk Map</span>
+                    </a>
+                    <a href="infrastructure.html" class="cross-action-btn">
+                        <div class="cross-action-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/></svg>
+                        </div>
+                        <span class="cross-action-label">View Impact</span>
+                    </a>
+                    <a href="alert-create.html" class="cross-action-btn">
+                        <div class="cross-action-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                        </div>
+                        <span class="cross-action-label">Generate Warning</span>
+                    </a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="sim-loading-overlay" id="loadingOverlay">
+        <div class="sim-loading-card">
+            <div class="sim-loading-spinner"></div>
+            <div class="sim-loading-title">Running scenario analysis...</div>
+            <div class="sim-loading-sub">Evaluating environmental parameter changes</div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="sim-toast" id="toast">
+        <div class="sim-toast-icon"></div>
+        <div class="sim-toast-message"></div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/services.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/simulator.js"></script>
+</body>
+</html>

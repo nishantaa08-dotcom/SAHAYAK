@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SAHAYAK Route Risk Analysis — Assess landslide exposure before movement">
+    <title>Route Risk Analysis — SAHAYAK</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/landing.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/route-risk.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <div class="app-shell">
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar" role="navigation" aria-label="Primary navigation">
+            <div class="sidebar-brand">
+                <div class="brand-logo" aria-hidden="true">
+                    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#19B8C7"/>
+                                <stop offset="100%" stop-color="#0F9D8A"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M20 3 L34 8 V20 C34 28 28 34 20 37 C12 34 6 28 6 20 V8 Z" fill="none" stroke="url(#logoGrad)" stroke-width="1.5"/>
+                        <path d="M10 26 L16 16 L20 22 L24 14 L30 26 Z" fill="url(#logoGrad)" opacity="0.85"/>
+                        <circle cx="24" cy="14" r="2" fill="#19B8C7"/>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">SAHAYAK</span>
+                    <span class="brand-sub">NER Landslide Intelligence</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav" id="sidebarNav"></nav>
+            <div class="sidebar-footer">
+                <div class="sidebar-status">
+                    <span class="status-dot"></span>
+                    <span>System Operational</span>
+                </div>
+                <div class="sidebar-user">
+                    <div class="user-avatar">AU</div>
+                    <div class="user-info">
+                        <div class="user-name">Authority</div>
+                        <div class="user-role">Administrator</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- TOP HEADER -->
+        <header class="top-header">
+            <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            </button>
+
+            <div class="header-title-wrap">
+                <nav class="route-breadcrumb" aria-label="Breadcrumb">
+                    <a href="dashboard.html">Dashboard</a>
+                    <span class="route-breadcrumb-sep">/</span>
+                    <span class="route-breadcrumb-current">Route Risk</span>
+                </nav>
+            </div>
+
+            <div class="header-actions">
+                <div class="header-system-status">
+                    <span class="status-dot"></span>
+                    <span>All systems operational</span>
+                </div>
+                <button class="header-user" aria-label="User profile">
+                    <div class="user-avatar">AU</div>
+                    <span class="header-user-name">Authority</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- MAIN -->
+        <main class="main-content" style="padding: 0;">
+            <!-- Page Header -->
+            <div class="route-header">
+                <div class="route-header-top">
+                    <div class="route-title-wrap">
+                        <h1 class="route-title">
+                            Route Risk Analysis
+                            <span class="route-title-badge">ROUTE INTELLIGENCE</span>
+                        </h1>
+                        <p class="route-subtitle">Assess landslide exposure and road safety before movement</p>
+                    </div>
+                </div>
+                <div class="route-meta">
+                    <span class="demo-indicator"></span>
+                    <span>DEMO DATA</span>
+                    <span style="color: var(--border);">·</span>
+                    <span>SIH 2026 PROTOTYPE</span>
+                </div>
+            </div>
+
+            <div class="route-main">
+                <!-- Route Input Panel -->
+                <div class="route-input-panel">
+                    <div class="route-input-grid">
+                        <div class="route-input-group">
+                            <label class="route-input-label" for="startSelect">
+                                <span class="route-input-dot"></span>
+                                Start Location
+                            </label>
+                            <select class="route-input" id="startSelect"></select>
+                        </div>
+                        <button class="route-swap-btn" id="swapBtn" aria-label="Swap locations" title="Swap start and destination">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                        </button>
+                        <div class="route-input-group">
+                            <label class="route-input-label" for="destSelect">
+                                <span class="route-input-dot destination"></span>
+                                Destination
+                            </label>
+                            <select class="route-input" id="destSelect"></select>
+                        </div>
+                        <button class="route-analyze-btn" id="analyzeBtn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                            Analyze Route
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Main Grid -->
+                <div class="route-grid">
+                    <!-- Results Panel -->
+                    <div class="route-results" id="routeResults">
+                        <div class="route-initial-state">
+                            <div class="route-initial-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg>
+                            </div>
+                            <div class="route-initial-title">Select start and destination</div>
+                            <div class="route-initial-sub">Choose locations above and click "Analyze Route" to view risk assessment</div>
+                        </div>
+                    </div>
+
+                    <!-- Map -->
+                    <div class="route-map-wrap">
+                        <div class="route-map-header">
+                            <div class="route-map-title">
+                                <span class="route-map-title-dot"></span>
+                                Route Visualization
+                            </div>
+                            <span class="route-result-badge" style="background: var(--watch-bg); color: var(--watch);">DEMO</span>
+                        </div>
+                        <div class="route-map-container">
+                            <div id="routeMap"></div>
+                            <div class="route-map-empty" id="routeMapEmpty">
+                                <div class="route-map-empty-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+                                </div>
+                                <div class="route-map-empty-title">Route will appear here</div>
+                                <div class="route-map-empty-sub">Analyze a route to see risk-segmented paths, alternative options and interactive segment details</div>
+                            </div>
+                            <div class="route-map-legend">
+                                <div class="route-legend-title">Risk Levels</div>
+                                <div class="route-legend-item"><span class="route-legend-line safe"></span> Safe (0-30)</div>
+                                <div class="route-legend-item"><span class="route-legend-line watch"></span> Watch (31-60)</div>
+                                <div class="route-legend-item"><span class="route-legend-line high"></span> High Risk (61-80)</div>
+                                <div class="route-legend-item"><span class="route-legend-line critical"></span> Critical (81-100)</div>
+                                <div class="route-legend-item"><span class="route-legend-line alt"></span> Alternative Route</div>
+                            </div>
+                            <div class="segment-popup" id="segmentPopup"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/services.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/route-risk.js"></script>
+</body>
+</html>

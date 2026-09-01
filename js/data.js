@@ -847,7 +847,889 @@ const DEMO_DATA = {
     { location: 'East Siang', lat: 27.20, lng: 94.50, type: 'Vegetation stress', detected: '1 day ago', confidence: 'Medium' },
     { location: 'Upper Subansiri', lat: 27.80, lng: 93.80, type: 'Surface change', detected: '3 days ago', confidence: 'High' },
     { location: 'Churachandpur', lat: 24.33, lng: 93.68, type: 'Ground subsidence', detected: '5 hours ago', confidence: 'High' }
-  ]
+  ],
+  // ===== ALERTS DATA =====
+alerts: [
+    {
+      id: 'SAH-ALR-0001', severity: 'critical', type: 'Landslide Risk Warning',
+      location: 'Tawang', state: 'Arunachal Pradesh', lat: 27.586, lng: 91.859,
+      risk: 88, message: 'Heavy rainfall + saturated soil + steep slope',
+      population: 1240, roads: 3, schools: 2, hospitals: 1, bridges: 1, villages: 4,
+      issued: '18 min ago', issuedAt: Date.now() - 18*60*1000,
+      expires: '2 hours', status: 'active',
+      factors: [
+        { label: 'Heavy Rainfall', value: 32 },
+        { label: 'Soil Moisture', value: 21 },
+        { label: 'Steep Slope', value: 18 },
+        { label: 'Historical Events', value: 10 },
+        { label: 'Satellite Indicator', value: 7 }
+      ],
+      timeline: [
+        { time: '18:00', event: 'Risk crossed warning threshold' },
+        { time: '17:45', event: 'Rainfall threshold exceeded' },
+        { time: '17:20', event: 'Soil moisture increased' },
+        { time: '16:30', event: 'AI risk score increased' },
+        { time: '15:00', event: 'Monitoring initiated' }
+      ],
+      assignedOfficer: null, read: false
+    },
+    {
+      id: 'SAH-ALR-0002', severity: 'critical', type: 'Landslide Risk Warning',
+      location: 'Churachandpur', state: 'Manipur', lat: 24.33, lng: 93.68,
+      risk: 92, message: 'Extreme rainfall + historical landslide zone',
+      population: 1580, roads: 2, schools: 2, hospitals: 1, bridges: 1, villages: 5,
+      issued: '42 min ago', issuedAt: Date.now() - 42*60*1000,
+      expires: '3 hours', status: 'active',
+      factors: [
+        { label: 'Heavy Rainfall', value: 36 },
+        { label: 'Soil Moisture', value: 24 },
+        { label: 'Steep Slope', value: 16 },
+        { label: 'Historical Events', value: 10 },
+        { label: 'Satellite Indicator', value: 6 }
+      ],
+      timeline: [
+        { time: '18:00', event: 'Critical threshold reached' },
+        { time: '17:30', event: 'Rainfall accumulation critical' },
+        { time: '16:45', event: 'Soil saturation detected' },
+        { time: '15:00', event: 'Monitoring escalated' }
+      ],
+      assignedOfficer: null, read: false
+    },
+    {
+      id: 'SAH-ALR-0003', severity: 'warning', type: 'Risk Elevation',
+      location: 'Upper Subansiri', state: 'Arunachal Pradesh', lat: 27.80, lng: 93.80,
+      risk: 76, message: 'Rising soil moisture with steep terrain',
+      population: 680, roads: 2, schools: 1, hospitals: 0, bridges: 1, villages: 3,
+      issued: '1 hr ago', issuedAt: Date.now() - 60*60*1000,
+      expires: '4 hours', status: 'active',
+      factors: [
+        { label: 'Heavy Rainfall', value: 28 },
+        { label: 'Steep Slope', value: 22 },
+        { label: 'High Soil Moisture', value: 15 },
+        { label: 'Historical Landslides', value: 8 },
+        { label: 'Satellite Anomaly', value: 3 }
+      ],
+      timeline: [
+        { time: '17:00', event: 'Warning threshold crossed' },
+        { time: '16:20', event: 'Soil moisture rising' },
+        { time: '15:00', event: 'Rainfall increasing' }
+      ],
+      assignedOfficer: null, read: false
+    },
+    {
+      id: 'SAH-ALR-0004', severity: 'warning', type: 'Risk Elevation',
+      location: 'East Siang', state: 'Arunachal Pradesh', lat: 27.20, lng: 94.50,
+      risk: 72, message: 'Satellite anomaly detected with rising rainfall',
+      population: 860, roads: 2, schools: 1, hospitals: 1, bridges: 1, villages: 3,
+      issued: '2 hr ago', issuedAt: Date.now() - 2*60*60*1000,
+      expires: '5 hours', status: 'active',
+      factors: [
+        { label: 'Heavy Rainfall', value: 26 },
+        { label: 'Steep Slope', value: 20 },
+        { label: 'High Soil Moisture', value: 14 },
+        { label: 'Historical Landslides', value: 8 },
+        { label: 'Satellite Anomaly', value: 4 }
+      ],
+      timeline: [
+        { time: '16:00', event: 'Anomaly detected' },
+        { time: '15:30', event: 'Rainfall increasing' }
+      ],
+      assignedOfficer: null, read: true
+    },
+    {
+      id: 'SAH-ALR-0005', severity: 'alert', type: 'Monitoring Advisory',
+      location: 'West Khasi Hills', state: 'Meghalaya', lat: 25.40, lng: 91.20,
+      risk: 68, message: 'Elevated rainfall with historical activity',
+      population: 2180, roads: 4, schools: 3, hospitals: 1, bridges: 2, villages: 6,
+      issued: '3 hr ago', issuedAt: Date.now() - 3*60*60*1000,
+      expires: '6 hours', status: 'active',
+      factors: [
+        { label: 'Heavy Rainfall', value: 28 },
+        { label: 'Steep Slope', value: 18 },
+        { label: 'High Soil Moisture', value: 15 },
+        { label: 'Historical Landslides', value: 5 },
+        { label: 'Satellite Anomaly', value: 2 }
+      ],
+      timeline: [
+        { time: '15:00', event: 'Advisory issued' },
+        { time: '14:30', event: 'Rainfall threshold approached' }
+      ],
+      assignedOfficer: null, read: true
+    },
+    {
+      id: 'SAH-ALR-0006', severity: 'alert', type: 'Monitoring Advisory',
+      location: 'Dima Hasao', state: 'Assam', lat: 25.60, lng: 93.20,
+      risk: 62, message: 'Moderate rainfall with terrain susceptibility',
+      population: 1420, roads: 3, schools: 2, hospitals: 1, bridges: 1, villages: 4,
+      issued: '4 hr ago', issuedAt: Date.now() - 4*60*60*1000,
+      expires: '8 hours', status: 'active',
+      factors: [
+        { label: 'Heavy Rainfall', value: 24 },
+        { label: 'Steep Slope', value: 16 },
+        { label: 'High Soil Moisture', value: 13 },
+        { label: 'Historical Landslides', value: 6 },
+        { label: 'Satellite Anomaly', value: 3 }
+      ],
+      timeline: [
+        { time: '14:00', event: 'Advisory issued' }
+      ],
+      assignedOfficer: null, read: true
+    },
+    {
+      id: 'SAH-ALR-0007', severity: 'warning', type: 'Risk Elevation',
+      location: 'Gangtok', state: 'Sikkim', lat: 27.33, lng: 88.62,
+      risk: 58, message: 'Elevated terrain risk with moderate rainfall',
+      population: 3400, roads: 5, schools: 4, hospitals: 2, bridges: 3, villages: 6,
+      issued: '5 hr ago', issuedAt: Date.now() - 5*60*60*1000,
+      expires: '10 hours', status: 'active',
+      factors: [
+        { label: 'Heavy Rainfall', value: 22 },
+        { label: 'Steep Slope', value: 16 },
+        { label: 'High Soil Moisture', value: 12 },
+        { label: 'Historical Landslides', value: 5 },
+        { label: 'Satellite Anomaly', value: 3 }
+      ],
+      timeline: [
+        { time: '13:00', event: 'Monitoring elevated' }
+      ],
+      assignedOfficer: null, read: true
+    },
+    {
+      id: 'SAH-ALR-0008', severity: 'watch', type: 'Precautionary Notice',
+      location: 'Kohima', state: 'Nagaland', lat: 25.67, lng: 94.11,
+      risk: 45, message: 'Moderate conditions with historical activity',
+      population: 1850, roads: 3, schools: 2, hospitals: 1, bridges: 1, villages: 3,
+      issued: '6 hr ago', issuedAt: Date.now() - 6*60*60*1000,
+      expires: '12 hours', status: 'active',
+      factors: [
+        { label: 'Heavy Rainfall', value: 18 },
+        { label: 'Steep Slope', value: 12 },
+        { label: 'High Soil Moisture', value: 9 },
+        { label: 'Historical Landslides', value: 4 },
+        { label: 'Satellite Anomaly', value: 2 }
+      ],
+      timeline: [
+        { time: '12:00', event: 'Watch initiated' }
+      ],
+      assignedOfficer: null, read: true
+    },
+    {
+      id: 'SAH-ALR-0009', severity: 'warning', type: 'Risk Elevation',
+      location: 'Aizawl', state: 'Mizoram', lat: 23.73, lng: 92.72,
+      risk: 38, message: 'Low-level monitoring advisory',
+      population: 2600, roads: 4, schools: 3, hospitals: 2, bridges: 2, villages: 4,
+      issued: '8 hr ago', issuedAt: Date.now() - 8*60*60*1000,
+      expires: '14 hours', status: 'scheduled',
+      factors: [
+        { label: 'Heavy Rainfall', value: 15 },
+        { label: 'Steep Slope', value: 10 },
+        { label: 'High Soil Moisture', value: 8 },
+        { label: 'Historical Landslides', value: 3 },
+        { label: 'Satellite Anomaly', value: 2 }
+      ],
+      timeline: [
+        { time: '10:00', event: 'Scheduled monitoring' }
+      ],
+      assignedOfficer: null, read: true
+    },
+    {
+      id: 'SAH-ALR-0010', severity: 'alert', type: 'Risk Elevation',
+      location: 'West Siang', state: 'Arunachal Pradesh', lat: 27.22, lng: 94.52,
+      risk: 54, message: 'Moderate risk conditions',
+      population: 720, roads: 2, schools: 1, hospitals: 0, bridges: 1, villages: 2,
+      issued: '10 hr ago', issuedAt: Date.now() - 10*60*60*1000,
+      expires: '16 hours', status: 'active',
+      factors: [
+        { label: 'Heavy Rainfall', value: 18 },
+        { label: 'Steep Slope', value: 16 },
+        { label: 'High Soil Moisture', value: 11 },
+        { label: 'Historical Landslides', value: 6 },
+        { label: 'Satellite Anomaly', value: 3 }
+      ],
+      timeline: [
+        { time: '08:00', event: 'Monitoring initiated' }
+      ],
+      assignedOfficer: null, read: true
+    },
+    {
+      id: 'SAH-ALR-0011', severity: 'watch', type: 'Precautionary Notice',
+      location: 'Shillong', state: 'Meghalaya', lat: 25.57, lng: 91.88,
+      risk: 22, message: 'Normal monitoring conditions',
+      population: 4200, roads: 6, schools: 5, hospitals: 3, bridges: 4, villages: 7,
+      issued: '1 day ago', issuedAt: Date.now() - 24*60*60*1000,
+      expires: '24 hours', status: 'resolved',
+      factors: [
+        { label: 'Heavy Rainfall', value: 8 },
+        { label: 'Steep Slope', value: 6 },
+        { label: 'High Soil Moisture', value: 5 },
+        { label: 'Historical Landslides', value: 2 },
+        { label: 'Satellite Anomaly', value: 1 }
+      ],
+      timeline: [
+        { time: 'Yesterday 18:00', event: 'Resolved — conditions normalized' },
+        { time: 'Yesterday 10:00', event: 'Watch initiated' }
+      ],
+      assignedOfficer: null, read: true
+    },
+    {
+      id: 'SAH-ALR-0012', severity: 'watch', type: 'Precautionary Notice',
+      location: 'Imphal', state: 'Manipur', lat: 24.82, lng: 93.95,
+      risk: 18, message: 'Normal monitoring conditions',
+      population: 3800, roads: 5, schools: 4, hospitals: 2, bridges: 3, villages: 6,
+      issued: '1 day ago', issuedAt: Date.now() - 24*60*60*1000,
+      expires: '24 hours', status: 'resolved',
+      factors: [
+        { label: 'Heavy Rainfall', value: 6 },
+        { label: 'Steep Slope', value: 5 },
+        { label: 'High Soil Moisture', value: 4 },
+        { label: 'Historical Landslides', value: 2 },
+        { label: 'Satellite Anomaly', value: 1 }
+      ],
+      timeline: [
+        { time: 'Yesterday 16:00', event: 'Resolved — conditions normalized' }
+      ],
+      assignedOfficer: null, read: true
+    }
+  ],
+  
+  // ===== FIELD REPORTS DATA =====
+  fieldReports: [
+    {
+      id: 'FR-1028', type: 'Soil Movement', location: 'Tawang', state: 'Arunachal Pradesh',
+      severity: 'HIGH', officer: 'Rahul Singh', officerRole: 'Field Officer',
+      latitude: 27.586, longitude: 91.859,
+      submitted: '21 min ago', submittedAt: Date.now() - 21*60*1000,
+      status: 'PENDING', aiRisk: 82, fieldAssessment: 'HIGH',
+      observation: 'Visible soil movement observed near roadside slope. Minor cracking detected along the road edge. Approximately 15m section affected.',
+      aiPredictionMatch: 'yes',
+      alertId: 'SAH-ALR-0001',
+      photos: ['demo-soil-movement-1']
+    },
+    {
+      id: 'FR-1027', type: 'Road Crack', location: 'East Siang', state: 'Arunachal Pradesh',
+      severity: 'MEDIUM', officer: 'M. Das', officerRole: 'Field Officer',
+      latitude: 27.22, longitude: 94.52,
+      submitted: '45 min ago', submittedAt: Date.now() - 45*60*1000,
+      status: 'PENDING', aiRisk: 72, fieldAssessment: 'MEDIUM',
+      observation: 'Longitudinal crack along highway edge, approximately 8m length. No immediate collapse risk.',
+      aiPredictionMatch: 'partially',
+      alertId: 'SAH-ALR-0004',
+      photos: ['demo-road-crack-1']
+    },
+    {
+      id: 'FR-1026', type: 'Landslide', location: 'Churachandpur', state: 'Manipur',
+      severity: 'CRITICAL', officer: 'L. Guite', officerRole: 'Field Officer',
+      latitude: 24.35, longitude: 93.70,
+      submitted: '1 hr ago', submittedAt: Date.now() - 60*60*1000,
+      status: 'VERIFIED', aiRisk: 92, fieldAssessment: 'CRITICAL',
+      observation: 'Active landslide observed. Approximately 40m section of slope failed. Road completely blocked. Two houses at risk.',
+      aiPredictionMatch: 'yes',
+      alertId: 'SAH-ALR-0002',
+      photos: ['demo-landslide-1']
+    },
+    {
+      id: 'FR-1025', type: 'Rockfall', location: 'West Khasi Hills', state: 'Meghalaya',
+      severity: 'HIGH', officer: 'P. Lyngdoh', officerRole: 'Field Officer',
+      latitude: 25.42, longitude: 91.22,
+      submitted: '2 hr ago', submittedAt: Date.now() - 2*60*60*1000,
+      status: 'VERIFIED', aiRisk: 68, fieldAssessment: 'HIGH',
+      observation: 'Recent rockfall event. Boulders up to 1m diameter on roadway. Slope above shows additional loose material.',
+      aiPredictionMatch: 'yes',
+      alertId: 'SAH-ALR-0005',
+      photos: ['demo-rockfall-1']
+    },
+    {
+      id: 'FR-1024', type: 'Water Seepage', location: 'Upper Subansiri', state: 'Arunachal Pradesh',
+      severity: 'MEDIUM', officer: 'R. Singh', officerRole: 'Field Officer',
+      latitude: 27.82, longitude: 93.82,
+      submitted: '3 hr ago', submittedAt: Date.now() - 3*60*60*1000,
+      status: 'PENDING', aiRisk: 76, fieldAssessment: 'MEDIUM',
+      observation: 'Multiple seepage points observed on hill slope. Water emerging from 3-4 locations. Soil saturation evident.',
+      aiPredictionMatch: 'partially',
+      alertId: 'SAH-ALR-0003',
+      photos: ['demo-seepage-1']
+    },
+    {
+      id: 'FR-1023', type: 'Blocked Road', location: 'Dima Hasao', state: 'Assam',
+      severity: 'HIGH', officer: 'K. Bora', officerRole: 'Field Officer',
+      latitude: 25.62, longitude: 93.22,
+      submitted: '4 hr ago', submittedAt: Date.now() - 4*60*60*1000,
+      status: 'VERIFIED', aiRisk: 62, fieldAssessment: 'HIGH',
+      observation: 'Road blocked by debris from minor slope failure. Traffic diverted. Clearing operations underway.',
+      aiPredictionMatch: 'yes',
+      alertId: 'SAH-ALR-0006',
+      photos: ['demo-blocked-road-1']
+    },
+    {
+      id: 'FR-1022', type: 'Soil Movement', location: 'Gangtok', state: 'Sikkim',
+      severity: 'MEDIUM', officer: 'T. Bhutia', officerRole: 'Field Officer',
+      latitude: 27.35, longitude: 88.64,
+      submitted: '5 hr ago', submittedAt: Date.now() - 5*60*60*1000,
+      status: 'VERIFIED', aiRisk: 58, fieldAssessment: 'MEDIUM',
+      observation: 'Minor soil creep observed on residential slope. No immediate risk to structures.',
+      aiPredictionMatch: 'yes',
+      alertId: 'SAH-ALR-0007',
+      photos: ['demo-soil-creep-1']
+    },
+    {
+      id: 'FR-1021', type: 'Inspection', location: 'Kohima', state: 'Nagaland',
+      severity: 'LOW', officer: 'A. Kikon', officerRole: 'Field Officer',
+      latitude: 25.69, longitude: 94.13,
+      submitted: '6 hr ago', submittedAt: Date.now() - 6*60*60*1000,
+      status: 'VERIFIED', aiRisk: 45, fieldAssessment: 'LOW',
+      observation: 'Routine inspection completed. No signs of instability. Vegetation cover intact.',
+      aiPredictionMatch: 'no',
+      alertId: 'SAH-ALR-0008',
+      photos: []
+    },
+    {
+      id: 'FR-1020', type: 'Road Crack', location: 'West Siang', state: 'Arunachal Pradesh',
+      severity: 'MEDIUM', officer: 'K. Bora', officerRole: 'Field Officer',
+      latitude: 27.22, longitude: 94.52,
+      submitted: '8 hr ago', submittedAt: Date.now() - 8*60*60*1000,
+      status: 'PENDING', aiRisk: 54, fieldAssessment: 'MEDIUM',
+      observation: 'Transverse cracks observed on road surface. Monitoring recommended.',
+      aiPredictionMatch: 'unable',
+      alertId: 'SAH-ALR-0010',
+      photos: ['demo-road-crack-2']
+    },
+    {
+      id: 'FR-1019', type: 'Other', location: 'Aizawl', state: 'Mizoram',
+      severity: 'LOW', officer: 'L. Guite', officerRole: 'Field Officer',
+      latitude: 23.73, longitude: 92.72,
+      submitted: '10 hr ago', submittedAt: Date.now() - 10*60*60*1000,
+      status: 'REJECTED', aiRisk: 38, fieldAssessment: 'LOW',
+      observation: 'Reported concern investigated. Found to be normal drainage activity, not slope instability.',
+      aiPredictionMatch: 'no',
+      alertId: 'SAH-ALR-0009',
+      photos: []
+    },
+    {
+      id: 'FR-1018', type: 'Soil Movement', location: 'Tawang', state: 'Arunachal Pradesh',
+      severity: 'HIGH', officer: 'R. Singh', officerRole: 'Field Officer',
+      latitude: 27.49, longitude: 91.87,
+      submitted: '12 hr ago', submittedAt: Date.now() - 12*60*60*1000,
+      status: 'VERIFIED', aiRisk: 84, fieldAssessment: 'HIGH',
+      observation: 'Continued soil movement in previously identified zone. Monitoring equipment shows acceleration.',
+      aiPredictionMatch: 'yes',
+      alertId: 'SAH-ALR-0001',
+      photos: ['demo-soil-movement-2']
+    },
+    {
+      id: 'FR-1017', type: 'Landslide', location: 'Churachandpur', state: 'Manipur',
+      severity: 'CRITICAL', officer: 'L. Guite', officerRole: 'Field Officer',
+      latitude: 24.33, longitude: 93.68,
+      submitted: '1 day ago', submittedAt: Date.now() - 24*60*60*1000,
+      status: 'VERIFIED', aiRisk: 88, fieldAssessment: 'CRITICAL',
+      observation: 'Historical landslide reactivated. Major road blockage. Emergency response deployed.',
+      aiPredictionMatch: 'yes',
+      alertId: 'SAH-ALR-0002',
+      photos: ['demo-landslide-2']
+    }
+  ],
+  
+  // ===== OFFICERS DATA =====
+  officers: [
+    { id: 'OFF-001', name: 'Rahul Singh', district: 'Tawang', role: 'Field Officer', status: 'available' },
+    { id: 'OFF-002', name: 'M. Das', district: 'East Siang', role: 'Field Officer', status: 'available' },
+    { id: 'OFF-003', name: 'K. Bora', district: 'West Siang', role: 'Field Officer', status: 'busy' },
+    { id: 'OFF-004', name: 'L. Guite', district: 'Churachandpur', role: 'Field Officer', status: 'available' },
+    { id: 'OFF-005', name: 'P. Lyngdoh', district: 'West Khasi Hills', role: 'Field Officer', status: 'available' },
+    { id: 'OFF-006', name: 'T. Bhutia', district: 'Gangtok', role: 'Field Officer', status: 'available' },
+    { id: 'OFF-007', name: 'A. Kikon', district: 'Kohima', role: 'Field Officer', status: 'available' },
+    { id: 'OFF-008', name: 'S. Chhetri', district: 'Upper Subansiri', role: 'Field Officer', status: 'busy' }
+  ],
+  
+  // ===== REPORT TYPES =====
+  reportTypes: ['Landslide', 'Road Crack', 'Soil Movement', 'Rockfall', 'Water Seepage', 'Blocked Road', 'Inspection', 'Other'],
+  
+  // ===== SEVERITY LEVELS =====
+  severityLevels: [
+    { value: 'LOW', color: 'safe', label: 'LOW' },
+    { value: 'MEDIUM', color: 'watch', label: 'MEDIUM' },
+    { value: 'HIGH', color: 'alert', label: 'HIGH' },
+    { value: 'CRITICAL', color: 'warning', label: 'CRITICAL' }
+  ],
+  // ===== VERIFICATION DATA =====
+verificationItems: [
+    {
+      id: 'VER-001', reportId: 'FR-1028', alertId: 'SAH-ALR-0001',
+      location: 'Tawang', state: 'Arunachal Pradesh',
+      lat: 27.586, lng: 91.859,
+      aiRisk: 82, aiLevel: 'WARNING', aiProbability: 80.2,
+      fieldSeverity: 'HIGH', fieldAssessment: 'HIGH',
+      officer: 'Rahul Singh', officerRole: 'Field Officer',
+      submitted: '21 min ago', submittedAt: Date.now() - 21*60*1000,
+      status: 'PENDING',
+      observation: 'Visible soil movement observed near roadside slope. Minor cracking detected along the road edge. Approximately 15m section affected.',
+      aiPredictionMatch: 'yes',
+      factors: [
+        { label: 'Heavy Rainfall', value: 32 },
+        { label: 'Steep Slope', value: 24 },
+        { label: 'High Soil Moisture', value: 17 },
+        { label: 'Historical Landslides', value: 11 },
+        { label: 'Satellite Anomaly', value: 6 }
+      ],
+      timeline: [
+        { time: '15:00', event: 'AI Prediction Generated', status: 'complete' },
+        { time: '16:30', event: 'Field Officer Assigned', status: 'complete' },
+        { time: '17:39', event: 'Field Report Submitted', status: 'complete' },
+        { time: 'Now', event: 'Evidence Under Review', status: 'current' },
+        { time: '—', event: 'Verification Decision', status: 'pending' }
+      ]
+    },
+    {
+      id: 'VER-002', reportId: 'FR-1027', alertId: 'SAH-ALR-0004',
+      location: 'East Siang', state: 'Arunachal Pradesh',
+      lat: 27.22, lng: 94.52,
+      aiRisk: 72, aiLevel: 'ALERT', aiProbability: 68.2,
+      fieldSeverity: 'MEDIUM', fieldAssessment: 'MEDIUM',
+      officer: 'M. Das', officerRole: 'Field Officer',
+      submitted: '45 min ago', submittedAt: Date.now() - 45*60*1000,
+      status: 'PENDING',
+      observation: 'Longitudinal crack along highway edge, approximately 8m length. No immediate collapse risk.',
+      aiPredictionMatch: 'partially',
+      factors: [
+        { label: 'Heavy Rainfall', value: 26 },
+        { label: 'Steep Slope', value: 20 },
+        { label: 'High Soil Moisture', value: 14 },
+        { label: 'Historical Landslides', value: 8 },
+        { label: 'Satellite Anomaly', value: 4 }
+      ],
+      timeline: [
+        { time: '14:00', event: 'AI Prediction Generated', status: 'complete' },
+        { time: '15:15', event: 'Field Officer Assigned', status: 'complete' },
+        { time: '17:15', event: 'Field Report Submitted', status: 'complete' },
+        { time: 'Now', event: 'Evidence Under Review', status: 'current' },
+        { time: '—', event: 'Verification Decision', status: 'pending' }
+      ]
+    },
+    {
+      id: 'VER-003', reportId: 'FR-1026', alertId: 'SAH-ALR-0002',
+      location: 'Churachandpur', state: 'Manipur',
+      lat: 24.35, lng: 93.70,
+      aiRisk: 92, aiLevel: 'WARNING', aiProbability: 90.5,
+      fieldSeverity: 'CRITICAL', fieldAssessment: 'CRITICAL',
+      officer: 'L. Guite', officerRole: 'Field Officer',
+      submitted: '1 hr ago', submittedAt: Date.now() - 60*60*1000,
+      status: 'VERIFIED',
+      observation: 'Active landslide observed. Approximately 40m section of slope failed. Road completely blocked. Two houses at risk.',
+      aiPredictionMatch: 'yes',
+      factors: [
+        { label: 'Heavy Rainfall', value: 36 },
+        { label: 'Steep Slope', value: 26 },
+        { label: 'High Soil Moisture', value: 18 },
+        { label: 'Historical Landslides', value: 12 },
+        { label: 'Satellite Anomaly', value: 7 }
+      ],
+      timeline: [
+        { time: '13:00', event: 'AI Prediction Generated', status: 'complete' },
+        { time: '14:00', event: 'Field Officer Assigned', status: 'complete' },
+        { time: '15:00', event: 'Field Report Submitted', status: 'complete' },
+        { time: '16:00', event: 'Evidence Reviewed', status: 'complete' },
+        { time: '17:00', event: 'Prediction Verified ✓', status: 'complete' }
+      ]
+    },
+    {
+      id: 'VER-004', reportId: 'FR-1025', alertId: 'SAH-ALR-0005',
+      location: 'West Khasi Hills', state: 'Meghalaya',
+      lat: 25.42, lng: 91.22,
+      aiRisk: 68, aiLevel: 'ALERT', aiProbability: 64.8,
+      fieldSeverity: 'HIGH', fieldAssessment: 'HIGH',
+      officer: 'P. Lyngdoh', officerRole: 'Field Officer',
+      submitted: '2 hr ago', submittedAt: Date.now() - 2*60*60*1000,
+      status: 'VERIFIED',
+      observation: 'Recent rockfall event. Boulders up to 1m diameter on roadway. Slope above shows additional loose material.',
+      aiPredictionMatch: 'yes',
+      factors: [
+        { label: 'Heavy Rainfall', value: 28 },
+        { label: 'Steep Slope', value: 18 },
+        { label: 'High Soil Moisture', value: 15 },
+        { label: 'Historical Landslides', value: 5 },
+        { label: 'Satellite Anomaly', value: 2 }
+      ],
+      timeline: [
+        { time: '12:00', event: 'AI Prediction Generated', status: 'complete' },
+        { time: '13:00', event: 'Field Officer Assigned', status: 'complete' },
+        { time: '14:00', event: 'Field Report Submitted', status: 'complete' },
+        { time: '15:30', event: 'Evidence Reviewed', status: 'complete' },
+        { time: '16:00', event: 'Prediction Verified ✓', status: 'complete' }
+      ]
+    },
+    {
+      id: 'VER-005', reportId: 'FR-1024', alertId: 'SAH-ALR-0003',
+      location: 'Upper Subansiri', state: 'Arunachal Pradesh',
+      lat: 27.82, lng: 93.82,
+      aiRisk: 76, aiLevel: 'ALERT', aiProbability: 72.4,
+      fieldSeverity: 'MEDIUM', fieldAssessment: 'MEDIUM',
+      officer: 'R. Singh', officerRole: 'Field Officer',
+      submitted: '3 hr ago', submittedAt: Date.now() - 3*60*60*1000,
+      status: 'PENDING',
+      observation: 'Multiple seepage points observed on hill slope. Water emerging from 3-4 locations. Soil saturation evident.',
+      aiPredictionMatch: 'partially',
+      factors: [
+        { label: 'Heavy Rainfall', value: 28 },
+        { label: 'Steep Slope', value: 22 },
+        { label: 'High Soil Moisture', value: 15 },
+        { label: 'Historical Landslides', value: 8 },
+        { label: 'Satellite Anomaly', value: 3 }
+      ],
+      timeline: [
+        { time: '11:00', event: 'AI Prediction Generated', status: 'complete' },
+        { time: '12:30', event: 'Field Officer Assigned', status: 'complete' },
+        { time: '13:00', event: 'Field Report Submitted', status: 'complete' },
+        { time: 'Now', event: 'Evidence Under Review', status: 'current' },
+        { time: '—', event: 'Verification Decision', status: 'pending' }
+      ]
+    },
+    {
+      id: 'VER-006', reportId: 'FR-1023', alertId: 'SAH-ALR-0006',
+      location: 'Dima Hasao', state: 'Assam',
+      lat: 25.62, lng: 93.22,
+      aiRisk: 62, aiLevel: 'ALERT', aiProbability: 58.6,
+      fieldSeverity: 'HIGH', fieldAssessment: 'HIGH',
+      officer: 'K. Bora', officerRole: 'Field Officer',
+      submitted: '4 hr ago', submittedAt: Date.now() - 4*60*60*1000,
+      status: 'VERIFIED',
+      observation: 'Road blocked by debris from minor slope failure. Traffic diverted. Clearing operations underway.',
+      aiPredictionMatch: 'yes',
+      factors: [
+        { label: 'Heavy Rainfall', value: 24 },
+        { label: 'Steep Slope', value: 16 },
+        { label: 'High Soil Moisture', value: 13 },
+        { label: 'Historical Landslides', value: 6 },
+        { label: 'Satellite Anomaly', value: 3 }
+      ],
+      timeline: [
+        { time: '10:00', event: 'AI Prediction Generated', status: 'complete' },
+        { time: '11:00', event: 'Field Officer Assigned', status: 'complete' },
+        { time: '12:00', event: 'Field Report Submitted', status: 'complete' },
+        { time: '13:00', event: 'Prediction Verified ✓', status: 'complete' }
+      ]
+    },
+    {
+      id: 'VER-007', reportId: 'FR-1022', alertId: 'SAH-ALR-0007',
+      location: 'Gangtok', state: 'Sikkim',
+      lat: 27.35, lng: 88.64,
+      aiRisk: 58, aiLevel: 'WATCH', aiProbability: 52.4,
+      fieldSeverity: 'MEDIUM', fieldAssessment: 'MEDIUM',
+      officer: 'T. Bhutia', officerRole: 'Field Officer',
+      submitted: '5 hr ago', submittedAt: Date.now() - 5*60*60*1000,
+      status: 'VERIFIED',
+      observation: 'Minor soil creep observed on residential slope. No immediate risk to structures.',
+      aiPredictionMatch: 'yes',
+      factors: [
+        { label: 'Heavy Rainfall', value: 22 },
+        { label: 'Steep Slope', value: 16 },
+        { label: 'High Soil Moisture', value: 12 },
+        { label: 'Historical Landslides', value: 5 },
+        { label: 'Satellite Anomaly', value: 3 }
+      ],
+      timeline: [
+        { time: '09:00', event: 'AI Prediction Generated', status: 'complete' },
+        { time: '10:00', event: 'Field Officer Assigned', status: 'complete' },
+        { time: '11:00', event: 'Field Report Submitted', status: 'complete' },
+        { time: '13:00', event: 'Prediction Verified ✓', status: 'complete' }
+      ]
+    },
+    {
+      id: 'VER-008', reportId: 'FR-1021', alertId: 'SAH-ALR-0008',
+      location: 'Kohima', state: 'Nagaland',
+      lat: 25.69, lng: 94.13,
+      aiRisk: 45, aiLevel: 'WATCH', aiProbability: 40.2,
+      fieldSeverity: 'LOW', fieldAssessment: 'LOW',
+      officer: 'A. Kikon', officerRole: 'Field Officer',
+      submitted: '6 hr ago', submittedAt: Date.now() - 6*60*60*1000,
+      status: 'REJECTED',
+      observation: 'Routine inspection completed. No signs of instability. Vegetation cover intact.',
+      aiPredictionMatch: 'no',
+      factors: [
+        { label: 'Heavy Rainfall', value: 18 },
+        { label: 'Steep Slope', value: 12 },
+        { label: 'High Soil Moisture', value: 9 },
+        { label: 'Historical Landslides', value: 4 },
+        { label: 'Satellite Anomaly', value: 2 }
+      ],
+      timeline: [
+        { time: '08:00', event: 'AI Prediction Generated', status: 'complete' },
+        { time: '09:00', event: 'Field Officer Assigned', status: 'complete' },
+        { time: '10:00', event: 'Field Report Submitted', status: 'complete' },
+        { time: '12:00', event: 'Prediction Rejected ✗', status: 'complete' }
+      ]
+    },
+    {
+      id: 'VER-009', reportId: 'FR-1020', alertId: 'SAH-ALR-0010',
+      location: 'West Siang', state: 'Arunachal Pradesh',
+      lat: 27.22, lng: 94.52,
+      aiRisk: 54, aiLevel: 'WATCH', aiProbability: 48.6,
+      fieldSeverity: 'MEDIUM', fieldAssessment: 'MEDIUM',
+      officer: 'K. Bora', officerRole: 'Field Officer',
+      submitted: '8 hr ago', submittedAt: Date.now() - 8*60*60*1000,
+      status: 'INSPECTION_REQUESTED',
+      observation: 'Transverse cracks observed on road surface. Monitoring recommended.',
+      aiPredictionMatch: 'unable',
+      factors: [
+        { label: 'Heavy Rainfall', value: 18 },
+        { label: 'Steep Slope', value: 16 },
+        { label: 'High Soil Moisture', value: 11 },
+        { label: 'Historical Landslides', value: 6 },
+        { label: 'Satellite Anomaly', value: 3 }
+      ],
+      timeline: [
+        { time: '06:00', event: 'AI Prediction Generated', status: 'complete' },
+        { time: '07:00', event: 'Field Officer Assigned', status: 'complete' },
+        { time: '08:00', event: 'Field Report Submitted', status: 'complete' },
+        { time: '10:00', event: 'Re-inspection Requested', status: 'complete' },
+        { time: '—', event: 'Awaiting Re-inspection', status: 'current' }
+      ]
+    },
+    {
+      id: 'VER-010', reportId: 'FR-1019', alertId: 'SAH-ALR-0009',
+      location: 'Aizawl', state: 'Mizoram',
+      lat: 23.73, lng: 92.72,
+      aiRisk: 38, aiLevel: 'WATCH', aiProbability: 32.8,
+      fieldSeverity: 'LOW', fieldAssessment: 'LOW',
+      officer: 'L. Guite', officerRole: 'Field Officer',
+      submitted: '10 hr ago', submittedAt: Date.now() - 10*60*60*1000,
+      status: 'REJECTED',
+      observation: 'Reported concern investigated. Found to be normal drainage activity, not slope instability.',
+      aiPredictionMatch: 'no',
+      factors: [
+        { label: 'Heavy Rainfall', value: 15 },
+        { label: 'Steep Slope', value: 10 },
+        { label: 'High Soil Moisture', value: 8 },
+        { label: 'Historical Landslides', value: 3 },
+        { label: 'Satellite Anomaly', value: 2 }
+      ],
+      timeline: [
+        { time: '04:00', event: 'AI Prediction Generated', status: 'complete' },
+        { time: '06:00', event: 'Field Officer Assigned', status: 'complete' },
+        { time: '08:00', event: 'Field Report Submitted', status: 'complete' },
+        { time: '10:00', event: 'Prediction Rejected ✗', status: 'complete' }
+      ]
+    },
+    {
+      id: 'VER-011', reportId: 'FR-1018', alertId: 'SAH-ALR-0001',
+      location: 'Tawang', state: 'Arunachal Pradesh',
+      lat: 27.49, lng: 91.87,
+      aiRisk: 84, aiLevel: 'WARNING', aiProbability: 82.4,
+      fieldSeverity: 'HIGH', fieldAssessment: 'HIGH',
+      officer: 'R. Singh', officerRole: 'Field Officer',
+      submitted: '12 hr ago', submittedAt: Date.now() - 12*60*60*1000,
+      status: 'VERIFIED',
+      observation: 'Continued soil movement in previously identified zone. Monitoring equipment shows acceleration.',
+      aiPredictionMatch: 'yes',
+      factors: [
+        { label: 'Heavy Rainfall', value: 32 },
+        { label: 'Steep Slope', value: 24 },
+        { label: 'High Soil Moisture', value: 17 },
+        { label: 'Historical Landslides', value: 11 },
+        { label: 'Satellite Anomaly', value: 6 }
+      ],
+      timeline: [
+        { time: '02:00', event: 'AI Prediction Generated', status: 'complete' },
+        { time: '04:00', event: 'Field Officer Assigned', status: 'complete' },
+        { time: '06:00', event: 'Field Report Submitted', status: 'complete' },
+        { time: '08:00', event: 'Prediction Verified ✓', status: 'complete' }
+      ]
+    },
+    {
+      id: 'VER-012', reportId: 'FR-1017', alertId: 'SAH-ALR-0002',
+      location: 'Churachandpur', state: 'Manipur',
+      lat: 24.33, lng: 93.68,
+      aiRisk: 88, aiLevel: 'WARNING', aiProbability: 86.2,
+      fieldSeverity: 'CRITICAL', fieldAssessment: 'CRITICAL',
+      officer: 'L. Guite', officerRole: 'Field Officer',
+      submitted: '1 day ago', submittedAt: Date.now() - 24*60*60*1000,
+      status: 'VERIFIED',
+      observation: 'Historical landslide reactivated. Major road blockage. Emergency response deployed.',
+      aiPredictionMatch: 'yes',
+      factors: [
+        { label: 'Heavy Rainfall', value: 36 },
+        { label: 'Steep Slope', value: 26 },
+        { label: 'High Soil Moisture', value: 18 },
+        { label: 'Historical Landslides', value: 12 },
+        { label: 'Satellite Anomaly', value: 7 }
+      ],
+      timeline: [
+        { time: 'Yesterday 08:00', event: 'AI Prediction Generated', status: 'complete' },
+        { time: 'Yesterday 10:00', event: 'Field Officer Assigned', status: 'complete' },
+        { time: 'Yesterday 12:00', event: 'Field Report Submitted', status: 'complete' },
+        { time: 'Yesterday 14:00', event: 'Prediction Verified ✓', status: 'complete' }
+      ]
+    }
+  ],
+  // ===== MONITORING DATA =====
+monitoringLocations: ['Tawang', 'East Siang', 'West Siang', 'Itanagar', 'Gangtok', 'Shillong', 'Aizawl', 'Kohima', 'Imphal', 'Agartala', 'Guwahati'],
+
+historicalEvents: [
+  { id: 'LS-1042', location: 'Tawang', state: 'Arunachal Pradesh', lat: 27.49, lng: 91.87, date: '12 Jul 2024', year: 2024, season: 'Monsoon', severity: 'HIGH', cause: 'Heavy Rainfall', damage: 'Road Blockage', source: 'Demo Dataset' },
+  { id: 'LS-1041', location: 'Churachandpur', state: 'Manipur', lat: 24.35, lng: 93.70, date: '09 Aug 2024', year: 2024, season: 'Monsoon', severity: 'CRITICAL', cause: 'Extreme Rainfall', damage: 'Multiple structures', source: 'Demo Dataset' },
+  { id: 'LS-1040', location: 'East Siang', state: 'Arunachal Pradesh', lat: 27.22, lng: 94.52, date: '28 Jun 2024', year: 2024, season: 'Pre-Monsoon', severity: 'MODERATE', cause: 'Prolonged Rainfall', damage: 'Partial road damage', source: 'Demo Dataset' },
+  { id: 'LS-1039', location: 'West Khasi Hills', state: 'Meghalaya', lat: 25.42, lng: 91.22, date: '15 Aug 2023', year: 2023, season: 'Monsoon', severity: 'HIGH', cause: 'Extreme Rainfall', damage: 'Village access cut', source: 'Demo Dataset' },
+  { id: 'LS-1038', location: 'Upper Subansiri', state: 'Arunachal Pradesh', lat: 27.82, lng: 93.82, date: '03 Sep 2023', year: 2023, season: 'Monsoon', severity: 'MODERATE', cause: 'Soil Saturation', damage: 'Agricultural land', source: 'Demo Dataset' },
+  { id: 'LS-1037', location: 'Dima Hasao', state: 'Assam', lat: 25.62, lng: 93.22, date: '22 Jul 2023', year: 2023, season: 'Monsoon', severity: 'HIGH', cause: 'Rainfall + Steep Slope', damage: 'Highway blocked 18h', source: 'Demo Dataset' },
+  { id: 'LS-1036', location: 'Gangtok', state: 'Sikkim', lat: 27.35, lng: 88.64, date: '04 Oct 2023', year: 2023, season: 'Post-Monsoon', severity: 'MODERATE', cause: 'Rainfall + Seismic', damage: 'Minor road damage', source: 'Demo Dataset' },
+  { id: 'LS-1035', location: 'Kohima', state: 'Nagaland', lat: 25.69, lng: 94.13, date: '17 Jun 2024', year: 2024, season: 'Pre-Monsoon', severity: 'LOW', cause: 'Moderate Rainfall', damage: 'Slope erosion', source: 'Demo Dataset' },
+  { id: 'LS-1034', location: 'Aizawl', state: 'Mizoram', lat: 23.73, lng: 92.72, date: '25 May 2023', year: 2023, season: 'Pre-Monsoon', severity: 'MODERATE', cause: 'Heavy Rainfall', damage: 'Road damage', source: 'Demo Dataset' },
+  { id: 'LS-1033', location: 'Shillong', state: 'Meghalaya', lat: 25.57, lng: 91.88, date: '14 Jun 2022', year: 2022, season: 'Pre-Monsoon', severity: 'MODERATE', cause: 'Heavy Rainfall', damage: 'Local road blockage', source: 'Demo Dataset' },
+  { id: 'LS-1032', location: 'Imphal', state: 'Manipur', lat: 24.82, lng: 93.95, date: '08 Jul 2022', year: 2022, season: 'Monsoon', severity: 'LOW', cause: 'Moderate Rainfall', damage: 'Minor erosion', source: 'Demo Dataset' },
+  { id: 'LS-1031', location: 'Tawang', state: 'Arunachal Pradesh', lat: 27.48, lng: 91.86, date: '19 Aug 2022', year: 2022, season: 'Monsoon', severity: 'HIGH', cause: 'Extreme Rainfall', damage: 'Road + houses', source: 'Demo Dataset' },
+  { id: 'LS-1030', location: 'West Siang', state: 'Arunachal Pradesh', lat: 27.22, lng: 94.52, date: '05 Sep 2021', year: 2021, season: 'Monsoon', severity: 'MODERATE', cause: 'Prolonged Rainfall', damage: 'Agricultural loss', source: 'Demo Dataset' },
+  { id: 'LS-1029', location: 'Churachandpur', state: 'Manipur', lat: 24.34, lng: 93.69, date: '22 Jul 2021', year: 2021, season: 'Monsoon', severity: 'CRITICAL', cause: 'Extreme Rainfall', damage: 'Major infrastructure', source: 'Demo Dataset' },
+  { id: 'LS-1028', location: 'Gangtok', state: 'Sikkim', lat: 27.34, lng: 88.63, date: '11 Oct 2021', year: 2021, season: 'Post-Monsoon', severity: 'MODERATE', cause: 'Rainfall', damage: 'Road damage', source: 'Demo Dataset' },
+  { id: 'LS-1027', location: 'East Siang', state: 'Arunachal Pradesh', lat: 27.21, lng: 94.51, date: '15 Jun 2025', year: 2025, season: 'Pre-Monsoon', severity: 'HIGH', cause: 'Heavy Rainfall', damage: 'Road blockage', source: 'Demo Dataset' },
+  { id: 'LS-1026', location: 'West Khasi Hills', state: 'Meghalaya', lat: 25.41, lng: 91.21, date: '28 Jul 2025', year: 2025, season: 'Monsoon', severity: 'CRITICAL', cause: 'Extreme Rainfall', damage: 'Village isolated', source: 'Demo Dataset' },
+  { id: 'LS-1025', location: 'Dima Hasao', state: 'Assam', lat: 25.61, lng: 93.21, date: '09 Aug 2025', year: 2025, season: 'Monsoon', severity: 'HIGH', cause: 'Rainfall + Slope', damage: 'Highway blocked', source: 'Demo Dataset' },
+  { id: 'LS-1024', location: 'Upper Subansiri', state: 'Arunachal Pradesh', lat: 27.81, lng: 93.81, date: '20 Sep 2025', year: 2025, season: 'Post-Monsoon', severity: 'MODERATE', cause: 'Soil Saturation', damage: 'Agricultural land', source: 'Demo Dataset' },
+  { id: 'LS-1023', location: 'Tawang', state: 'Arunachal Pradesh', lat: 27.47, lng: 91.85, date: '03 Feb 2023', year: 2023, season: 'Winter', severity: 'LOW', cause: 'Freeze-Thaw', damage: 'Minor erosion', source: 'Demo Dataset' }
+],
+
+monitoringData: {
+  'Tawang': {
+    rainfall: { current: 42, h24: 112, h48: 198, h72: 286, h7day: 412, threshold: 250, exceeded: true, exceedPct: 23,
+      hourly: [2,3,5,8,12,15,18,14,10,8,6,4,3,5,8,12,16,20,24,22,18,14,10,6],
+      accumulated: [2,5,10,18,30,45,63,77,87,95,101,105,108,113,121,133,149,169,193,215,233,247,257,263]
+    },
+    terrain: { soilMoisture: 81, slope: 41, elevation: 2100, stability: 'REDUCED', soilType: 'Mountain Soil — Demo', aspect: 'North-East', curvature: 'Moderate',
+      normal: { soilMoisture: 58, slope: 35 }
+    },
+    satellite: { ndvi: 'Change Detected', ndwi: 'Stable', surface: 'Detected', sar: 'Elevated', vegetation: 'Moderate',
+      vegetationPct: 78, surfaceStabilityPct: 61, waterSoilPct: 72, anomaly: true
+    },
+    historical: { total: 18, critical: 3, high: 7, moderate: 6, low: 2, byYear: { 2021: 2, 2022: 3, 2023: 4, 2024: 5, 2025: 4 } }
+  },
+  'East Siang': {
+    rainfall: { current: 28, h24: 78, h48: 142, h72: 198, h7day: 286, threshold: 250, exceeded: false, exceedPct: 0,
+      hourly: [1,2,3,4,6,8,10,9,7,5,4,3,2,4,6,8,10,12,14,13,11,9,7,5],
+      accumulated: [1,3,6,10,16,24,34,43,50,55,59,62,64,68,74,82,92,104,118,131,142,151,158,163]
+    },
+    terrain: { soilMoisture: 74, slope: 36, elevation: 1800, stability: 'MODERATE', soilType: 'Loamy Soil — Demo', aspect: 'South-East', curvature: 'Low',
+      normal: { soilMoisture: 52, slope: 32 }
+    },
+    satellite: { ndvi: 'Stable', ndwi: 'Stable', surface: 'Detected', sar: 'Normal', vegetation: 'Stable',
+      vegetationPct: 84, surfaceStabilityPct: 72, waterSoilPct: 65, anomaly: false
+    },
+    historical: { total: 12, critical: 1, high: 4, moderate: 5, low: 2, byYear: { 2021: 1, 2022: 2, 2023: 3, 2024: 3, 2025: 3 } }
+  },
+  'West Siang': {
+    rainfall: { current: 18, h24: 54, h48: 98, h72: 142, h7day: 210, threshold: 250, exceeded: false, exceedPct: 0,
+      hourly: [1,1,2,3,4,5,6,5,4,3,2,2,1,2,3,4,5,6,7,6,5,4,3,2],
+      accumulated: [1,2,4,7,11,16,22,27,31,34,36,38,39,41,44,48,53,59,66,72,77,81,84,86]
+    },
+    terrain: { soilMoisture: 62, slope: 30, elevation: 1500, stability: 'STABLE', soilType: 'Red Soil — Demo', aspect: 'East', curvature: 'Low',
+      normal: { soilMoisture: 48, slope: 28 }
+    },
+    satellite: { ndvi: 'Stable', ndwi: 'Stable', surface: 'None', sar: 'Normal', vegetation: 'Stable',
+      vegetationPct: 91, surfaceStabilityPct: 85, waterSoilPct: 54, anomaly: false
+    },
+    historical: { total: 8, critical: 0, high: 2, moderate: 4, low: 2, byYear: { 2021: 1, 2022: 1, 2023: 2, 2024: 2, 2025: 2 } }
+  },
+  'Itanagar': {
+    rainfall: { current: 12, h24: 38, h48: 68, h72: 98, h7day: 156, threshold: 250, exceeded: false, exceedPct: 0,
+      hourly: [0,1,1,2,3,4,5,4,3,2,1,1,0,1,2,3,4,5,6,5,4,3,2,1],
+      accumulated: [0,1,2,4,7,11,16,20,23,25,26,27,27,28,30,33,37,42,48,53,57,60,62,63]
+    },
+    terrain: { soilMoisture: 54, slope: 22, elevation: 440, stability: 'STABLE', soilType: 'Alluvial — Demo', aspect: 'South', curvature: 'Low',
+      normal: { soilMoisture: 42, slope: 20 }
+    },
+    satellite: { ndvi: 'Stable', ndwi: 'Stable', surface: 'None', sar: 'Normal', vegetation: 'Stable',
+      vegetationPct: 94, surfaceStabilityPct: 92, waterSoilPct: 48, anomaly: false
+    },
+    historical: { total: 5, critical: 0, high: 1, moderate: 3, low: 1, byYear: { 2021: 0, 2022: 1, 2023: 1, 2024: 2, 2025: 1 } }
+  },
+  'Gangtok': {
+    rainfall: { current: 22, h24: 56, h48: 102, h72: 142, h7day: 224, threshold: 250, exceeded: false, exceedPct: 0,
+      hourly: [1,2,2,3,4,5,6,5,4,3,2,2,1,2,3,4,5,6,7,6,5,4,3,2],
+      accumulated: [1,3,5,8,12,17,23,28,32,35,37,39,40,42,45,49,54,60,67,73,78,82,85,87]
+    },
+    terrain: { soilMoisture: 62, slope: 32, elevation: 1650, stability: 'MODERATE', soilType: 'Mountain Soil — Demo', aspect: 'North', curvature: 'Moderate',
+      normal: { soilMoisture: 48, slope: 28 }
+    },
+    satellite: { ndvi: 'Stable', ndwi: 'Stable', surface: 'None', sar: 'Normal', vegetation: 'Stable',
+      vegetationPct: 88, surfaceStabilityPct: 78, waterSoilPct: 58, anomaly: false
+    },
+    historical: { total: 10, critical: 1, high: 3, moderate: 4, low: 2, byYear: { 2021: 2, 2022: 2, 2023: 2, 2024: 2, 2025: 2 } }
+  },
+  'Shillong': {
+    rainfall: { current: 8, h24: 22, h48: 42, h72: 64, h7day: 112, threshold: 250, exceeded: false, exceedPct: 0,
+      hourly: [0,0,1,1,2,2,3,2,2,1,1,0,0,1,1,2,2,3,3,2,2,1,1,0],
+      accumulated: [0,0,1,2,4,6,9,11,13,14,15,15,15,16,17,19,21,24,27,29,31,32,33,33]
+    },
+    terrain: { soilMoisture: 42, slope: 18, elevation: 1500, stability: 'STABLE', soilType: 'Laterite — Demo', aspect: 'West', curvature: 'Low',
+      normal: { soilMoisture: 38, slope: 16 }
+    },
+    satellite: { ndvi: 'Stable', ndwi: 'Stable', surface: 'None', sar: 'Normal', vegetation: 'Stable',
+      vegetationPct: 96, surfaceStabilityPct: 94, waterSoilPct: 42, anomaly: false
+    },
+    historical: { total: 6, critical: 0, high: 1, moderate: 3, low: 2, byYear: { 2021: 1, 2022: 1, 2023: 1, 2024: 2, 2025: 1 } }
+  },
+  'Aizawl': {
+    rainfall: { current: 14, h24: 38, h48: 68, h72: 98, h7day: 164, threshold: 250, exceeded: false, exceedPct: 0,
+      hourly: [0,1,1,2,3,4,4,3,3,2,1,1,0,1,2,3,4,4,5,4,3,2,1,1],
+      accumulated: [0,1,2,4,7,11,15,18,21,23,24,25,25,26,28,31,35,39,44,48,51,53,54,55]
+    },
+    terrain: { soilMoisture: 54, slope: 26, elevation: 1200, stability: 'STABLE', soilType: 'Loamy Soil — Demo', aspect: 'South-East', curvature: 'Low',
+      normal: { soilMoisture: 44, slope: 24 }
+    },
+    satellite: { ndvi: 'Stable', ndwi: 'Stable', surface: 'None', sar: 'Normal', vegetation: 'Stable',
+      vegetationPct: 92, surfaceStabilityPct: 88, waterSoilPct: 50, anomaly: false
+    },
+    historical: { total: 7, critical: 0, high: 2, moderate: 3, low: 2, byYear: { 2021: 1, 2022: 1, 2023: 2, 2024: 2, 2025: 1 } }
+  },
+  'Kohima': {
+    rainfall: { current: 16, h24: 42, h48: 78, h72: 112, h7day: 186, threshold: 250, exceeded: false, exceedPct: 0,
+      hourly: [0,1,1,2,3,4,5,4,3,2,2,1,1,2,3,4,5,5,6,5,4,3,2,1],
+      accumulated: [0,1,2,4,7,11,16,20,23,25,27,28,29,31,34,38,43,48,54,59,63,66,68,69]
+    },
+    terrain: { soilMoisture: 58, slope: 28, elevation: 1450, stability: 'STABLE', soilType: 'Mountain Soil — Demo', aspect: 'North-East', curvature: 'Low',
+      normal: { soilMoisture: 46, slope: 26 }
+    },
+    satellite: { ndvi: 'Stable', ndwi: 'Stable', surface: 'None', sar: 'Normal', vegetation: 'Stable',
+      vegetationPct: 90, surfaceStabilityPct: 86, waterSoilPct: 52, anomaly: false
+    },
+    historical: { total: 9, critical: 0, high: 2, moderate: 5, low: 2, byYear: { 2021: 1, 2022: 2, 2023: 2, 2024: 2, 2025: 2 } }
+  },
+  'Imphal': {
+    rainfall: { current: 6, h24: 18, h48: 34, h72: 52, h7day: 94, threshold: 250, exceeded: false, exceedPct: 0,
+      hourly: [0,0,0,1,1,2,2,2,1,1,0,0,0,0,1,1,2,2,2,1,1,0,0,0],
+      accumulated: [0,0,0,1,2,4,6,8,9,10,10,10,10,10,11,12,14,16,18,19,20,20,20,20]
+    },
+    terrain: { soilMoisture: 38, slope: 15, elevation: 786, stability: 'STABLE', soilType: 'Alluvial — Demo', aspect: 'South', curvature: 'Low',
+      normal: { soilMoisture: 34, slope: 14 }
+    },
+    satellite: { ndvi: 'Stable', ndwi: 'Stable', surface: 'None', sar: 'Normal', vegetation: 'Stable',
+      vegetationPct: 95, surfaceStabilityPct: 93, waterSoilPct: 38, anomaly: false
+    },
+    historical: { total: 4, critical: 0, high: 1, moderate: 2, low: 1, byYear: { 2021: 0, 2022: 1, 2023: 1, 2024: 1, 2025: 1 } }
+  },
+  'Agartala': {
+    rainfall: { current: 4, h24: 14, h48: 28, h72: 42, h7day: 78, threshold: 250, exceeded: false, exceedPct: 0,
+      hourly: [0,0,0,0,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0],
+      accumulated: [0,0,0,0,1,2,3,4,5,5,5,5,5,5,6,7,8,9,10,11,11,11,11,11]
+    },
+    terrain: { soilMoisture: 34, slope: 12, elevation: 25, stability: 'STABLE', soilType: 'Alluvial — Demo', aspect: 'South', curvature: 'Low',
+      normal: { soilMoisture: 30, slope: 10 }
+    },
+    satellite: { ndvi: 'Stable', ndwi: 'Stable', surface: 'None', sar: 'Normal', vegetation: 'Stable',
+      vegetationPct: 97, surfaceStabilityPct: 95, waterSoilPct: 34, anomaly: false
+    },
+    historical: { total: 2, critical: 0, high: 0, moderate: 1, low: 1, byYear: { 2021: 0, 2022: 0, 2023: 1, 2024: 1, 2025: 0 } }
+  },
+  'Guwahati': {
+    rainfall: { current: 10, h24: 24, h48: 46, h72: 68, h7day: 124, threshold: 250, exceeded: false, exceedPct: 0,
+      hourly: [0,0,1,1,2,2,3,2,2,1,1,0,0,1,1,2,2,3,3,2,2,1,1,0],
+      accumulated: [0,0,1,2,4,6,9,11,13,14,15,15,15,16,17,19,21,24,27,29,31,32,33,33]
+    },
+    terrain: { soilMoisture: 46, slope: 16, elevation: 55, stability: 'STABLE', soilType: 'Alluvial — Demo', aspect: 'South', curvature: 'Low',
+      normal: { soilMoisture: 40, slope: 14 }
+    },
+    satellite: { ndvi: 'Stable', ndwi: 'Stable', surface: 'None', sar: 'Normal', vegetation: 'Stable',
+      vegetationPct: 93, surfaceStabilityPct: 91, waterSoilPct: 46, anomaly: false
+    },
+    historical: { total: 6, critical: 0, high: 1, moderate: 3, low: 2, byYear: { 2021: 1, 2022: 1, 2023: 1, 2024: 2, 2025: 1 } }
+  }
+}
 };
 
 if (typeof window !== 'undefined') {

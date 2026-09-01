@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Field Report — SAHAYAK</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/landing.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/alerts.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body class="field-report-new-page">
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-logo">
+          <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#19B8C7"/><stop offset="100%" stop-color="#0F9D8A"/></linearGradient></defs>
+            <path d="M20 3 L34 8 V20 C34 28 28 34 20 37 C12 34 6 28 6 20 V8 Z" fill="none" stroke="url(#logoGrad)" stroke-width="1.5"/>
+            <path d="M10 26 L16 16 L20 22 L24 14 L30 26 Z" fill="url(#logoGrad)" opacity="0.85"/>
+            <circle cx="24" cy="14" r="2" fill="#19B8C7"/>
+          </svg>
+        </div>
+        <div class="brand-text"><span class="brand-name">SAHAYAK</span><span class="brand-sub">NER Landslide Intelligence</span></div>
+      </div>
+      <nav class="sidebar-nav" id="sidebarNav"></nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-status"><span class="status-dot"></span><span>System Operational</span></div>
+        <div class="sidebar-user"><div class="user-avatar">FO</div><div class="user-info"><div class="user-name">Field Officer</div><div class="user-role">Reporter</div></div></div>
+      </div>
+    </aside>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <header class="top-header">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="header-title-wrap">
+        <h1 class="header-title">CREATE FIELD REPORT</h1>
+        <div class="header-subtitle">Submit ground observations for verification</div>
+      </div>
+      <div class="header-actions">
+        <div style="position: relative;">
+          <button class="icon-btn" id="notificationBtn" aria-label="Notifications">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notification-badge" id="notificationBadge" style="display:none;">0</span>
+          </button>
+          <div class="notification-panel" id="notificationPanel">
+            <div class="notification-panel-header"><div class="notification-panel-title">Notifications</div></div>
+            <div class="notification-list" id="notificationList"></div>
+          </div>
+        </div>
+        <button class="header-user"><div class="user-avatar">FO</div><span class="header-user-name">Field Officer</span></button>
+      </div>
+    </header>
+
+    <div class="status-bar">
+      <div class="status-bar-item"><span class="status-bar-label">Role</span><span class="status-bar-value">Field Officer</span></div>
+      <div class="status-bar-divider"></div>
+      <div class="status-bar-item"><span class="status-bar-label">Session</span><span class="status-bar-value" style="color: var(--watch);">Prototype Session</span></div>
+      <div class="status-bar-demo"><span class="demo-indicator"></span>SIH 2026 PROTOTYPE · DEMO DATA</div>
+    </div>
+
+    <main class="main-content">
+      <div class="field-form-container">
+        <div class="page-header" style="margin-bottom: var(--space-4);">
+          <div class="page-header-left">
+            <h2 class="page-title">CREATE FIELD REPORT <span class="page-title-badge">MOBILE-OPTIMIZED</span></h2>
+            <p class="page-subtitle">Submit ground observations for verification</p>
+          </div>
+        </div>
+
+        <!-- Offline Status -->
+        <div class="offline-status" id="offlineStatus" style="margin-bottom: var(--space-4);">
+          <span class="offline-status-dot"></span>
+          <span>ONLINE</span>
+          <button class="btn btn-ghost" style="margin-left: auto; padding: 2px 10px; font-size: 10px;" onclick="window.SahayakFieldReportNew.toggleOffline()">Toggle</button>
+        </div>
+
+        <!-- Report Type -->
+        <div class="form-section">
+          <div class="form-section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Report Type <span class="required">*</span>
+          </div>
+          <div class="severity-radio-group" style="grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));">
+            <label class="severity-radio"><input type="radio" name="reportType" value="Landslide"><span class="severity-radio-label warning">Landslide</span></label>
+            <label class="severity-radio"><input type="radio" name="reportType" value="Road Crack"><span class="severity-radio-label alert">Road Crack</span></label>
+            <label class="severity-radio"><input type="radio" name="reportType" value="Soil Movement"><span class="severity-radio-label watch">Soil Movement</span></label>
+            <label class="severity-radio"><input type="radio" name="reportType" value="Rockfall"><span class="severity-radio-label warning">Rockfall</span></label>
+            <label class="severity-radio"><input type="radio" name="reportType" value="Water Seepage"><span class="severity-radio-label safe">Water Seepage</span></label>
+            <label class="severity-radio"><input type="radio" name="reportType" value="Blocked Road"><span class="severity-radio-label alert">Blocked Road</span></label>
+            <label class="severity-radio"><input type="radio" name="reportType" value="Other"><span class="severity-radio-label watch">Other</span></label>
+          </div>
+        </div>
+
+        <!-- GPS Location -->
+        <div class="form-section">
+          <div class="form-section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            GPS Location <span class="required">*</span>
+          </div>
+          <div class="gps-capture">
+            <div class="gps-info">
+              <div class="gps-coords" id="gpsCoords">No location captured</div>
+              <div class="gps-accuracy" id="gpsAccuracy">Tap button to capture current location</div>
+            </div>
+            <button class="btn btn-primary" id="captureGpsBtn" onclick="window.SahayakFieldReportNew.captureGPS()" style="flex-shrink: 0;">
+              📍 Capture Location
+            </button>
+          </div>
+          <div class="form-help">Uses browser geolocation. If unavailable, demo coordinates will be used.</div>
+        </div>
+
+        <!-- Photo Upload -->
+        <div class="form-section">
+          <div class="form-section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            Evidence Photos
+          </div>
+          <div class="photo-upload-area" id="photoUploadArea">
+            <div class="photo-upload-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            </div>
+            <div class="photo-upload-text">Tap to upload or drag photos here</div>
+            <div class="photo-upload-hint">Demo upload mode — images stored locally</div>
+          </div>
+          <input type="file" id="photoFileInput" accept="image/*" multiple style="display: none;">
+          <div class="photo-preview-grid" id="photoPreviewGrid"></div>
+        </div>
+
+        <!-- Severity -->
+        <div class="form-section">
+          <div class="form-section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            Severity <span class="required">*</span>
+          </div>
+          <div class="severity-radio-group">
+            <label class="severity-radio"><input type="radio" name="severity" value="LOW"><span class="severity-radio-label safe"><span class="severity-dot"></span>🟢 LOW</span></label>
+            <label class="severity-radio"><input type="radio" name="severity" value="MEDIUM"><span class="severity-radio-label watch"><span class="severity-dot"></span>🟡 MEDIUM</span></label>
+            <label class="severity-radio"><input type="radio" name="severity" value="HIGH"><span class="severity-radio-label alert"><span class="severity-dot"></span>🟠 HIGH</span></label>
+            <label class="severity-radio"><input type="radio" name="severity" value="CRITICAL"><span class="severity-radio-label warning"><span class="severity-dot"></span>🔴 CRITICAL</span></label>
+          </div>
+        </div>
+
+        <!-- Observation -->
+        <div class="form-section">
+          <div class="form-section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            Observation <span class="required">*</span>
+          </div>
+          <textarea class="form-textarea" id="observation" placeholder="Describe what you observed..." style="min-height: 140px;"></textarea>
+          <div class="form-help">Be specific: location, size, visible damage, immediate risks.</div>
+        </div>
+
+        <!-- AI Match -->
+        <div class="form-section">
+          <div class="form-section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/></svg>
+            AI Prediction Match (Optional)
+          </div>
+          <div class="checkbox-group">
+            <label class="checkbox-item"><input type="radio" name="aiMatch" value="yes"> ✓ Yes — matches AI prediction</label>
+            <label class="checkbox-item"><input type="radio" name="aiMatch" value="partially"> ◐ Partially — some elements match</label>
+            <label class="checkbox-item"><input type="radio" name="aiMatch" value="no"> ✗ No — differs from AI prediction</label>
+            <label class="checkbox-item"><input type="radio" name="aiMatch" value="unable"> ? Unable to determine</label>
+          </div>
+        </div>
+
+        <!-- Officer Details -->
+        <div class="form-section">
+          <div class="form-section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Field Officer Details
+          </div>
+          <div class="detail-info-grid">
+            <div class="detail-info-item"><div class="detail-info-label">Officer</div><div class="detail-info-value">Rahul Singh</div></div>
+            <div class="detail-info-item"><div class="detail-info-label">Assigned District</div><div class="detail-info-value">Tawang</div></div>
+            <div class="detail-info-item"><div class="detail-info-label">Role</div><div class="detail-info-value">Field Officer</div></div>
+            <div class="detail-info-item"><div class="detail-info-label">Report Time</div><div class="detail-info-value" id="reportTimestamp">—</div></div>
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <div style="display: flex; gap: var(--space-3); flex-wrap: wrap; margin-top: var(--space-4);">
+          <button class="btn btn-outline" style="flex: 1;" onclick="window.SahayakFieldReportNew.saveOffline()">💾 Save Offline</button>
+          <button class="btn btn-primary" style="flex: 2;" onclick="window.SahayakFieldReportNew.submitReport()">Submit Report →</button>
+        </div>
+
+        <div style="margin-top: var(--space-5); padding: var(--space-3); background: var(--watch-bg); border: 1px solid rgba(234, 179, 8, 0.25); border-radius: var(--radius-md); font-size: var(--fs-xs); color: var(--watch); text-align: center;">
+          <strong>DEMO:</strong> This is a prototype. No real data is transmitted.
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/field-report-new.js"></script>
+</body>
+</html>

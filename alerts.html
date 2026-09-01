@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SAHAYAK Early Warning Center — Monitor and manage landslide risk alerts">
+  <title>Early Warning Center — SAHAYAK</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/landing.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/alerts.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body class="alerts-page">
+  <div class="app-shell">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar" role="navigation" aria-label="Primary navigation">
+      <div class="sidebar-brand">
+        <div class="brand-logo" aria-hidden="true">
+          <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#19B8C7"/>
+                <stop offset="100%" stop-color="#0F9D8A"/>
+              </linearGradient>
+            </defs>
+            <path d="M20 3 L34 8 V20 C34 28 28 34 20 37 C12 34 6 28 6 20 V8 Z" fill="none" stroke="url(#logoGrad)" stroke-width="1.5"/>
+            <path d="M10 26 L16 16 L20 22 L24 14 L30 26 Z" fill="url(#logoGrad)" opacity="0.85"/>
+            <circle cx="24" cy="14" r="2" fill="#19B8C7"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">SAHAYAK</span>
+          <span class="brand-sub">NER Landslide Intelligence</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav" id="sidebarNav"></nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-status">
+          <span class="status-dot"></span>
+          <span>System Operational</span>
+        </div>
+        <div class="sidebar-user">
+          <div class="user-avatar">AU</div>
+          <div class="user-info">
+            <div class="user-name">Authority</div>
+            <div class="user-role">Administrator</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- TOP HEADER -->
+    <header class="top-header">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="header-title-wrap">
+        <h1 class="header-title">EARLY WARNING CENTER</h1>
+        <div class="header-subtitle">Monitor, review and manage landslide risk alerts</div>
+      </div>
+      <div class="header-actions">
+        <div class="header-system-status" id="systemStatus">
+          <span class="status-dot"></span>
+          <span>All systems operational</span>
+        </div>
+        <div style="position: relative;">
+          <button class="icon-btn" id="notificationBtn" aria-label="Notifications">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notification-badge" id="notificationBadge" style="display:none;">0</span>
+          </button>
+          <div class="notification-panel" id="notificationPanel">
+            <div class="notification-panel-header">
+              <div class="notification-panel-title">Notifications</div>
+              <span class="notification-mark-read" onclick="window.SahayakAlerts.markAllNotificationsRead()">Mark all read</span>
+            </div>
+            <div class="notification-list" id="notificationList"></div>
+          </div>
+        </div>
+        <select class="lang-selector" aria-label="Language">
+          <option>EN</option><option>HI</option><option>BN</option><option>AS</option>
+        </select>
+        <button class="header-user" aria-label="User profile">
+          <div class="user-avatar">AU</div>
+          <span class="header-user-name">Authority</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- STATUS BAR -->
+    <div class="status-bar">
+      <div class="status-bar-item">
+        <span class="status-bar-label">System Status</span>
+        <span class="status-bar-value" style="color: var(--safe);">Operational</span>
+      </div>
+      <div class="status-bar-divider"></div>
+      <div class="status-bar-item">
+        <span class="status-bar-label">Active Monitoring Regions</span>
+        <span class="status-bar-value">8 States</span>
+      </div>
+      <div class="status-bar-divider"></div>
+      <div class="status-bar-item">
+        <span class="status-bar-label">Session</span>
+        <span class="status-bar-value" style="color: var(--watch);">Prototype Session</span>
+      </div>
+      <div class="status-bar-demo">
+        <span class="demo-indicator"></span>
+        SIH 2026 PROTOTYPE · DEMO DATA
+      </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <!-- Page Header -->
+      <div class="page-header">
+        <div class="page-header-left">
+          <h2 class="page-title">
+            EARLY WARNING CENTER
+            <span class="page-title-badge">AUTHORITY REVIEW REQUIRED</span>
+          </h2>
+          <p class="page-subtitle">Monitor, review and manage landslide risk alerts</p>
+          <div class="page-demo-strip">
+            <span class="demo-tag">SIH 2026 PROTOTYPE</span>
+            <span class="demo-tag">DEMO DATA</span>
+            <span class="demo-tag">SYNTHETIC WORKFLOW</span>
+          </div>
+        </div>
+        <a href="alert-create.html" class="btn btn-primary">+ Generate Warning</a>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="summary-grid">
+        <div class="summary-card total">
+          <div class="summary-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          </div>
+          <div class="summary-card-value" id="summaryTotal">0</div>
+          <div class="summary-card-label">Active Alerts</div>
+        </div>
+        <div class="summary-card critical">
+          <div class="summary-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <div class="summary-card-value" id="summaryCritical">0</div>
+          <div class="summary-card-label">Critical</div>
+        </div>
+        <div class="summary-card high">
+          <div class="summary-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <div class="summary-card-value" id="summaryHigh">0</div>
+          <div class="summary-card-label">High Priority</div>
+        </div>
+        <div class="summary-card resolved">
+          <div class="summary-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <div class="summary-card-value" id="summaryResolved">0</div>
+          <div class="summary-card-label">Resolved</div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs" id="alertsTabs"></div>
+
+      <!-- Filters -->
+      <div class="filter-bar">
+        <div class="filter-search">
+          <svg class="filter-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="alertSearch" placeholder="Search location, alert ID...">
+        </div>
+        <select class="filter-select" id="alertSeverity">
+          <option value="all">All Risk Levels</option>
+          <option value="critical">Critical</option>
+          <option value="warning">Warning</option>
+          <option value="alert">Alert</option>
+          <option value="watch">Watch</option>
+        </select>
+        <select class="filter-select" id="alertState">
+          <option value="all">All States</option>
+          <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+          <option value="Assam">Assam</option>
+          <option value="Meghalaya">Meghalaya</option>
+          <option value="Sikkim">Sikkim</option>
+          <option value="Nagaland">Nagaland</option>
+          <option value="Manipur">Manipur</option>
+          <option value="Mizoram">Mizoram</option>
+          <option value="Tripura">Tripura</option>
+        </select>
+        <button class="filter-reset" id="filterReset">Reset Filters</button>
+      </div>
+
+      <!-- Loading State -->
+      <div id="alertsLoading" class="state-message" style="display: none;">
+        <div class="loading-spinner"></div>
+        <div class="state-message-title">Loading alerts...</div>
+      </div>
+
+      <!-- Empty State -->
+      <div id="alertsEmpty" class="state-message" style="display: none;">
+        <div class="state-message-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <div class="state-message-title">No active alerts found</div>
+        <div class="state-message-sub">All monitored regions are currently within normal parameters.</div>
+      </div>
+
+      <!-- Alerts Grid -->
+      <div class="alerts-grid" id="alertsGrid"></div>
+
+      <!-- Disclaimer -->
+      <div style="margin-top: var(--space-6); padding: var(--space-4); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); text-align: center;">
+        <div style="font-size: var(--fs-xs); color: var(--text-600); line-height: 1.6; max-width: 720px; margin: 0 auto;">
+          <strong>Disclaimer:</strong> This prototype demonstrates a decision-support workflow using synthetic data. All alerts, risk scores, and warnings are illustrative. Warnings must be reviewed by authorized personnel before any real-world action.
+        </div>
+        <div style="display: flex; justify-content: center; gap: var(--space-2); margin-top: var(--space-3); flex-wrap: wrap;">
+          <span class="demo-tag">SIH 2026 PROTOTYPE</span>
+          <span class="demo-tag">DEMO DATA</span>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Detail Panel Overlay -->
+  <div class="detail-panel-overlay" id="detailPanelOverlay"></div>
+
+  <!-- Detail Panel -->
+  <div class="detail-panel" id="alertDetailPanel"></div>
+
+  <!-- Assign Modal -->
+  <div class="modal-overlay" id="assignModal">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">Assign Field Officer</div>
+        <button class="modal-close" onclick="window.SahayakAlerts.closeAssignModal()" aria-label="Close">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body"></div>
+      <div class="modal-footer"></div>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/alerts.js"></script>
+</body>
+</html>

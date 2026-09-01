@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SAHAYAK Environmental Intelligence — Rainfall, terrain, satellite and historical monitoring">
+  <title>Environmental Intelligence — SAHAYAK</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/landing.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/monitoring.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body class="monitoring-page">
+  <div class="app-shell">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-logo">
+          <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#19B8C7"/><stop offset="100%" stop-color="#0F9D8A"/></linearGradient></defs>
+            <path d="M20 3 L34 8 V20 C34 28 28 34 20 37 C12 34 6 28 6 20 V8 Z" fill="none" stroke="url(#logoGrad)" stroke-width="1.5"/>
+            <path d="M10 26 L16 16 L20 22 L24 14 L30 26 Z" fill="url(#logoGrad)" opacity="0.85"/>
+            <circle cx="24" cy="14" r="2" fill="#19B8C7"/>
+          </svg>
+        </div>
+        <div class="brand-text"><span class="brand-name">SAHAYAK</span><span class="brand-sub">NER Landslide Intelligence</span></div>
+      </div>
+      <nav class="sidebar-nav" id="sidebarNav"></nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-status"><span class="status-dot"></span><span>System Operational</span></div>
+        <div class="sidebar-user">
+          <div class="user-avatar">AU</div>
+          <div class="user-info"><div class="user-name">Authority</div><div class="user-role">Administrator</div></div>
+        </div>
+      </div>
+    </aside>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- TOP HEADER -->
+    <header class="top-header">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="header-title-wrap">
+        <h1 class="header-title">ENVIRONMENTAL INTELLIGENCE</h1>
+        <div class="header-subtitle">Rainfall, terrain, satellite and historical landslide monitoring</div>
+      </div>
+      <div class="header-actions">
+        <div class="header-system-status"><span class="status-dot"></span><span>Operational</span></div>
+        <div style="position: relative;">
+          <button class="icon-btn" id="notificationBtn" aria-label="Notifications">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notification-badge" id="notificationBadge" style="display:none;">0</span>
+          </button>
+          <div class="notification-panel" id="notificationPanel">
+            <div class="notification-panel-header">
+              <div class="notification-panel-title">Notifications</div>
+              <span class="notification-mark-read" onclick="window.SahayakMonitoring.markAllNotificationsRead()">Mark all read</span>
+            </div>
+            <div class="notification-list" id="notificationList"></div>
+          </div>
+        </div>
+        <select class="lang-selector" aria-label="Language">
+          <option>EN</option><option>HI</option><option>BN</option><option>AS</option>
+        </select>
+        <button class="header-user"><div class="user-avatar">AU</div><span class="header-user-name">Authority</span></button>
+      </div>
+    </header>
+
+    <!-- STATUS BAR -->
+    <div class="status-bar">
+      <div class="status-bar-item"><span class="status-bar-label">System Status</span><span class="status-bar-value" style="color: var(--safe);">Operational</span></div>
+      <div class="status-bar-divider"></div>
+      <div class="status-bar-item"><span class="status-bar-label">Data Sources</span><span class="status-bar-value">5/5 Online</span></div>
+      <div class="status-bar-divider"></div>
+      <div class="status-bar-item"><span class="status-bar-label">Session</span><span class="status-bar-value" style="color: var(--watch);">Prototype Session</span></div>
+      <div class="status-bar-demo"><span class="demo-indicator"></span>SIH 2026 PROTOTYPE · DEMO DATA</div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <!-- Page Header -->
+      <div class="page-header" style="margin-bottom: var(--space-4);">
+        <div class="page-header-left">
+          <h2 class="page-title">
+            ENVIRONMENTAL INTELLIGENCE
+            <span class="page-title-badge">MONITORING CONSOLE</span>
+          </h2>
+          <p class="page-subtitle">Rainfall, terrain, satellite and historical landslide monitoring</p>
+          <div class="page-demo-strip">
+            <span class="demo-tag">SIH 2026 PROTOTYPE</span>
+            <span class="demo-tag">DEMO DATA</span>
+            <span class="demo-tag">ILLUSTRATIVE ENVIRONMENTAL ANALYSIS</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Location Selector -->
+      <div class="monitoring-location-bar">
+        <div class="monitoring-location-label">Analyzing Location</div>
+        <select class="monitoring-location-select" id="locationSelect" aria-label="Select location"></select>
+        <div class="monitoring-quick-nav">
+          <a href="risk-map.html" class="btn btn-outline">View Risk Map →</a>
+          <a href="risk-analysis.html" class="btn btn-outline">Analyze Risk →</a>
+          <a href="alerts.html" class="btn btn-outline">View Alerts →</a>
+        </div>
+      </div>
+
+      <!-- Tab Navigation -->
+      <div class="monitoring-tabs">
+        <button class="monitoring-tab active" data-tab="rainfall">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="16" y1="13" x2="16" y2="21"/><line x1="8" y1="13" x2="8" y2="21"/><line x1="12" y1="15" x2="12" y2="23"/><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"/></svg>
+          RAINFALL
+        </button>
+        <button class="monitoring-tab" data-tab="terrain">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20l4-8 4 4 4-10 6 14"/></svg>
+          TERRAIN & SOIL
+        </button>
+        <button class="monitoring-tab" data-tab="satellite">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="21.17" y1="8" x2="12" y2="8"/></svg>
+          SATELLITE
+        </button>
+        <button class="monitoring-tab" data-tab="historical">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          HISTORICAL
+        </button>
+      </div>
+
+      <!-- Loading -->
+      <div id="monitoringLoading" class="state-message" style="display: none;">
+        <div class="loading-spinner"></div>
+        <div class="state-message-title">Loading environmental intelligence...</div>
+      </div>
+
+      <!-- ============ TAB: RAINFALL ============ -->
+      <div class="tab-content active" data-content="rainfall">
+        <div class="monitoring-summary" id="rainfallSummaryCards"></div>
+
+        <div class="monitoring-section">
+          <div class="monitoring-section-header">
+            <div class="monitoring-section-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="16" y1="13" x2="16" y2="21"/><line x1="8" y1="13" x2="8" y2="21"/><line x1="12" y1="15" x2="12" y2="23"/><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"/></svg>
+              Rainfall Monitoring — Last 24 Hours
+            </div>
+            <div style="display: flex; gap: var(--space-2); align-items: center;">
+              <span class="freshness-inline">
+                <span class="freshness-inline-dot fresh"></span>
+                Fresh — 12 min ago
+              </span>
+              <span class="monitoring-section-badge">DEMO</span>
+            </div>
+          </div>
+          <div class="monitoring-section-body">
+            <div class="chart-container">
+              <canvas id="rainfallChart"></canvas>
+            </div>
+            <div class="chart-caption">Illustrative Demo Data</div>
+
+            <div class="rainfall-risk-indicator" id="rainfallRiskIndicator"></div>
+            <div class="rainfall-alert-banner" id="rainfallAlertBanner" style="display: none;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ TAB: TERRAIN ============ -->
+      <div class="tab-content" data-content="terrain">
+        <div class="monitoring-section">
+          <div class="monitoring-section-header">
+            <div class="monitoring-section-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20l4-8 4 4 4-10 6 14"/></svg>
+              Terrain & Soil Analysis
+            </div>
+            <div style="display: flex; gap: var(--space-2); align-items: center;">
+              <span class="freshness-inline">
+                <span class="freshness-inline-dot fresh"></span>
+                Available — 18 min ago
+              </span>
+              <span class="monitoring-section-badge">DEMO</span>
+            </div>
+          </div>
+          <div class="monitoring-section-body">
+            <div class="terrain-gauges" id="terrainGauges"></div>
+
+            <div class="terrain-profile">
+              <div class="terrain-profile-title">Terrain Elevation Profile</div>
+              <div id="terrainProfile"></div>
+            </div>
+
+            <div class="comparison-grid" id="terrainComparison"></div>
+            <div class="deviation-banner" id="deviationBanner" style="display: none;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ TAB: SATELLITE ============ -->
+      <div class="tab-content" data-content="satellite">
+        <div class="monitoring-section">
+          <div class="monitoring-section-header">
+            <div class="monitoring-section-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="21.17" y1="8" x2="12" y2="8"/></svg>
+              Satellite Intelligence
+            </div>
+            <div style="display: flex; gap: var(--space-2); align-items: center;">
+              <span class="freshness-inline">
+                <span class="freshness-inline-dot delayed"></span>
+                Delayed — 4 hours ago
+              </span>
+              <span class="monitoring-section-badge">DEMO</span>
+            </div>
+          </div>
+          <div class="monitoring-section-body">
+            <div class="satellite-comparison">
+              <div class="satellite-layer before">
+                <span class="satellite-layer-label">BEFORE · T-7 DAYS</span>
+              </div>
+              <div class="satellite-layer after">
+                <span class="satellite-layer-label">AFTER · CURRENT</span>
+              </div>
+              <div class="satellite-slider-handle"></div>
+              <div class="satellite-demo-badge">DEMO TERRAIN VISUALIZATION</div>
+            </div>
+
+            <div class="satellite-alert" id="satelliteAlert" style="display: none;"></div>
+
+            <div class="satellite-indicators" id="satelliteIndicators"></div>
+
+            <div class="satellite-change-bars" id="satelliteChangeBars"></div>
+
+            <div style="margin-top: var(--space-4); display: flex; gap: var(--space-2); flex-wrap: wrap;">
+              <a href="risk-map.html" class="btn btn-primary">View on Risk Map →</a>
+              <button class="btn btn-outline">Download Report</button>
+            </div>
+
+            <div style="margin-top: var(--space-3); padding: var(--space-3); background: var(--watch-bg); border: 1px solid rgba(234, 179, 8, 0.25); border-radius: var(--radius-md); font-size: var(--fs-xs); color: var(--watch);">
+              <strong>Disclaimer:</strong> Illustrative Satellite Analysis — DEMO. These are not real satellite observations.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ TAB: HISTORICAL ============ -->
+      <div class="tab-content" data-content="historical">
+        <div class="historical-summary" id="historicalSummaryCards"></div>
+
+        <div class="monitoring-section">
+          <div class="monitoring-section-header">
+            <div class="monitoring-section-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Historical Landslide Explorer
+            </div>
+            <div style="display: flex; gap: var(--space-2); align-items: center;">
+              <span class="freshness-inline">
+                <span class="freshness-inline-dot fresh"></span>
+                Available — Updated yesterday
+              </span>
+              <span class="monitoring-section-badge">DEMO</span>
+            </div>
+          </div>
+          <div class="monitoring-section-body">
+            <div class="historical-charts-grid">
+              <div>
+                <div style="font-size: 10px; font-weight: 700; letter-spacing: 0.1em; color: var(--text-500); margin-bottom: var(--space-2); text-transform: uppercase;">Landslides by State</div>
+                <div class="chart-container medium"><canvas id="byStateChart"></canvas></div>
+              </div>
+              <div>
+                <div style="font-size: 10px; font-weight: 700; letter-spacing: 0.1em; color: var(--text-500); margin-bottom: var(--space-2); text-transform: uppercase;">Events by Year</div>
+                <div class="chart-container medium"><canvas id="byYearChart"></canvas></div>
+              </div>
+            </div>
+
+            <div style="margin-bottom: var(--space-5);">
+              <div style="font-size: 10px; font-weight: 700; letter-spacing: 0.1em; color: var(--text-500); margin-bottom: var(--space-2); text-transform: uppercase;">Seasonal Distribution</div>
+              <div class="chart-container medium" style="max-width: 400px; margin: 0 auto;"><canvas id="seasonalChart"></canvas></div>
+            </div>
+
+            <div style="font-size: 10px; font-weight: 700; letter-spacing: 0.1em; color: var(--text-500); margin-bottom: var(--space-2); text-transform: uppercase;">Event Locations</div>
+            <div class="historical-map-container">
+              <div id="historicalMap"></div>
+            </div>
+            <div class="historical-map-legend">
+              <div class="historical-map-legend-item"><span class="historical-map-legend-dot" style="background: var(--warning);"></span>Critical</div>
+              <div class="historical-map-legend-item"><span class="historical-map-legend-dot" style="background: var(--alert);"></span>High</div>
+              <div class="historical-map-legend-item"><span class="historical-map-legend-dot" style="background: var(--watch);"></span>Moderate</div>
+              <div class="historical-map-legend-item"><span class="historical-map-legend-dot" style="background: var(--safe);"></span>Low</div>
+            </div>
+            <div class="chart-caption">Synthetic demonstration dataset</div>
+          </div>
+        </div>
+
+        <!-- Historical Table -->
+        <div class="monitoring-section">
+          <div class="monitoring-section-header">
+            <div class="monitoring-section-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+              Event Database
+            </div>
+          </div>
+          <div class="monitoring-section-body">
+            <div class="historical-filters">
+              <input type="text" id="historicalSearch" placeholder="Search location, ID, state...">
+              <select id="historicalState">
+                <option value="all">All States</option>
+                <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                <option value="Assam">Assam</option>
+                <option value="Meghalaya">Meghalaya</option>
+                <option value="Sikkim">Sikkim</option>
+                <option value="Nagaland">Nagaland</option>
+                <option value="Manipur">Manipur</option>
+                <option value="Mizoram">Mizoram</option>
+                <option value="Tripura">Tripura</option>
+              </select>
+              <select id="historicalSeverity">
+                <option value="all">All Severity</option>
+                <option value="CRITICAL">Critical</option>
+                <option value="HIGH">High</option>
+                <option value="MODERATE">Moderate</option>
+                <option value="LOW">Low</option>
+              </select>
+              <select id="historicalYear">
+                <option value="all">All Years</option>
+                <option value="2025">2025</option>
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+                <option value="2021">2021</option>
+              </select>
+              <select id="historicalCause">
+                <option value="all">All Causes</option>
+                <option value="Heavy Rainfall">Heavy Rainfall</option>
+                <option value="Extreme Rainfall">Extreme Rainfall</option>
+                <option value="Prolonged Rainfall">Prolonged Rainfall</option>
+                <option value="Soil Saturation">Soil Saturation</option>
+                <option value="Rainfall + Steep Slope">Rainfall + Steep Slope</option>
+                <option value="Rainfall + Seismic">Rainfall + Seismic</option>
+                <option value="Moderate Rainfall">Moderate Rainfall</option>
+                <option value="Freeze-Thaw">Freeze-Thaw</option>
+              </select>
+            </div>
+
+            <div id="historicalEmpty" class="state-message" style="display: none;">
+              <div class="state-message-title">No historical events found</div>
+              <div class="state-message-sub">Try adjusting your filters.</div>
+            </div>
+
+            <div class="historical-table-wrap">
+              <table class="historical-table">
+                <thead>
+                  <tr>
+                    <th>Event ID</th>
+                    <th>Location</th>
+                    <th>State</th>
+                    <th>Date</th>
+                    <th>Severity</th>
+                    <th>Cause</th>
+                    <th>Damage</th>
+                    <th>Source</th>
+                  </tr>
+                </thead>
+                <tbody id="historicalTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Disclaimer Footer -->
+      <div style="margin-top: var(--space-6); padding: var(--space-4); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); text-align: center;">
+        <div style="font-size: var(--fs-xs); color: var(--text-600); line-height: 1.6; max-width: 720px; margin: 0 auto;">
+          <strong>Core Concept:</strong> ENVIRONMENT → CHANGE → HISTORY → RISK. Rainfall + Soil + Terrain + Satellite + Historical Events feed into the SAHAYAK risk intelligence system.
+        </div>
+        <div style="display: flex; justify-content: center; gap: var(--space-2); margin-top: var(--space-3); flex-wrap: wrap;">
+          <span class="demo-tag">SIH 2026 PROTOTYPE</span>
+          <span class="demo-tag">DEMO DATA</span>
+          <span class="demo-tag">ILLUSTRATIVE ENVIRONMENTAL ANALYSIS</span>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/monitoring.js"></script>
+</body>
+</html>

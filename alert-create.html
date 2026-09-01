@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generate Warning — SAHAYAK</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/landing.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/alerts.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body class="alert-create-page">
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-logo">
+          <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#19B8C7"/><stop offset="100%" stop-color="#0F9D8A"/></linearGradient></defs>
+            <path d="M20 3 L34 8 V20 C34 28 28 34 20 37 C12 34 6 28 6 20 V8 Z" fill="none" stroke="url(#logoGrad)" stroke-width="1.5"/>
+            <path d="M10 26 L16 16 L20 22 L24 14 L30 26 Z" fill="url(#logoGrad)" opacity="0.85"/>
+            <circle cx="24" cy="14" r="2" fill="#19B8C7"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">SAHAYAK</span>
+          <span class="brand-sub">NER Landslide Intelligence</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav" id="sidebarNav"></nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-status"><span class="status-dot"></span><span>System Operational</span></div>
+        <div class="sidebar-user">
+          <div class="user-avatar">AU</div>
+          <div class="user-info"><div class="user-name">Authority</div><div class="user-role">Administrator</div></div>
+        </div>
+      </div>
+    </aside>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <header class="top-header">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="header-title-wrap">
+        <h1 class="header-title">GENERATE EARLY WARNING</h1>
+        <div class="header-subtitle">Create an authority-reviewed warning from risk intelligence</div>
+      </div>
+      <div class="header-actions">
+        <div class="header-system-status"><span class="status-dot"></span><span>Operational</span></div>
+        <div style="position: relative;">
+          <button class="icon-btn" id="notificationBtn" aria-label="Notifications">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notification-badge" id="notificationBadge" style="display:none;">0</span>
+          </button>
+          <div class="notification-panel" id="notificationPanel">
+            <div class="notification-panel-header">
+              <div class="notification-panel-title">Notifications</div>
+            </div>
+            <div class="notification-list" id="notificationList"></div>
+          </div>
+        </div>
+        <button class="header-user"><div class="user-avatar">AU</div><span class="header-user-name">Authority</span></button>
+      </div>
+    </header>
+
+    <div class="status-bar">
+      <div class="status-bar-item"><span class="status-bar-label">Role</span><span class="status-bar-value">Authority</span></div>
+      <div class="status-bar-divider"></div>
+      <div class="status-bar-item"><span class="status-bar-label">Session</span><span class="status-bar-value" style="color: var(--watch);">Prototype Session</span></div>
+      <div class="status-bar-demo"><span class="demo-indicator"></span>SIH 2026 PROTOTYPE · DEMO DATA</div>
+    </div>
+
+    <main class="main-content">
+      <div class="page-header">
+        <div class="page-header-left">
+          <h2 class="page-title">GENERATE EARLY WARNING <span class="page-title-badge">AUTHORITY REVIEW</span></h2>
+          <p class="page-subtitle">Create an authority-reviewed warning from risk intelligence</p>
+          <div class="page-demo-strip">
+            <span class="demo-tag">SIH 2026 PROTOTYPE</span>
+            <span class="demo-tag">DEMO DATA</span>
+            <span class="demo-tag">NO REAL DELIVERY</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="create-grid">
+        <!-- Form Column -->
+        <div>
+          <!-- Location & Risk -->
+          <div class="form-section">
+            <div class="form-section-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Location & Risk Level
+            </div>
+            <div class="form-group">
+              <label class="form-label">Location <span class="required">*</span></label>
+              <select class="form-select" id="locationSelect"></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Risk Level <span class="required">*</span></label>
+              <div class="severity-radio-group">
+                <label class="severity-radio">
+                  <input type="radio" name="severity" value="watch">
+                  <span class="severity-radio-label safe"><span class="severity-dot"></span>WATCH</span>
+                </label>
+                <label class="severity-radio">
+                  <input type="radio" name="severity" value="alert">
+                  <span class="severity-radio-label watch"><span class="severity-dot"></span>ALERT</span>
+                </label>
+                <label class="severity-radio">
+                  <input type="radio" name="severity" value="warning" checked>
+                  <span class="severity-radio-label alert"><span class="severity-dot"></span>WARNING</span>
+                </label>
+                <label class="severity-radio">
+                  <input type="radio" name="severity" value="critical">
+                  <span class="severity-radio-label warning"><span class="severity-dot"></span>CRITICAL</span>
+                </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Risk Score</label>
+              <div style="font-size: var(--fs-xl); font-weight: 800; color: var(--text-900); font-family: 'SF Mono', Monaco, monospace;" id="riskScoreDisplay">84 / 100</div>
+              <div class="form-help">Auto-populated from selected location</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Affected Radius</label>
+              <div class="range-group">
+                <div class="range-display">
+                  <span>1 km</span>
+                  <span class="range-value" id="radiusValue">5 km</span>
+                  <span>10 km</span>
+                </div>
+                <input type="range" id="radiusSlider" min="1" max="10" value="5" step="1">
+              </div>
+            </div>
+          </div>
+
+          <!-- Reason & Action -->
+          <div class="form-section">
+            <div class="form-section-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              Warning Content
+            </div>
+            <div class="form-group">
+              <label class="form-label">Reason <span class="required">*</span></label>
+              <textarea class="form-textarea" id="reason" placeholder="Heavy rainfall, elevated soil moisture and steep terrain.">Heavy rainfall, elevated soil moisture and steep terrain.</textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Recommended Action</label>
+              <textarea class="form-textarea" id="action" placeholder="Increase local monitoring and prepare response teams.">Increase local monitoring and prepare response teams.</textarea>
+            </div>
+          </div>
+
+          <!-- Audience & Delivery -->
+          <div class="form-section">
+            <div class="form-section-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+              Audience & Delivery
+            </div>
+            <div class="form-group">
+              <label class="form-label">Target Audience</label>
+              <div class="checkbox-group">
+                <label class="checkbox-item"><input type="checkbox" name="audience" value="authority" checked> Disaster Authority</label>
+                <label class="checkbox-item"><input type="checkbox" name="audience" value="district" checked> District Officers</label>
+                <label class="checkbox-item"><input type="checkbox" name="audience" value="field"> Field Officers</label>
+                <label class="checkbox-item"><input type="checkbox" name="audience" value="local"> Local Administration</label>
+                <label class="checkbox-item"><input type="checkbox" name="audience" value="public"> Public</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Language</label>
+              <select class="form-select" id="language">
+                <option value="en">English</option>
+                <option value="hi">Hindi</option>
+                <option value="as">Assamese</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Delivery Channel</label>
+              <div class="checkbox-group">
+                <label class="checkbox-item"><input type="checkbox" name="channel" value="dashboard" checked> Dashboard</label>
+                <label class="checkbox-item"><input type="checkbox" name="channel" value="sms"> SMS — Demo</label>
+                <label class="checkbox-item"><input type="checkbox" name="channel" value="mobile"> Mobile Notification — Demo</label>
+                <label class="checkbox-item"><input type="checkbox" name="channel" value="public"> Public Notice — Demo</label>
+              </div>
+              <div class="form-help" style="color: var(--watch);">⚠ SMS, mobile and public notice channels are demonstration-only</div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div style="display: flex; gap: var(--space-3); flex-wrap: wrap;">
+            <button class="btn btn-outline" onclick="window.SahayakAlertCreate.saveDraft()">Save Draft</button>
+            <button class="btn btn-outline" onclick="window.SahayakAlertCreate.generateWarning()">Generate Warning</button>
+            <button class="btn btn-primary" onclick="window.SahayakAlertCreate.sendAlert()">Send Alert →</button>
+          </div>
+        </div>
+
+        <!-- Preview Column -->
+        <div>
+          <div class="warning-preview">
+            <div class="warning-preview-header">
+              <div class="warning-preview-title">Warning Preview</div>
+              <span class="warning-preview-badge">LIVE PREVIEW</span>
+            </div>
+            <div class="warning-preview-body">
+              <div class="warning-preview-card">
+                <div class="warning-preview-icon" id="previewIcon">🔴</div>
+                <div class="warning-preview-label">LANDSLIDE RISK WARNING</div>
+                <div class="warning-preview-location" id="previewLocation">[Location]</div>
+                <div class="warning-preview-row">
+                  <span class="warning-preview-row-label">Risk Level</span>
+                  <span class="warning-preview-row-value" id="previewSeverity" class="detail-risk-level warning">WARNING</span>
+                </div>
+                <div class="warning-preview-row">
+                  <span class="warning-preview-row-label">Risk Score</span>
+                  <span class="warning-preview-row-value" id="previewRisk">84 / 100</span>
+                </div>
+                <div class="warning-preview-row">
+                  <span class="warning-preview-row-label">Affected Radius</span>
+                  <span class="warning-preview-row-value" id="previewRadius">5 km</span>
+                </div>
+                <div class="warning-preview-section">
+                  <div class="warning-preview-section-label">Reason</div>
+                  <div class="warning-preview-section-text" id="previewReason">Heavy rainfall, elevated soil moisture and steep terrain.</div>
+                </div>
+                <div class="warning-preview-section">
+                  <div class="warning-preview-section-label">Recommended Action</div>
+                  <div class="warning-preview-section-text" id="previewAction">Increase local monitoring and prepare response teams.</div>
+                </div>
+                <div class="warning-preview-row" style="margin-top: var(--space-3);">
+                  <span class="warning-preview-row-label">Audience</span>
+                  <span class="warning-preview-row-value" id="previewAudience">2 group(s)</span>
+                </div>
+                <div class="warning-preview-row">
+                  <span class="warning-preview-row-label">Channels</span>
+                  <span class="warning-preview-row-value" id="previewChannels">1 channel(s)</span>
+                </div>
+                <div class="warning-preview-footer">
+                  SAHAYAK · SIH 2026 PROTOTYPE
+                </div>
+              </div>
+            </div>
+            <div class="warning-preview-actions">
+              <button class="btn btn-outline" onclick="window.SahayakAlertCreate.saveDraft()">Save Draft</button>
+              <button class="btn btn-primary" onclick="window.SahayakAlertCreate.sendAlert()">Send Alert →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/alert-create.js"></script>
+</body>
+</html>

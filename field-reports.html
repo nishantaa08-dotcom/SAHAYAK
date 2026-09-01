@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Field Intelligence Center — SAHAYAK</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/landing.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/alerts.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body class="field-reports-page">
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-logo">
+          <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#19B8C7"/><stop offset="100%" stop-color="#0F9D8A"/></linearGradient></defs>
+            <path d="M20 3 L34 8 V20 C34 28 28 34 20 37 C12 34 6 28 6 20 V8 Z" fill="none" stroke="url(#logoGrad)" stroke-width="1.5"/>
+            <path d="M10 26 L16 16 L20 22 L24 14 L30 26 Z" fill="url(#logoGrad)" opacity="0.85"/>
+            <circle cx="24" cy="14" r="2" fill="#19B8C7"/>
+          </svg>
+        </div>
+        <div class="brand-text"><span class="brand-name">SAHAYAK</span><span class="brand-sub">NER Landslide Intelligence</span></div>
+      </div>
+      <nav class="sidebar-nav" id="sidebarNav"></nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-status"><span class="status-dot"></span><span>System Operational</span></div>
+        <div class="sidebar-user"><div class="user-avatar">FO</div><div class="user-info"><div class="user-name">Field Officer</div><div class="user-role">Reporter</div></div></div>
+      </div>
+    </aside>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <header class="top-header">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="header-title-wrap">
+        <h1 class="header-title">FIELD INTELLIGENCE CENTER</h1>
+        <div class="header-subtitle">Ground observations, incident reports and verification status</div>
+      </div>
+      <div class="header-actions">
+        <div class="header-system-status"><span class="status-dot"></span><span>Operational</span></div>
+        <div style="position: relative;">
+          <button class="icon-btn" id="notificationBtn" aria-label="Notifications">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notification-badge" id="notificationBadge" style="display:none;">0</span>
+          </button>
+          <div class="notification-panel" id="notificationPanel">
+            <div class="notification-panel-header">
+              <div class="notification-panel-title">Notifications</div>
+              <span class="notification-mark-read" onclick="window.SahayakFieldReports.markAllNotificationsRead()">Mark all read</span>
+            </div>
+            <div class="notification-list" id="notificationList"></div>
+          </div>
+        </div>
+        <button class="header-user"><div class="user-avatar">FO</div><span class="header-user-name">Field Officer</span></button>
+      </div>
+    </header>
+
+    <div class="status-bar">
+      <div class="status-bar-item"><span class="status-bar-label">Role</span><span class="status-bar-value">Field Officer</span></div>
+      <div class="status-bar-divider"></div>
+      <div class="status-bar-item"><span class="status-bar-label">Session</span><span class="status-bar-value" style="color: var(--watch);">Prototype Session</span></div>
+      <div class="status-bar-demo"><span class="demo-indicator"></span>SIH 2026 PROTOTYPE · DEMO DATA</div>
+    </div>
+
+    <main class="main-content">
+      <div class="page-header">
+        <div class="page-header-left">
+          <h2 class="page-title">FIELD INTELLIGENCE CENTER <span class="page-title-badge">GROUND TRUTH</span></h2>
+          <p class="page-subtitle">Ground observations, incident reports and verification status</p>
+          <div class="page-demo-strip">
+            <span class="demo-tag">SIH 2026 PROTOTYPE</span>
+            <span class="demo-tag">DEMO DATA</span>
+            <span class="demo-tag">SYNTHETIC WORKFLOW</span>
+          </div>
+        </div>
+        <a href="field-report-new.html" class="btn btn-primary">+ Create Field Report</a>
+      </div>
+
+      <!-- Summary -->
+      <div class="summary-grid">
+        <div class="summary-card total">
+          <div class="summary-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <div class="summary-card-value" id="summaryTotal">0</div>
+          <div class="summary-card-label">Total Reports</div>
+        </div>
+        <div class="summary-card high">
+          <div class="summary-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+          <div class="summary-card-value" id="summaryPending">0</div>
+          <div class="summary-card-label">Pending Verification</div>
+        </div>
+        <div class="summary-card resolved">
+          <div class="summary-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+          <div class="summary-card-value" id="summaryVerified">0</div>
+          <div class="summary-card-label">Verified</div>
+        </div>
+        <div class="summary-card critical">
+          <div class="summary-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+          <div class="summary-card-value" id="summaryCritical">0</div>
+          <div class="summary-card-label">Critical Reports</div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs" id="reportsTabs"></div>
+
+      <!-- Filters -->
+      <div class="filter-bar">
+        <div class="filter-search">
+          <svg class="filter-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="reportSearch" placeholder="Search location, officer, report ID...">
+        </div>
+        <select class="filter-select" id="reportSeverity">
+          <option value="all">All Severity</option>
+          <option value="LOW">Low</option>
+          <option value="MEDIUM">Medium</option>
+          <option value="HIGH">High</option>
+          <option value="CRITICAL">Critical</option>
+        </select>
+        <select class="filter-select" id="reportState">
+          <option value="all">All States</option>
+          <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+          <option value="Assam">Assam</option>
+          <option value="Meghalaya">Meghalaya</option>
+          <option value="Sikkim">Sikkim</option>
+          <option value="Nagaland">Nagaland</option>
+          <option value="Manipur">Manipur</option>
+          <option value="Mizoram">Mizoram</option>
+          <option value="Tripura">Tripura</option>
+        </select>
+        <select class="filter-select" id="reportType">
+          <option value="all">All Types</option>
+          <option value="Landslide">Landslide</option>
+          <option value="Road Crack">Road Crack</option>
+          <option value="Soil Movement">Soil Movement</option>
+          <option value="Rockfall">Rockfall</option>
+          <option value="Water Seepage">Water Seepage</option>
+          <option value="Blocked Road">Blocked Road</option>
+          <option value="Inspection">Inspection</option>
+          <option value="Other">Other</option>
+        </select>
+        <button class="filter-reset" id="filterReset">Reset</button>
+      </div>
+
+      <!-- Loading -->
+      <div id="reportsLoading" class="state-message" style="display: none;">
+        <div class="loading-spinner"></div>
+        <div class="state-message-title">Loading reports...</div>
+      </div>
+
+      <!-- Empty -->
+      <div id="reportsEmpty" class="state-message" style="display: none;">
+        <div class="state-message-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg></div>
+        <div class="state-message-title">No field reports match the selected filters</div>
+      </div>
+
+      <!-- Main Layout -->
+      <div class="reports-layout">
+        <!-- Reports List -->
+        <div class="reports-list" id="reportsList"></div>
+
+        <!-- Right Column -->
+        <div class="reports-side">
+          <!-- Offline Status -->
+          <div class="side-card">
+            <div class="side-card-body">
+              <div class="offline-status" id="offlineStatus">
+                <span class="offline-status-dot"></span>
+                <span>ONLINE</span>
+              </div>
+              <div style="margin-top: var(--space-3); display: flex; gap: var(--space-2);">
+                <button class="btn btn-outline" style="flex: 1;" onclick="window.SahayakFieldReports.toggleOffline()">Toggle Offline</button>
+                <button class="btn btn-primary" style="flex: 1;" onclick="window.SahayakFieldReports.syncNow()">Sync Now</button>
+              </div>
+              <div id="syncQueueContainer" class="sync-queue" style="display: none;">
+                <div class="sync-queue-title">Synchronization Queue · <span id="syncQueueCount">0</span></div>
+                <div class="sync-queue-list" id="syncQueueList"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Map -->
+          <div class="side-card">
+            <div class="side-card-header">
+              <div class="side-card-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/></svg>
+                Field Reports Map
+              </div>
+            </div>
+            <div class="field-map-container">
+              <div id="fieldReportsMap"></div>
+            </div>
+            <div class="field-map-legend">
+              <div class="field-map-legend-item"><span class="field-map-legend-dot" style="background: var(--watch);"></span>Pending</div>
+              <div class="field-map-legend-item"><span class="field-map-legend-dot" style="background: var(--safe);"></span>Verified</div>
+              <div class="field-map-legend-item"><span class="field-map-legend-dot" style="background: var(--warning);"></span>Rejected</div>
+            </div>
+          </div>
+
+          <!-- Activity Feed -->
+          <div class="side-card">
+            <div class="side-card-header">
+              <div class="side-card-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Recent Field Activity
+              </div>
+            </div>
+            <div class="side-card-body">
+              <div class="activity-feed" id="activityFeed"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Detail Panel -->
+  <div class="detail-panel-overlay" id="detailPanelOverlay"></div>
+  <div class="detail-panel" id="reportDetailPanel"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/field-reports.js"></script>
+</body>
+</html>

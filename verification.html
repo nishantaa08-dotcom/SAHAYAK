@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SAHAYAK Verification Center — Validate AI predictions using field observations">
+  <title>Verification Center — SAHAYAK</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/landing.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/alerts.css">
+  <link rel="stylesheet" href="css/verification.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body class="verification-page">
+  <div class="app-shell">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-logo">
+          <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#19B8C7"/><stop offset="100%" stop-color="#0F9D8A"/></linearGradient></defs>
+            <path d="M20 3 L34 8 V20 C34 28 28 34 20 37 C12 34 6 28 6 20 V8 Z" fill="none" stroke="url(#logoGrad)" stroke-width="1.5"/>
+            <path d="M10 26 L16 16 L20 22 L24 14 L30 26 Z" fill="url(#logoGrad)" opacity="0.85"/>
+            <circle cx="24" cy="14" r="2" fill="#19B8C7"/>
+          </svg>
+        </div>
+        <div class="brand-text"><span class="brand-name">SAHAYAK</span><span class="brand-sub">NER Landslide Intelligence</span></div>
+      </div>
+      <nav class="sidebar-nav" id="sidebarNav"></nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-status"><span class="status-dot"></span><span>System Operational</span></div>
+        <div class="sidebar-user">
+          <div class="user-avatar">AU</div>
+          <div class="user-info"><div class="user-name">Authority</div><div class="user-role">Administrator</div></div>
+        </div>
+      </div>
+    </aside>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- TOP HEADER -->
+    <header class="top-header">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="header-title-wrap">
+        <h1 class="header-title">VERIFICATION CENTER</h1>
+        <div class="header-subtitle">Validate AI predictions using ground-level field observations</div>
+      </div>
+      <div class="header-actions">
+        <div class="header-system-status"><span class="status-dot"></span><span>Operational</span></div>
+        <div style="position: relative;">
+          <button class="icon-btn" id="notificationBtn" aria-label="Notifications">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notification-badge" id="notificationBadge" style="display:none;">0</span>
+          </button>
+          <div class="notification-panel" id="notificationPanel">
+            <div class="notification-panel-header">
+              <div class="notification-panel-title">Notifications</div>
+              <span class="notification-mark-read" onclick="window.SahayakVerification.markAllNotificationsRead()">Mark all read</span>
+            </div>
+            <div class="notification-list" id="notificationList"></div>
+          </div>
+        </div>
+        <select class="lang-selector" aria-label="Language">
+          <option>EN</option><option>HI</option><option>BN</option><option>AS</option>
+        </select>
+        <button class="header-user">
+          <div class="user-avatar">AU</div>
+          <span class="header-user-name">Authority</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- STATUS BAR -->
+    <div class="status-bar">
+      <div class="status-bar-item"><span class="status-bar-label">Role</span><span class="status-bar-value">Authority</span></div>
+      <div class="status-bar-divider"></div>
+      <div class="status-bar-item"><span class="status-bar-label">Session</span><span class="status-bar-value" style="color: var(--watch);">Prototype Session</span></div>
+      <div class="status-bar-divider"></div>
+      <div class="status-bar-item"><span class="status-bar-label">Verification Mode</span><span class="status-bar-value">Human-in-the-Loop</span></div>
+      <div class="status-bar-demo"><span class="demo-indicator"></span>SIH 2026 PROTOTYPE · DEMO DATA</div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <!-- Page Header -->
+      <div class="page-header">
+        <div class="page-header-left">
+          <h2 class="page-title">
+            VERIFICATION CENTER
+            <span class="page-title-badge">HUMAN-IN-THE-LOOP</span>
+          </h2>
+          <p class="page-subtitle">Validate AI predictions using ground-level field observations</p>
+          <div class="page-demo-strip">
+            <span class="demo-tag">SIH 2026 PROTOTYPE</span>
+            <span class="demo-tag">DEMO DATA</span>
+            <span class="demo-tag">AI PREDICTS → HUMAN VERIFIES → SYSTEM LEARNS</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="verification-summary">
+        <div class="verification-summary-card pending">
+          <div class="verification-summary-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div class="verification-summary-value" id="summaryPending">0</div>
+          <div class="verification-summary-label">Pending Verification</div>
+        </div>
+        <div class="verification-summary-card verified">
+          <div class="verification-summary-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <div class="verification-summary-value" id="summaryVerified">0</div>
+          <div class="verification-summary-label">Verified</div>
+        </div>
+        <div class="verification-summary-card rejected">
+          <div class="verification-summary-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+          </div>
+          <div class="verification-summary-value" id="summaryRejected">0</div>
+          <div class="verification-summary-label">Rejected</div>
+        </div>
+        <div class="verification-summary-card inspection">
+          <div class="verification-summary-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <div class="verification-summary-value" id="summaryInspection">0</div>
+          <div class="verification-summary-label">Inspections Requested</div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs" id="verificationTabs"></div>
+
+      <!-- Filters -->
+      <div class="filter-bar">
+        <div class="filter-search">
+          <svg class="filter-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="verificationSearch" placeholder="Search location, officer, report ID...">
+        </div>
+        <select class="filter-select" id="verificationState">
+          <option value="all">All States</option>
+          <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+          <option value="Assam">Assam</option>
+          <option value="Meghalaya">Meghalaya</option>
+          <option value="Sikkim">Sikkim</option>
+          <option value="Nagaland">Nagaland</option>
+          <option value="Manipur">Manipur</option>
+          <option value="Mizoram">Mizoram</option>
+          <option value="Tripura">Tripura</option>
+        </select>
+        <select class="filter-select" id="verificationRisk">
+          <option value="all">All Risk Levels</option>
+          <option value="warning">Warning</option>
+          <option value="alert">Alert</option>
+          <option value="watch">Watch</option>
+        </select>
+        <button class="filter-reset" id="verificationReset">Reset</button>
+      </div>
+
+      <!-- Loading -->
+      <div id="verificationLoading" class="state-message" style="display: none;">
+        <div class="loading-spinner"></div>
+        <div class="state-message-title">Loading verification data...</div>
+      </div>
+
+      <!-- Empty -->
+      <div id="verificationEmpty" class="state-message" style="display: none;">
+        <div class="state-message-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <div class="state-message-title">No verification items match the filters</div>
+        <div class="state-message-sub">All predictions have been processed.</div>
+      </div>
+
+      <!-- Main Layout -->
+      <div class="verification-layout">
+        <!-- Verification List -->
+        <div class="verification-list" id="verificationList"></div>
+
+        <!-- Right Column -->
+        <div class="verification-side">
+          <!-- Map -->
+          <div class="side-card">
+            <div class="side-card-header">
+              <div class="side-card-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/></svg>
+                Verification Map
+              </div>
+            </div>
+            <div class="verification-map-container">
+              <div id="verificationMap"></div>
+            </div>
+            <div class="verification-map-legend">
+              <div class="verification-map-legend-item"><span class="verification-map-legend-dot" style="background: var(--watch);"></span>Pending</div>
+              <div class="verification-map-legend-item"><span class="verification-map-legend-dot" style="background: var(--safe);"></span>Verified</div>
+              <div class="verification-map-legend-item"><span class="verification-map-legend-dot" style="background: var(--warning);"></span>Rejected</div>
+              <div class="verification-map-legend-item"><span class="verification-map-legend-dot" style="background: var(--alert);"></span>Inspection</div>
+            </div>
+          </div>
+
+          <!-- Recent Verifications -->
+          <div class="side-card">
+            <div class="side-card-header">
+              <div class="side-card-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Recent Verifications
+              </div>
+            </div>
+            <div class="side-card-body">
+              <div class="recent-feed" id="recentFeed"></div>
+            </div>
+          </div>
+
+          <!-- Workflow Info -->
+          <div class="side-card">
+            <div class="side-card-header">
+              <div class="side-card-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                Verification Workflow
+              </div>
+            </div>
+            <div class="side-card-body" style="font-size: var(--fs-xs); color: var(--text-600); line-height: 1.7;">
+              <div style="display: flex; flex-direction: column; gap: var(--space-2);">
+                <div style="display: flex; align-items: center; gap: var(--space-2);">
+                  <span style="width: 20px; height: 20px; background: var(--teal); color: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0;">1</span>
+                  <span>AI generates risk prediction</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: var(--space-2);">
+                  <span style="width: 20px; height: 20px; background: var(--teal); color: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0;">2</span>
+                  <span>Field officer assigned & investigates</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: var(--space-2);">
+                  <span style="width: 20px; height: 20px; background: var(--teal); color: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0;">3</span>
+                  <span>Field report submitted with evidence</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: var(--space-2);">
+                  <span style="width: 20px; height: 20px; background: var(--teal); color: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0;">4</span>
+                  <span>Authority verifies AI vs field</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: var(--space-2);">
+                  <span style="width: 20px; height: 20px; background: var(--teal); color: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0;">5</span>
+                  <span>System learns from verification</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Disclaimer -->
+      <div style="margin-top: var(--space-6); padding: var(--space-4); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); text-align: center;">
+        <div style="font-size: var(--fs-xs); color: var(--text-600); line-height: 1.6; max-width: 720px; margin: 0 auto;">
+          <strong>Core Concept:</strong> AI PREDICTS → HUMAN VERIFIES → SYSTEM LEARNS. This prototype demonstrates a human-in-the-loop verification workflow using synthetic data. All verification decisions are illustrative.
+        </div>
+        <div style="display: flex; justify-content: center; gap: var(--space-2); margin-top: var(--space-3); flex-wrap: wrap;">
+          <span class="demo-tag">SIH 2026 PROTOTYPE</span>
+          <span class="demo-tag">DEMO DATA</span>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Detail Panel Overlay -->
+  <div class="verification-detail-overlay" id="verificationDetailOverlay"></div>
+
+  <!-- Detail Panel -->
+  <div class="verification-detail-panel" id="verificationDetailPanel"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/verification.js"></script>
+</body>
+</html>

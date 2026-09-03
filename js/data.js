@@ -2057,7 +2057,175 @@ routeActivity: [
     { type: 'action', icon: '🔄', title: 'Alternative route suggested', location: 'Gangtok → Guwahati', time: '1 hr ago' },
     { type: 'success', icon: '✓', title: 'Route verified safe', location: 'Shillong → Guwahati', time: '2 hr ago' }
 ]
-}
+},
+// ===== USERS & ROLES DATA =====
+roles: [
+  {
+    id: 'super_admin', name: 'Super Admin',
+    description: 'Full system access',
+    color: '#6366F1',
+    permissions: ['all'],
+    userCount: 2
+  },
+  {
+    id: 'disaster_authority', name: 'Disaster Authority',
+    description: 'Alerts, risk analysis, infrastructure, reports',
+    color: '#0F9D8A',
+    permissions: ['dashboard', 'riskMap', 'riskAnalysis', 'alerts', 'fieldReports', 'verification', 'monitoring', 'infrastructure', 'simulator'],
+    userCount: 5
+  },
+  {
+    id: 'district_officer', name: 'District Officer',
+    description: 'District monitoring and response',
+    color: '#19B8C7',
+    permissions: ['dashboard', 'riskMap', 'riskAnalysis', 'alerts', 'fieldReports', 'verification'],
+    userCount: 8
+  },
+  {
+    id: 'field_officer', name: 'Field Officer',
+    description: 'Field reports, GPS, verification',
+    color: '#F97316',
+    permissions: ['riskMap', 'fieldReports', 'verification'],
+    userCount: 18
+  },
+  {
+    id: 'analyst', name: 'Analyst',
+    description: 'Analytics, AI model and environmental data',
+    color: '#8B5CF6',
+    permissions: ['dashboard', 'riskAnalysis', 'monitoring', 'simulator'],
+    userCount: 7
+  },
+  {
+    id: 'citizen', name: 'Citizen',
+    description: 'Hazard reporting only',
+    color: '#64748B',
+    permissions: ['fieldReports'],
+    userCount: 8
+  }
+],
+
+permissionLabels: {
+  all: 'All Access',
+  dashboard: 'Dashboard',
+  riskMap: 'Risk Map',
+  riskAnalysis: 'Risk Analysis',
+  alerts: 'Alerts',
+  fieldReports: 'Field Reports',
+  verification: 'Verification',
+  monitoring: 'Monitoring',
+  infrastructure: 'Infrastructure',
+  simulator: 'Simulator'
+},
+
+users: [
+  {
+    id: 'USR-001', name: 'Demo Authority', email: 'authority@sahayak.demo',
+    role: 'super_admin', region: 'Northeast India', district: 'All',
+    status: 'active', lastActive: '2 min ago', lastActiveTs: Date.now() - 2*60*1000,
+    incidents: 12, phone: '+91 98XXX XXX01'
+  },
+  {
+    id: 'USR-002', name: 'Rahul Singh', email: 'r.singh@sahayak.demo',
+    role: 'field_officer', region: 'Arunachal Pradesh', district: 'Tawang',
+    status: 'active', lastActive: '8 min ago', lastActiveTs: Date.now() - 8*60*1000,
+    incidents: 24, phone: '+91 98XXX XXX02'
+  },
+  {
+    id: 'USR-003', name: 'Priya Sharma', email: 'p.sharma@sahayak.demo',
+    role: 'district_officer', region: 'Arunachal Pradesh', district: 'East Siang',
+    status: 'active', lastActive: '21 min ago', lastActiveTs: Date.now() - 21*60*1000,
+    incidents: 18, phone: '+91 98XXX XXX03'
+  },
+  {
+    id: 'USR-004', name: 'Amit Das', email: 'a.das@sahayak.demo',
+    role: 'field_officer', region: 'Arunachal Pradesh', district: 'East Siang',
+    status: 'active', lastActive: '34 min ago', lastActiveTs: Date.now() - 34*60*1000,
+    incidents: 15, phone: '+91 98XXX XXX04'
+  },
+  {
+    id: 'USR-005', name: 'Neha Singh', email: 'n.singh@sahayak.demo',
+    role: 'analyst', region: 'Northeast India', district: 'All',
+    status: 'active', lastActive: '1 hr ago', lastActiveTs: Date.now() - 60*60*1000,
+    incidents: 8, phone: '+91 98XXX XXX05'
+  },
+  {
+    id: 'USR-006', name: 'Lhuntlempui Guite', email: 'l.guite@sahayak.demo',
+    role: 'field_officer', region: 'Manipur', district: 'Churachandpur',
+    status: 'active', lastActive: '42 min ago', lastActiveTs: Date.now() - 42*60*1000,
+    incidents: 21, phone: '+91 98XXX XXX06'
+  },
+  {
+    id: 'USR-007', name: 'Pynshai Lyngdoh', email: 'p.lyngdoh@sahayak.demo',
+    role: 'field_officer', region: 'Meghalaya', district: 'West Khasi Hills',
+    status: 'active', lastActive: '1 hr ago', lastActiveTs: Date.now() - 60*60*1000,
+    incidents: 16, phone: '+91 98XXX XXX07'
+  },
+  {
+    id: 'USR-008', name: 'Tenzin Bhutia', email: 't.bhutia@sahayak.demo',
+    role: 'field_officer', region: 'Sikkim', district: 'Gangtok',
+    status: 'active', lastActive: '2 hr ago', lastActiveTs: Date.now() - 2*60*60*1000,
+    incidents: 11, phone: '+91 98XXX XXX08'
+  },
+  {
+    id: 'USR-009', name: 'Atemjen Kikon', email: 'a.kikon@sahayak.demo',
+    role: 'district_officer', region: 'Nagaland', district: 'Kohima',
+    status: 'active', lastActive: '3 hr ago', lastActiveTs: Date.now() - 3*60*60*1000,
+    incidents: 9, phone: '+91 98XXX XXX09'
+  },
+  {
+    id: 'USR-010', name: 'Kamal Bora', email: 'k.bora@sahayak.demo',
+    role: 'field_officer', region: 'Arunachal Pradesh', district: 'West Siang',
+    status: 'inactive', lastActive: '2 days ago', lastActiveTs: Date.now() - 2*24*60*60*1000,
+    incidents: 14, phone: '+91 98XXX XXX10'
+  },
+  {
+    id: 'USR-011', name: 'Sunita Chhetri', email: 's.chhetri@sahayak.demo',
+    role: 'analyst', region: 'Arunachal Pradesh', district: 'Upper Subansiri',
+    status: 'active', lastActive: '4 hr ago', lastActiveTs: Date.now() - 4*60*60*1000,
+    incidents: 6, phone: '+91 98XXX XXX11'
+  },
+  {
+    id: 'USR-012', name: 'Rajib Hazarika', email: 'r.hazarika@sahayak.demo',
+    role: 'district_officer', region: 'Assam', district: 'Dima Hasao',
+    status: 'active', lastActive: '5 hr ago', lastActiveTs: Date.now() - 5*60*60*1000,
+    incidents: 13, phone: '+91 98XXX XXX12'
+  },
+  {
+    id: 'USR-013', name: 'Mangteitluangi', email: 'm.zo@sahayak.demo',
+    role: 'field_officer', region: 'Mizoram', district: 'Aizawl',
+    status: 'active', lastActive: '6 hr ago', lastActiveTs: Date.now() - 6*60*60*1000,
+    incidents: 10, phone: '+91 98XXX XXX13'
+  },
+  {
+    id: 'USR-014', name: 'Thangjam Meitei', email: 't.meitei@sahayak.demo',
+    role: 'citizen', region: 'Manipur', district: 'Imphal',
+    status: 'active', lastActive: '8 hr ago', lastActiveTs: Date.now() - 8*60*60*1000,
+    incidents: 3, phone: '+91 98XXX XXX14'
+  },
+  {
+    id: 'USR-015', name: 'Debashis Roy', email: 'd.roy@sahayak.demo',
+    role: 'citizen', region: 'Tripura', district: 'Agartala',
+    status: 'inactive', lastActive: '5 days ago', lastActiveTs: Date.now() - 5*24*60*60*1000,
+    incidents: 2, phone: '+91 98XXX XXX15'
+  },
+  {
+    id: 'USR-016', name: 'Sonam Dorjee', email: 's.dorjee@sahayak.demo',
+    role: 'disaster_authority', region: 'Sikkim', district: 'All',
+    status: 'active', lastActive: '30 min ago', lastActiveTs: Date.now() - 30*60*1000,
+    incidents: 17, phone: '+91 98XXX XXX16'
+  }
+],
+
+userActivity: [
+  { userId: 'USR-002', action: 'submitted field report', location: 'Tawang', timestamp: '8 min ago', type: 'report' },
+  { userId: 'USR-003', action: 'reviewed alert', location: 'East Siang', timestamp: '21 min ago', type: 'alert' },
+  { userId: 'USR-001', action: 'generated warning', location: 'Churachandpur', timestamp: '34 min ago', type: 'warning' },
+  { userId: 'USR-006', action: 'verified prediction', location: 'Churachandpur', timestamp: '42 min ago', type: 'verification' },
+  { userId: 'USR-007', action: 'submitted field report', location: 'West Khasi Hills', timestamp: '1 hr ago', type: 'report' },
+  { userId: 'USR-005', action: 'analyzed risk trend', location: 'Arunachal Pradesh', timestamp: '1 hr ago', type: 'analysis' },
+  { userId: 'USR-008', action: 'requested inspection', location: 'Gangtok', timestamp: '2 hr ago', type: 'verification' },
+  { userId: 'USR-016', action: 'assigned field officer', location: 'Sikkim', timestamp: '30 min ago', type: 'assignment' }
+]
 };
 
 if (typeof window !== 'undefined') {

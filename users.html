@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SAHAYAK Users & Roles — Manage platform users and access levels">
+  <title>Users & Roles — SAHAYAK</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/landing.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/users.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body class="users-page">
+  <div class="app-shell">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-logo">
+          <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#19B8C7"/><stop offset="100%" stop-color="#0F9D8A"/></linearGradient></defs>
+            <path d="M20 3 L34 8 V20 C34 28 28 34 20 37 C12 34 6 28 6 20 V8 Z" fill="none" stroke="url(#logoGrad)" stroke-width="1.5"/>
+            <path d="M10 26 L16 16 L20 22 L24 14 L30 26 Z" fill="url(#logoGrad)" opacity="0.85"/>
+            <circle cx="24" cy="14" r="2" fill="#19B8C7"/>
+          </svg>
+        </div>
+        <div class="brand-text"><span class="brand-name">SAHAYAK</span><span class="brand-sub">NER Landslide Intelligence</span></div>
+      </div>
+      <nav class="sidebar-nav" id="sidebarNav"></nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-status"><span class="status-dot"></span><span>System Operational</span></div>
+        <div class="sidebar-user">
+          <div class="user-avatar">AU</div>
+          <div class="user-info"><div class="user-name">Authority</div><div class="user-role">Administrator</div></div>
+        </div>
+      </div>
+    </aside>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- TOP HEADER -->
+    <header class="top-header">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="header-title-wrap">
+        <h1 class="header-title">USERS & ROLES</h1>
+        <div class="header-subtitle">Manage platform users, responsibilities and access levels</div>
+      </div>
+      <div class="header-actions">
+        <div class="header-system-status"><span class="status-dot"></span><span>Operational</span></div>
+        <div style="position: relative;">
+          <button class="icon-btn" id="notificationBtn" aria-label="Notifications">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notification-badge" id="notificationBadge" style="display:none;">0</span>
+          </button>
+          <div class="notification-panel" id="notificationPanel">
+            <div class="notification-panel-header">
+              <div class="notification-panel-title">Notifications</div>
+              <span class="notification-mark-read" onclick="window.SahayakUsers.markAllNotificationsRead()">Mark all read</span>
+            </div>
+            <div class="notification-list" id="notificationList"></div>
+          </div>
+        </div>
+        <select class="lang-selector" aria-label="Language">
+          <option>EN</option><option>HI</option><option>BN</option><option>AS</option>
+        </select>
+        <button class="header-user">
+          <div class="user-avatar">AU</div>
+          <span class="header-user-name">Authority</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- STATUS BAR -->
+    <div class="status-bar">
+      <div class="status-bar-item"><span class="status-bar-label">Role</span><span class="status-bar-value">Super Admin</span></div>
+      <div class="status-bar-divider"></div>
+      <div class="status-bar-item"><span class="status-bar-label">Session</span><span class="status-bar-value" style="color: var(--watch);">Prototype Session</span></div>
+      <div class="status-bar-divider"></div>
+      <div class="status-bar-item"><span class="status-bar-label">Environment</span><span class="status-bar-value">DEMO</span></div>
+      <div class="status-bar-demo"><span class="demo-indicator"></span>SIH 2026 PROTOTYPE · DEMO DATA</div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <!-- Page Header -->
+      <div class="page-header">
+        <div class="page-header-left">
+          <h2 class="page-title">
+            USERS & ROLES
+            <span class="page-title-badge">ACCESS CONTROL</span>
+          </h2>
+          <p class="page-subtitle">Manage platform users, responsibilities and access levels</p>
+          <div class="page-demo-strip">
+            <span class="demo-tag">SIH 2026 PROTOTYPE</span>
+            <span class="demo-tag">DEMO DATA</span>
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="window.SahayakUsers.openAddModal()">+ Add User</button>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="users-summary">
+        <div class="users-summary-card total">
+          <div class="users-summary-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div class="users-summary-value" id="summaryTotal">0</div>
+          <div class="users-summary-label">Total Users</div>
+        </div>
+        <div class="users-summary-card active">
+          <div class="users-summary-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <div class="users-summary-value" id="summaryActive">0</div>
+          <div class="users-summary-label">Active</div>
+        </div>
+        <div class="users-summary-card field">
+          <div class="users-summary-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="users-summary-value" id="summaryField">0</div>
+          <div class="users-summary-label">Field Officers</div>
+        </div>
+        <div class="users-summary-card admin">
+          <div class="users-summary-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div class="users-summary-value" id="summaryAdmin">0</div>
+          <div class="users-summary-label">Administrators</div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="filter-bar" style="margin-bottom: var(--space-4);">
+        <div class="filter-search">
+          <svg class="filter-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="userSearch" placeholder="Search name, email, district...">
+        </div>
+        <select class="filter-select" id="userRoleFilter">
+          <option value="all">All Roles</option>
+          <option value="super_admin">Super Admin</option>
+          <option value="disaster_authority">Disaster Authority</option>
+          <option value="district_officer">District Officer</option>
+          <option value="field_officer">Field Officer</option>
+          <option value="analyst">Analyst</option>
+          <option value="citizen">Citizen</option>
+        </select>
+        <select class="filter-select" id="userDistrictFilter">
+          <option value="all">All Districts</option>
+        </select>
+        <select class="filter-select" id="userStatusFilter">
+          <option value="all">All Status</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+          <option value="suspended">Suspended</option>
+        </select>
+        <button class="filter-reset" id="usersFilterReset">Reset</button>
+      </div>
+
+      <!-- Loading -->
+      <div id="usersLoading" class="state-message" style="display: none;">
+        <div class="loading-spinner"></div>
+        <div class="state-message-title">Loading users...</div>
+      </div>
+
+      <!-- Main Layout -->
+      <div class="users-layout">
+        <!-- Users Table -->
+        <div class="users-table-card">
+          <div class="users-table-header">
+            <div class="users-table-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+              Platform Users
+              <span class="users-table-count" id="usersTableCount">0</span>
+            </div>
+          </div>
+
+          <div id="usersEmpty" class="users-empty" style="display: none;">
+            <div class="users-empty-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            </div>
+            <div class="state-message-title">No users match the filters</div>
+            <div class="state-message-sub">Try adjusting your search or filter criteria.</div>
+          </div>
+
+          <div class="users-table-wrap">
+            <table class="users-table">
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Role</th>
+                  <th>Assigned Region</th>
+                  <th>Status</th>
+                  <th>Last Active</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="usersTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="users-side">
+          <!-- Roles & Permissions -->
+          <div class="side-card">
+            <div class="side-card-header">
+              <div class="side-card-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Roles & Permissions
+              </div>
+            </div>
+            <div class="side-card-body">
+              <div class="roles-grid" id="rolesGrid"></div>
+            </div>
+          </div>
+
+          <!-- Activity Log -->
+          <div class="side-card">
+            <div class="side-card-header">
+              <div class="side-card-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Recent Activity
+              </div>
+            </div>
+            <div class="side-card-body">
+              <div class="activity-feed" id="activityFeed"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Disclaimer -->
+      <div style="margin-top: var(--space-6); padding: var(--space-4); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); text-align: center;">
+        <div style="font-size: var(--fs-xs); color: var(--text-600); line-height: 1.6; max-width: 720px; margin: 0 auto;">
+          <strong>Core Flow:</strong> USER → ROLE → PERMISSIONS → RESPONSIBILITY → ACTIVITY. This prototype demonstrates user management with synthetic data. No real authentication is implemented.
+        </div>
+        <div style="display: flex; justify-content: center; gap: var(--space-2); margin-top: var(--space-3); flex-wrap: wrap;">
+          <span class="demo-tag">SIH 2026 PROTOTYPE</span>
+          <span class="demo-tag">DEMO DATA</span>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- User Detail Panel -->
+  <div class="user-detail-overlay" id="userDetailOverlay"></div>
+  <div class="user-detail-panel" id="userDetailPanel"></div>
+
+  <!-- Add/Edit User Modal -->
+  <div class="modal-overlay" id="addUserModal">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">Add New User</div>
+        <button class="modal-close" onclick="window.SahayakUsers.closeAddModal()" aria-label="Close">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body"></div>
+      <div class="modal-footer"></div>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/users.js"></script>
+</body>
+</html>

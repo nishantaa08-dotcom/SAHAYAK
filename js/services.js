@@ -993,7 +993,100 @@ async getSimulationPresets() {
             satelliteMultiplier: 1.5
         }
     };
-}
+},
+// ===== USER MANAGEMENT SERVICES =====
+async getUsers(filters = {}) {
+  await this._delay(150);
+  let users = SahayakState.get('users') || DEMO_DATA.users;
+  if (filters.role && filters.role !== 'all') {
+    users = users.filter(u => u.role === filters.role);
+  }
+  if (filters.district && filters.district !== 'all') {
+    users = users.filter(u => u.district === filters.district);
+  }
+  if (filters.status && filters.status !== 'all') {
+    users = users.filter(u => u.status === filters.status);
+  }
+  if (filters.search) {
+    const q = filters.search.toLowerCase();
+    users = users.filter(u =>
+      u.name.toLowerCase().includes(q) ||
+      u.email.toLowerCase().includes(q) ||
+      u.district.toLowerCase().includes(q)
+    );
+  }
+  return users.map(u => ({ ...u, isDemo: true }));
+},
+async getUserById(id) {
+  await this._delay(100);
+  const users = SahayakState.get('users') || DEMO_DATA.users;
+  const user = users.find(u => u.id === id);
+  return user ? { ...user, isDemo: true } : null;
+},
+async addUser(userData) {
+  await this._delay(300);
+  const users = SahayakState.get('users') || [...DEMO_DATA.users];
+  const newUser = {
+    id: 'USR-' + String(users.length + 1).padStart(3, '0'),
+    ...userData,
+    lastActive: 'Just now',
+    lastActiveTs: Date.now(),
+    incidents: 0
+  };
+  users.unshift(newUser);
+  SahayakState.set('users', users);
+  SahayakState.addNotification({
+    type: 'info', icon: '👤',
+    title: 'New user created',
+    message: `${newUser.name} added as ${newUser.role.replace('_', ' ')}`,
+    timestamp: 'Just now', read: false
+  });
+  return { ...newUser, isDemo: true };
+},
+async updateUser(id, updates) {
+  await this._delay(200);
+  const users = SahayakState.get('users') || [...DEMO_DATA.users];
+  const idx = users.findIndex(u => u.id === id);
+  if (idx !== -1) {
+    users[idx] = { ...users[idx], ...updates };
+    SahayakState.set('users', users);
+  }
+  return { success: true, isDemo: true };
+},
+async deactivateUser(id) {
+  await this._delay(200);
+  const users = SahayakState.get('users') || [...DEMO_DATA.users];
+  const idx = users.findIndex(u => u.id === id);
+  if (idx !== -1) {
+    users[idx] = { ...users[idx], status: 'inactive' };
+    SahayakState.set('users', users);
+    SahayakState.addNotification({
+      type: 'warning', icon: '⚠',
+      title: 'User deactivated',
+      message: `${users[idx].name} has been deactivated`,
+      timestamp: 'Just now', read: false
+    });
+  }
+  return { success: true, isDemo: true };
+},
+async reactivateUser(id) {
+  await this._delay(200);
+  const users = SahayakState.get('users') || [...DEMO_DATA.users];
+  const idx = users.findIndex(u => u.id === id);
+  if (idx !== -1) {
+    users[idx] = { ...users[idx], status: 'active' };
+    SahayakState.set('users', users);
+  }
+  return { success: true, isDemo: true };
+},
+async getRoles() {
+  await this._delay(100);
+  return DEMO_DATA.roles.map(r => ({ ...r, isDemo: true }));
+},
+async getUserActivity() {
+  await this._delay(100);
+  return DEMO_DATA.userActivity.map(a => ({ ...a, isDemo: true }));
+},
 };
 
 if (typeof window !== 'undefined') {

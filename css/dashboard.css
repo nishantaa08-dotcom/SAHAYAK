@@ -1932,5 +1932,22 @@
     background: rgba(7, 17, 31, 0.5);
     z-index: 99;
 }
+.header-search-icon {
+    position: absolute;
+    left: var(--space-3);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px !important;
+    height: 16px !important;
+    color: var(--text-400);
+    pointer-events: none;
+  }
+  
+  /* Add this to ensure SVG respects the size */
+  .header-search-icon svg {
+    width: 16px !important;
+    height: 16px !important;
+    display: block;
+  }
 
 .sidebar-overlay.active { display: block; }
